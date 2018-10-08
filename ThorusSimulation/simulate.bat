@@ -1,1 +1,0 @@
-.\ThorusSimulation.exe 2018-11-01 2018-01-31_00

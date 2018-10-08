@@ -1,0 +1,53 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon", "ThorusCommon\ThorusCommon.csproj", "{33317F8C-B42E-4F21-AE91-E160D6E25CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusSimulation", "ThorusSimulation\ThorusSimulation.csproj", "{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C50AD334-4773-4554-8C81-FCAC2168C325} = {C50AD334-4773-4554-8C81-FCAC2168C325}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCdfImporter", "NetCdfImporter\NetCdfImporter.csproj", "{C50AD334-4773-4554-8C81-FCAC2168C325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusViewer", "ThorusViewer\ThorusViewer.csproj", "{A2A19837-E1BD-4703-B452-C071DFE1B5E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F7B08F4-A52A-48F4-A0FB-927B4887BAAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon.IO", "ThorusCommon.IO\ThorusCommon.IO.csproj", "{0F186CF5-5B63-440B-A5BE-98E597F0B076}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FA3AD2E-FD36-48B1-A27A-2217DAA10226}
+	EndGlobalSection
+EndGlobal

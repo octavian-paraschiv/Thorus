@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="ThorusViewer.Views.MapView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf" 
+        xmlns:model="clr-namespace:ThorusViewer.Models">
+    <UserControl.DataContext>
+        <model:MapViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <oxy:PlotView x:Name="plotView" Model="{Binding Model}" />
+    </Grid>
+</UserControl>

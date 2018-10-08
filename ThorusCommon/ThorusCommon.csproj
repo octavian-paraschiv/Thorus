@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\..\..\bin\ThorusCommon.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>..\..\..\bin\ThorusCommon.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectGuid>{33317F8C-B42E-4F21-AE91-E160D6E25CFE}</ProjectGuid>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>ThorusCommon</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\Atmosphere\AtmosphericLevel.cs" />
+    <Compile Include="Data\Atmosphere\Atmosphere.cs" />
+    <Compile Include="Data\Atmosphere\JetLevel.cs" />
+    <Compile Include="Data\Atmosphere\SeaLevel.cs" />
+    <Compile Include="Data\Earth\EarthModel.cs" />
+    <Compile Include="Data\Earth\IEarthFeature.cs" />
+    <Compile Include="Data\Atmosphere\MidLevel.cs" />
+    <Compile Include="Data\Simulation\SimDateTime.cs" />
+    <Compile Include="Data\Simulation\SimDateTimeRange.cs" />
+    <Compile Include="Data\Simulation\SimDateTimeRangeStats.cs" />
+    <Compile Include="Data\Simulation\SimulationData.cs" />
+    <Compile Include="Data\Surface\SurfaceLevel.cs" />
+    <Compile Include="Data\Atmosphere\TopLevel.cs" />
+    <Compile Include="IO\FileSupport.cs" />
+    <Compile Include="MatrixExtensions\Algebraic.cs" />
+    <Compile Include="SimParams\SimulationParameters.cs" />
+    <Compile Include="Thermodynamics\Constants.cs" />
+    <Compile Include="Thermodynamics\LapseRate.cs" />
+    <Compile Include="Thermodynamics\ReferenceTemp.cs" />
+    <Compile Include="TicToc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MatrixExtensions\Calculus.cs" />
+    <Compile Include="Thermodynamics\HypsometricEquation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ADJ_LR.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="albedo.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="elevationMap.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LandWaterMask.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="SimParams.thd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
+      <Project>{0f186cf5-5b63-440b-a5be-98e597f0b076}</Project>
+      <Name>ThorusCommon.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

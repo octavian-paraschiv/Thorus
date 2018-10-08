@@ -1,0 +1,50 @@
+﻿<Window x:Class="ThorusViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:ThorusViewer.Views"
+        Title="Weather Studio - Loading shapshots, please wait ..."
+        WindowState="Maximized"
+        WindowStyle="ThreeDBorderWindow"
+        Width="1300" Height="1000"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="2" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.Column="0">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem x:Name="mnuLoadDataSet" Header="LOAD DATASET" Grid.Column="0"  Click="mnuLoadDataSet_Click"/>
+            <MenuItem x:Name="mnuSaveAsImage" Header="SAVE IMAGE" Grid.Column="1" Click="mnuSaveAsImage_Click"  />
+            <MenuItem x:Name="mnuAutoSave"  Header="AUTO-SAVE IMAGE" Grid.Column="2" Click="mnuAutoSave_Click" IsCheckable="True"  />
+            <MenuItem x:Name="mnuSubmatrix"  Header="GENERATE SUBMATRICES" Grid.Column="3" Click="mnuSubmatrix_Click" />
+            <MenuItem x:Name="mnuSimulation" Header="SIMULATION" Grid.Column="5"  Click="mnuSimulation_Click"  />
+            <MenuItem x:Name="mnuGlobalSettings" Header="GLOBAL SETTINGS" Grid.Column="6"  Click="mnuGlobalSettings_Click" />
+        </Menu>        
+        <views:ControlPanelView Grid.Row="1" x:Name="controlPanel" Margin="0,10,0,0" />
+        <Label Grid.Row="3" Margin="0" Background="Black" />
+        <views:MapView x:Name="mapView" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+    </Grid>
+</Window>

@@ -239,6 +239,8 @@ namespace ThorusViewer.Models
             DataTypes.Add(new DataType("D_02", "Custom data (top level)"));
             DataTypes.Add(new DataType("D_AA", "Custom data"));
 
+            DataTypes.Add(new DataType("D_BP", "Blocking potential"));
+
             #endregion
 
             #region Others

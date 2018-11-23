@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusViewer", "ThorusViewer\ThorusViewer.csproj", "{A2A19837-E1BD-4703-B452-C071DFE1B5E6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F7B08F4-A52A-48F4-A0FB-927B4887BAAA}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\Variabile_With_reversal_calculator.xlsx = Docs\Variabile_With_reversal_calculator.xlsx
+		Docs\xyzJet_SeasonalVariable.xlsx = Docs\xyzJet_SeasonalVariable.xlsx
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon.IO", "ThorusCommon.IO\ThorusCommon.IO.csproj", "{0F186CF5-5B63-440B-A5BE-98E597F0B076}"
 EndProject

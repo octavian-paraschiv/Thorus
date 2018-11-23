@@ -467,6 +467,19 @@ namespace ThorusViewer.Pallettes
         }
     }
 
+    public class D_BP_Palette : CustomDataPalette
+    {
+        public D_BP_Palette()
+        {
+            _minMax = new Range<float>(-2, 2);
+
+            this.Description = "Blocking potential";
+            this.Unit = "";
+            this.ShowContours = false;
+            this.ShowHeatmap = true;
+        }
+    }
+
     public class D_XX_Palette : CustomDataPalette
     {
         public D_XX_Palette()

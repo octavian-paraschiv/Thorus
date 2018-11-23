@@ -378,19 +378,14 @@ namespace ThorusCommon
         public enum JetStreamPatterns
         {
             /// <summary>
-            /// Single hemispherical jet, without reversal
-            /// </summary>
-            SingleJet_NoReversal = 0,
-
-            /// <summary>
-            /// Dual hemispherical jet without reversal
-            /// </summary>
-            DualJet_NoReversal,
-
-            /// <summary>
             /// Single hemispherical jet, with reversal at Poles and Equator
             /// </summary>
-            SingleJet_WithReversal,
+            SingleJet_WithReversal = 0,
+
+            /// <summary>
+            /// Single hemispherical jet, with reversal zones depending on season
+            /// </summary>
+            SingleJet_SeasonalReversal,
 
             /// <summary>
             /// Dual jet with reversal at Tropics and Polar Circles
@@ -398,19 +393,38 @@ namespace ThorusCommon
             DualJet_WithReversal,
 
             /// <summary>
+            /// Dual jet with reversal zones depending on season
+            /// </summary>
+            DualJet_SeasonalReversal,
+
+            /// <summary>
             /// Variable jet with reversal (Combination of Single and Dual with reversal)
             /// </summary>
             Variable_WithReversal,
+
+            /// <summary>
+            /// Variable jet with reversal depending on season  (Combination of Single and Dual with seasonal reversal)
+            /// </summary>
+            Variable_SeasonalReversal,
+
+
+            Experimental,
         }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the pattern of the jet stream oscillation.\n\n" +
             "SingleJet_NoReversal => Single hemispherical jet, without reversal [Theoretical pattern only]\n" +
+            "SingleJet_WithReversal => Single hemispherical jet, with reversal at Poles and Equator [Applicable in cold season]\n" +
+            "SingleJet_SeasonalReversal => Single hemispherical jet with reversal zones depending on season" +
+
             "DualJet_NoReversal => Dual hemispherical jet without reversal. [Theoretical pattern only]\n\n" +
-            "SingleJet_Reversal => Single hemispherical jet, with reversal at Poles and Equator [Applicable in cold season]\n" +
-            "DualJet_Reversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
-            "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n")]
-        [DefaultValue(JetStreamPatterns.SingleJet_WithReversal)]
+            "DualJet_WithReversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
+            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season" +
+
+            "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
+            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n")]
+
+        [DefaultValue(JetStreamPatterns.DualJet_SeasonalReversal)]
         public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]

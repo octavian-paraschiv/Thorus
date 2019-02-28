@@ -62,34 +62,34 @@ namespace ThorusCommon.Data
                     // ------------
                     // Soil temperature where applicable
                     string filePath = Path.Combine(SimulationData.WorkFolder, "SOIL.thd");
-                    if (File.Exists(filePath) == false)
-                        throw new FileNotFoundException();
-
-                    var tl = FileSupport.LoadMatrixFromFile(filePath);
-                    TL.Assign((r, c) =>
+                    if (File.Exists(filePath))
                     {
-                        if (WL[r, c] == 0)
-                            return tl[r, c];
+                        var tl = FileSupport.LoadMatrixFromFile(filePath);
+                        TL.Assign((r, c) =>
+                        {
+                            if (WL[r, c] == 0)
+                                return tl[r, c];
 
-                        return 0;
+                            return 0;
 
-                    });
+                        });
+                    }
 
                     // ------------
                     // Sea temperature where applicable
                     filePath = Path.Combine(SimulationData.WorkFolder, "SST.thd");
-                    if (File.Exists(filePath) == false)
-                        throw new FileNotFoundException();
-
-                    var tw = FileSupport.LoadMatrixFromFile(filePath);
-                    TW.Assign((r, c) =>
+                    if (File.Exists(filePath))
                     {
-                        if (WL[r, c] != 0)
-                            return tw[r, c];
+                        var tw = FileSupport.LoadMatrixFromFile(filePath);
+                        TW.Assign((r, c) =>
+                        {
+                            if (WL[r, c] != 0)
+                                return tw[r, c];
 
-                        return 0;
+                            return 0;
 
-                    });
+                        });
+                    }
 
                     // Combined surface temperature
                     TS.Assign((r, c) =>
@@ -104,10 +104,8 @@ namespace ThorusCommon.Data
                     // ------------
                     // Snow cover
                     filePath = Path.Combine(SimulationData.WorkFolder, "SNOW.thd");
-                    if (File.Exists(filePath) == false)
-                        throw new FileNotFoundException();
-
-                    this.SNOW = FileSupport.LoadMatrixFromFile(filePath);
+                    if (File.Exists(filePath))
+                        this.SNOW = FileSupport.LoadMatrixFromFile(filePath);
                 }
                 else
                 {

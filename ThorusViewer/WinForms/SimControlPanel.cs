@@ -13,6 +13,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using ThorusCommon;
 using ThorusCommon.Data;
+using ThorusViewer.WinForms;
 
 namespace ThorusViewer
 {
@@ -22,22 +23,14 @@ namespace ThorusViewer
         private int _simProcPid = -1;
 
         private DateTime _defaultDtStart = DateTime.MinValue;
-        bool defaultDtStartChanged = false;
 
         private ConcurrentQueue<string> _SimStdOut = new ConcurrentQueue<string>();
-
-        private System.Timers.Timer _tmrDownloadInitialConditions = null;
 
         public SimControlPanel()
         {
             InitializeComponent();
 
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
-
-            _tmrDownloadInitialConditions = new System.Timers.Timer(5000);
-            _tmrDownloadInitialConditions.AutoReset = true;
-            _tmrDownloadInitialConditions.Elapsed += new System.Timers.ElapsedEventHandler(_tmrDownloadInitialConditions_Elapsed);
-            _tmrDownloadInitialConditions.Start();
 
             _tmrClock = new System.Windows.Forms.Timer();
             _tmrClock.Interval = 100;
@@ -53,7 +46,7 @@ namespace ThorusViewer
             cmbRange.SelectedIndex = 0;
             cmbStepLen.SelectedIndex = 0;
 
-            ValidateInitialConditionFiles();
+            ValidateInitialConditionFiles(true);
 
             this.dtpSimStart.ValueChanged += dtpSimStart_ValueChanged;
         }
@@ -68,7 +61,7 @@ namespace ThorusViewer
 
         void _tmrClock_Tick(object sender, EventArgs e)
         {
-            ValidateInitialConditionFiles();
+            ValidateInitialConditionFiles(false);
             CheckSimProcess();
         }
 
@@ -212,7 +205,7 @@ namespace ThorusViewer
         }
 
 
-        private void ValidateInitialConditionFiles()
+        private void ValidateInitialConditionFiles(bool adjustStartDateBasedOnFiles)
         {
             if (this.DesignMode)
                 return;
@@ -232,18 +225,17 @@ namespace ThorusViewer
             {
                 dtpSimStart.ValueChanged -= dtpSimStart_ValueChanged;
 
-                string soilNcFile = "TMP_BGRND.nc";
-                NetCdfImporter.CorrectFilePath(ref soilNcFile);
-                _defaultDtStart = NetCdfImporter.ImportDateTime(soilNcFile);
+                string dateTimeFile = "SST.nc";
+                _defaultDtStart = NetCdfImporter.ImportDateTime(dateTimeFile);
 
-                if (defaultDtStartChanged)
-                {
-                    dt = dtpSimStart.Value;
-                }
-                else
+                if (adjustStartDateBasedOnFiles)
                 {
                     dtpSimStart.Value = _defaultDtStart;
                     dt = _defaultDtStart;
+                }
+                else
+                {
+                    dt = dtpSimStart.Value;
                 }
             }
             catch (Exception ex)
@@ -294,73 +286,16 @@ namespace ThorusViewer
 
         private void dtpSimStart_ValueChanged(object sender, EventArgs e)
         {
-            defaultDtStartChanged = true;
-
             DateTime dt = dtpSimStart.Value.AddDays(5);
             dtpSimStop.Value = new DateTime(dt.Year, dt.Month, dt.Day, 23, 0, 0);
         }
 
-        void _tmrDownloadInitialConditions_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void btnFetchData_Click(object sender, EventArgs e)
         {
-            try
-            {
-                _tmrDownloadInitialConditions.Stop();
+            DataFetcherDlg dlg = new DataFetcherDlg();
+            dlg.ShowDialog();
 
-                if (_simProcPid <= 0)
-                {
-                    using (EmailClient ec = new EmailClient())
-                    {
-                        if (ec.Connect())
-                        {
-                            ec.FetchWeatherData(SimulationData.WorkFolder);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-            finally
-            {
-                _tmrDownloadInitialConditions.Start();
-            }
-        }
-
-        private void btnDownload_Click(object sender, EventArgs e)
-        {
-            FileDelete("TMP_BGRND.nc");
-            FileDelete("WEASD_SFC.nc");
-            FileDelete("SPFH_PRES.nc");
-            FileDelete("TMP_PRES.nc");
-            FileDelete("HGT_PRES.nc");
-            FileDelete("SST.nc");
-
-            //// issue web requests to generate new NC files
-            //using (ServerRequestor sr = new ServerRequestor())
-            //{
-            //    if (sr.RequestNewFile("SST.NC"))
-            //    {
-            //        // Wait getting the SST file
-            //    }
-            //}
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            using (EmailClient ec = new EmailClient())
-            {
-                try
-                {
-                    if (ec.Connect())
-                    {
-                        ec.DeleteAllMessages();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            ValidateInitialConditionFiles(true);
         }
     }
 }

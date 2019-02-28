@@ -15,7 +15,7 @@ namespace ThorusViewer
 
         public WebClientEx() : this(60000) { }
 
-        public WebClientEx(int timeout)
+        public WebClientEx(int timeout = 10000)
         {
             this.Timeout = timeout;
         }
@@ -28,6 +28,30 @@ namespace ThorusViewer
                 request.Timeout = this.Timeout;
             }
             return request;
+        }
+
+        public new string DownloadString(string url)
+        {
+            try
+            {
+                return base.DownloadString(url);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        public new string UploadString(string url, string data)
+        {
+            try
+            {
+                return base.UploadString(url, data);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 

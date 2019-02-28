@@ -62,8 +62,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.btnDownload = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnFetchData = new System.Windows.Forms.Button();
             this.gbSimControl = new System.Windows.Forms.GroupBox();
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
             this.pbSimProgress = new System.Windows.Forms.ProgressBar();
@@ -368,8 +367,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel5.Controls.Add(this.groupBox5, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.btnDownload, 2, 0);
-            this.tableLayoutPanel5.Controls.Add(this.button1, 2, 1);
+            this.tableLayoutPanel5.Controls.Add(this.btnFetchData, 2, 2);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -556,29 +554,18 @@
             this.label12.Text = "Soil Temperature (TMP_BGRND)";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // btnDownload
+            // btnFetchData
             // 
-            this.btnDownload.AutoSize = true;
-            this.btnDownload.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnDownload.Location = new System.Drawing.Point(573, 3);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(180, 23);
-            this.btnDownload.TabIndex = 4;
-            this.btnDownload.Text = "Reset initial conditions / client side";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
-            // 
-            // button1
-            // 
-            this.button1.AutoSize = true;
-            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.Location = new System.Drawing.Point(573, 32);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(184, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Reset initial conditions / server side";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnFetchData.AutoSize = true;
+            this.btnFetchData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnFetchData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFetchData.Location = new System.Drawing.Point(612, 43);
+            this.btnFetchData.Name = "btnFetchData";
+            this.btnFetchData.Size = new System.Drawing.Size(145, 36);
+            this.btnFetchData.TabIndex = 6;
+            this.btnFetchData.Text = "Download initial conditions \r\nfiles from NOAA server";
+            this.btnFetchData.UseVisualStyleBackColor = true;
+            this.btnFetchData.Click += new System.EventHandler(this.btnFetchData_Click);
             // 
             // gbSimControl
             // 
@@ -633,7 +620,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SimControlPanel";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Simulation Control Panel";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -705,7 +692,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbStepLen;
         private System.Windows.Forms.CheckBox cbAutoClose;
-        private System.Windows.Forms.Button btnDownload;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnFetchData;
     }
 }

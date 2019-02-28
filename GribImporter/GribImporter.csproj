@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F186CF5-5B63-440B-A5BE-98E597F0B076}</ProjectGuid>
+    <ProjectGuid>{F9D65A21-83D4-408A-A175-7B4868EE4EE0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ThorusCommon.IO</RootNamespace>
-    <AssemblyName>ThorusCommon.IO</AssemblyName>
+    <RootNamespace>ThorusCommon.Data</RootNamespace>
+    <AssemblyName>GribImporter</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,15 +31,21 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics">
+    <Reference Include="Grib.Api">
+      <HintPath>..\packages\Grib.Api.1.0.0-beta4\lib\net45\Grib.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,11 +53,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPrecipTypeBoundaries.cs" />
-    <Compile Include="MatrixFile.cs" />
-    <Compile Include="PrecipTypeComputer.cs" />
+    <Compile Include="GribImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Range.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
+      <Project>{0f186cf5-5b63-440b-a5be-98e597f0b076}</Project>
+      <Name>ThorusCommon.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj">
+      <Project>{33317f8c-b42e-4f21-ae91-e160d6e25cfe}</Project>
+      <Name>ThorusCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /S /E "$(SolutionDir)packages\Grib.Api.1.0.0-beta4\Grib.Api\lib\win\x64\*" "$(OutDir)"
+
+if exist "$(OutDir)Grib.Api" (
+    echo Grib.Api definitions files are already present.
+) ELSE (
+mkdir "$(OutDir)Grib.Api"
+xcopy /Y /S /E "$(SolutionDir)packages\Grib.Api.1.0.0-beta4\Grib.Api" "$(OutDir)Grib.Api"
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

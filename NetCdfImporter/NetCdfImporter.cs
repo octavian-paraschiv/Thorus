@@ -15,139 +15,51 @@ using ThorusCommon.Engine;
 
 namespace ThorusCommon.Data
 {
-    public class NetCdfImporter
+    public class NetCdfImporter : FileImporter
     {
-        static string TemperatureNcFile = "TMP_PRES.nc";
-        static string GeopotentialNcFile = "HGT_PRES.nc";
-        static string HumidityNcFile = "SPFH_PRES.nc";
-        static string SoilTempNcFile = "TMP_BGRND.nc";
-        static string SnowCoverNcFile = "WEASD_SFC.nc";
+        protected string TemperatureNcFile = "TMP_PRES.nc";
+        protected string GeopotentialNcFile = "HGT_PRES.nc";
+        protected string HumidityNcFile = "SPFH_PRES.nc";
+        protected string SoilTempNcFile = "TMP_BGRND.nc";
+        protected string SnowCoverNcFile = "WEASD_SFC.nc";
 
-        static string SeaTempNcFile = "SST.nc";
-
-        static string TemperatureFileLow = "T00.thd";
-        static string TemperatureFileMid = "T01.thd";
-        static string TemperatureFileTop = "T02.thd";
-
-        static string GeopotentialFileLow = "Z00.thd";
-        static string GeopotentialFileMid = "Z01.thd";
-        static string GeopotentialFileTop = "Z02.thd";
-
-        static string PressureFileLow = "P00.thd";
-        static string PressureFileMid = "P01.thd";
-        static string PressureFileTop = "P02.thd";
-
-        static string HumidityFileLow = "H00.thd";
-        static string HumidityFileMid = "H01.thd";
-        static string HumidityFileTop = "H02.thd";
-
-        static string SeaTempFile = "SST.thd";
-        static string SoilTempFile = "SOIL.thd";
-
-        static string SnowCoverFile = "SNOW.thd";
+        protected string SeaTempNcFile = "SST.nc";
         
-        static readonly int EW = SurfaceLevel.GridColumnCount;
-        static readonly int EH = SurfaceLevel.GridRowCount;
-
-        static string WorkFolder = SimulationData.WorkFolder;
-
-        const int TotalLevels = 3;
-        static string[] TempFiles = new string[TotalLevels];
-        static string[] GeopotentialFiles = new string[TotalLevels];
-        static string[] HumidityFiles = new string[TotalLevels];
-        static string[] PressureFiles = new string[TotalLevels];
-
-        static NetCdfImporter()
+        public NetCdfImporter()
         {
             // ----------------------------------------------
-            // Surface files - NC and THD
+            // Surface files - NC
             CorrectFilePath(ref SeaTempNcFile);
             CorrectFilePath(ref SoilTempNcFile);
             CorrectFilePath(ref SnowCoverNcFile);
-
-            CorrectFilePath(ref SeaTempFile);
-            CorrectFilePath(ref SoilTempFile);
-            CorrectFilePath(ref SnowCoverFile);
 
             // ----------------------------------------------
             // Atmosphere NC files
             CorrectFilePath(ref TemperatureNcFile);
             CorrectFilePath(ref GeopotentialNcFile);
             CorrectFilePath(ref HumidityNcFile);
-
-            // ----------------------------------------------
-            // Temperature THD files
-            CorrectFilePath(ref TemperatureFileLow);
-            CorrectFilePath(ref TemperatureFileMid);
-            CorrectFilePath(ref TemperatureFileTop);
-            
-            TempFiles[0] = TemperatureFileLow;
-            TempFiles[1] = TemperatureFileMid;
-            TempFiles[2] = TemperatureFileTop;
-
-            // ----------------------------------------------
-            // Geopotential THD files
-            CorrectFilePath(ref GeopotentialFileMid);
-            CorrectFilePath(ref GeopotentialFileTop);
-            CorrectFilePath(ref GeopotentialFileLow);
-
-            GeopotentialFiles[0] = GeopotentialFileLow;
-            GeopotentialFiles[1] = GeopotentialFileMid;
-            GeopotentialFiles[2] = GeopotentialFileTop;
-
-            // ----------------------------------------------
-            // Pressure THD files
-            CorrectFilePath(ref PressureFileMid);
-            CorrectFilePath(ref PressureFileTop);
-            CorrectFilePath(ref PressureFileLow);
-
-            PressureFiles[0] = PressureFileLow;
-            PressureFiles[1] = PressureFileMid;
-            PressureFiles[2] = PressureFileTop;
-
-            // ----------------------------------------------
-            // Humidity THD files
-            CorrectFilePath(ref HumidityFileMid);
-            CorrectFilePath(ref HumidityFileTop);
-            CorrectFilePath(ref HumidityFileLow);
-
-            HumidityFiles[0] = HumidityFileLow;
-            HumidityFiles[1] = HumidityFileMid;
-            HumidityFiles[2] = HumidityFileTop;
         }
 
-        public static void CorrectFilePath(ref string filePath)
-        {
-            filePath = Path.Combine(WorkFolder, filePath);
-        }
 
-        public static void ImportNetCdfFiles()
+        protected override void ImportSurface()
         {
-            ImportSurface();
-            ImportLevel(0); // low level    
-            ImportLevel(1); // mid level
-            ImportLevel(2); // top level
-        }
+            ImportNcFile<float>(SeaTempNcFile,
+                          "sst", 1, 0,
+                          SeaTempFile,
+                          (d) => (d / 100),
+                          false);
 
-        private static void ImportSurface()
-        {
             ImportNcFile<float>(SoilTempNcFile, 
                 "Temperature_depth_below_surface_layer", 1, 0, 
                 SoilTempFile,
                 (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
-
-            ImportNcFile<float>(SeaTempNcFile, 
-                "sst", 1, 0, 
-                SeaTempFile,
-                (d) => (d / 100), 
-                false);
 
             ImportNcFile<float>(SnowCoverNcFile,
                 "Water_equivalent_of_accumulated_snow_depth", 1, 0,
                 SnowCoverFile,
                 (d) => (d));
 
-            DateTime dt = ImportDateTime(SoilTempNcFile);
+            DateTime dt = ImportDateTime(SeaTempNcFile);
             SimDateTime sdt = new SimDateTime(dt);
 
             string timeSeedFile = "timeSeed.thd";
@@ -160,31 +72,22 @@ namespace ThorusCommon.Data
             DateTime dt = DateTime.Now;
 
             int ncid = 0, varid = 0;
+
+            CorrectFilePath(ref inputNcFile);
+
             if (File.Exists(inputNcFile))
             {
                 try
                 {
                     NetCDF.nc_open(inputNcFile, NetCDF.CreateMode.NC_NOWRITE, out ncid);
-                    NetCDF.nc_inq_varid(ncid, "intTime", out varid);
+                    NetCDF.nc_inq_varid(ncid, "time", out varid);
 
-                    long[] hoursElapsed = new long[1];
-                    NetCDF.nc_get_var_long(ncid, varid, hoursElapsed);
+                    // Days since 1800-01-01
+                    long[] daysElapsed = new long[1];
+                    NetCDF.nc_get_var_long(ncid, varid, daysElapsed);
 
-                    // time as an integer: YYYYMMDDHH
-                    int time = (int)hoursElapsed[0];
-
-                    int year = time / 1000000;
-                    time -= 1000000 * year;
-
-                    int month = time / 10000;
-                    time -= 10000 * month;
-
-                    int day = time / 100;
-                    time -= 100 * day;
-
-                    int hour = time;
-
-                    return new DateTime(year, month, day, hour, 0, 0);
+                    dt = new DateTime(1800, 1, 1, 0, 0, 0);
+                    dt = dt.AddDays(daysElapsed[0]);
 
                 }
                 catch (Exception ex)
@@ -200,7 +103,7 @@ namespace ThorusCommon.Data
             return dt;
         }
 
-        private static void ImportLevel(int idx)
+        protected override void ImportLevel(int idx)
         {
             // T, P, H must be read and built in this order
             // Calculation of P depends on T;
@@ -277,7 +180,7 @@ namespace ThorusCommon.Data
             }
         }
 
-        private static DenseMatrix ImportNcFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount, 
+        private DenseMatrix ImportNcFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount, 
             int netCdfLevelIdx, string dataFile, Func<T, float> conversionFunc, bool flipUpDown = true)
         {
             DenseMatrix mat = null;
@@ -300,7 +203,7 @@ namespace ThorusCommon.Data
         }
 
 
-        private static T[] GetData<T>(string path, string variable, int levelCount, int levelIdx)
+        private T[] GetData<T>(string path, string variable, int levelCount, int levelIdx)
         {
             int ncid = 0, varid = 0;
 
@@ -345,7 +248,7 @@ namespace ThorusCommon.Data
             return null;
         }
 
-        public static DenseMatrix DataToMatrix<T>(T[] data, Func<T, float> conversionFunc, bool flipUpDown = true)
+        public DenseMatrix DataToMatrix<T>(T[] data, Func<T, float> conversionFunc, bool flipUpDown = true)
         {
             DenseMatrix mat = MatrixFactory.New((r, c) =>
             {

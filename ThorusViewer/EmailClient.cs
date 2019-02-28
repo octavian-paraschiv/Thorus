@@ -58,12 +58,19 @@ namespace ThorusViewer
             return false;
         }
 
-        public void FetchWeatherData(string destFolder)
+        public string FetchWeatherData(string destFolder)
         {
+            StringBuilder sb = new StringBuilder();
+
             int msgCount = _popClient.GetMessageCount();
+
+            sb.Append($" total: {msgCount} messages for {_user}");
+
             for (int i = 1; i <= msgCount; i++)
             {
                 var header = _popClient.GetMessageHeaders(i);
+
+                sb.Append($" parsing message #{i} ...");
 
                 if (string.Compare(header.From.Address, _sender, true) == 0)
                 {
@@ -86,12 +93,15 @@ namespace ThorusViewer
                     {
                         using (WebClient wc = new WebClient())
                         {
+                            sb.Append($" downloading {dataType} data from {ftpUrl} ...");
+
                             wc.DownloadFile(ftpUrl, file);
                         }
                     }
                 }
-
             }
+
+            return sb.ToString();
         }
 
         public void Disconnect()

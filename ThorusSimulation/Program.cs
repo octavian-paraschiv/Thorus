@@ -99,7 +99,10 @@ namespace ThorusSimulation
             // Run simulation engine
             if (runSim)
             {
-                ThorusCommon.Data.NetCdfImporter.ImportNetCdfFiles();
+                DataSourceType type = DataSourceType.NetCdf;
+
+                FileImporterFactory.CreateImporter(type).ImportFiles();
+                
 
                 string dataDir = SimulationData.DataFolder;
                 if (Directory.Exists(dataDir))

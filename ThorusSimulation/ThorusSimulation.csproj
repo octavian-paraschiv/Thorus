@@ -32,14 +32,16 @@
     <ProjectGuid>{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.4.6.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileImporterFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation.cs" />
@@ -47,6 +49,10 @@
     <Compile Include="StatisticsEngine.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GribImporter\GribImporter.csproj">
+      <Project>{f9d65a21-83d4-408a-a175-7b4868ee4ee0}</Project>
+      <Name>GribImporter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj">
       <Project>{c50ad334-4773-4554-8c81-fcac2168c325}</Project>
       <Name>NetCdfImporter</Name>
@@ -62,9 +68,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

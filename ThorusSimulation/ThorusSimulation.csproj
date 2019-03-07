@@ -49,10 +49,6 @@
     <Compile Include="StatisticsEngine.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GribImporter\GribImporter.csproj">
-      <Project>{f9d65a21-83d4-408a-a175-7b4868ee4ee0}</Project>
-      <Name>GribImporter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj">
       <Project>{c50ad334-4773-4554-8c81-fcac2168c325}</Project>
       <Name>NetCdfImporter</Name>

@@ -18,15 +18,17 @@ namespace ThorusSimulation
     {
         public static FileImporter CreateImporter(DataSourceType type)
         {
-            switch (type)
-            {
-                case DataSourceType.NetCdf:
-                    return new NetCdfImporter();
+            //switch (type)
+            //{
+            //    case DataSourceType.NetCdf:
+            //        return new NetCdfImporter();
 
-                case DataSourceType.Grib:
-                default:
-                    return new GribImporter();
-            }
+            //    case DataSourceType.Grib:
+            //    default:
+            //        return new GribImporter();
+            //}
+
+            return new NetCdfImporter();
         }
     }
 }

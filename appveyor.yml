@@ -1,0 +1,42 @@
+version: 1.0.{build}
+skip_tags: true
+image: Visual Studio 2017
+
+environment:
+    git_access_token:
+        secure: AdNddFLS8qRKDQ0iJayURTbXSMKvCJ7nXbME8W/wmCL9xF2MAGMC89a1NqZ03Hpg
+    
+before_build:
+- git checkout master
+- ps: .\prep_build.ps1 "$env:APPVEYOR_BUILD_VERSION"
+- nuget restore ".\Thorus.sln" -Verbosity Quiet
+
+build_script:
+- msbuild /restore /p:Configuration=Debug /t:Rebuild ".\Thorus.sln" /v:minimal 
+  
+after_build:
+- set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
+- ISCC /Q ".\Installer\Thorus.iss"
+- 7z a thorus-setup.zip ".\output\*.*"
+
+artifacts:
+- path: thorus-setup.zip
+  name: thorus-setup
+
+deploy:
+    provider: FTP
+    protocol: ftp
+    host: 188.213.19.151
+    username: ocparo
+    password: 
+        secure: WLrEKSe6D0A7YU3E96co+w==
+    folder: httpdocs/meteo/Thorus/
+    application: thorus-setup
+  
+on_success:
+    - git config --global credential.helper store
+    - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:git_access_token):x-oauth-basic@github.com`n"
+    - git config --global user.email "octavian.paraschiv@gmail.com"
+    - git config --global user.name "octavian-paraschiv"
+    - git commit -a -m "build_%APPVEYOR_BUILD_VERSION%
+    - git push --all --progress origin

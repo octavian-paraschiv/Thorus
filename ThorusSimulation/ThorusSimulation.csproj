@@ -53,6 +53,10 @@
       <Project>{c50ad334-4773-4554-8c81-fcac2168c325}</Project>
       <Name>NetCdfImporter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
+      <Project>{0F186CF5-5B63-440B-A5BE-98E597F0B076}</Project>
+      <Name>ThorusCommon.IO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj">
       <Project>{33317f8c-b42e-4f21-ae91-e160d6e25cfe}</Project>
       <Name>ThorusCommon</Name>

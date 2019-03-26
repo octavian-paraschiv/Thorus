@@ -83,9 +83,13 @@ namespace ThorusCommon
             this.MinTsForMelting = 0.1f;
             this.MaxFreezingRainDelta = 5f;
 
-            this.JetStreamPattern = JetStreamPatterns.SingleJet_WithReversal;
+            this.JetStreamPattern = JetStreamPatterns.Variable_SeasonalReversal;
             this.JetStreamVariabilityPeriod = 7f;
             this.JetStreamVariabilitySeed = 0f;
+
+            this.JetStreamPluginName = "";
+
+            this.FrontsDelta = 0.2f;
         }
 
 
@@ -351,7 +355,7 @@ namespace ThorusCommon
 
         #endregion
 
-        #region Atmosphere / Jet Stream
+        #region Atmosphere / Jet Stream and Fronts
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the 'period' of the jet stream oscillation (that is, the interval between two similar phases of the polar jet stream in the same geographical region)")]
@@ -407,8 +411,15 @@ namespace ThorusCommon
             /// </summary>
             Variable_SeasonalReversal,
 
+            /// <summary>
+            /// Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)
+            /// </summary>
+            Variable_SeasonalAndBlock_Reversal,
 
-            Experimental,
+            /// <summary>
+            /// Jet stream is modeled by an external plugin
+            /// </summary>
+            Plugin,
         }
 
         [Category(" Atmosphere model / Jet Stream")]
@@ -419,12 +430,15 @@ namespace ThorusCommon
 
             "DualJet_NoReversal => Dual hemispherical jet without reversal. [Theoretical pattern only]\n\n" +
             "DualJet_WithReversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
-            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season" +
+            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season\n\n" +
 
             "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
-            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n")]
+            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n" +
+            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n" +
 
-        [DefaultValue(JetStreamPatterns.DualJet_SeasonalReversal)]
+            "Plugin => Jet stream is modeled by an external plugin")]
+
+        [DefaultValue(JetStreamPatterns.Variable_SeasonalReversal)]
         public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
@@ -442,9 +456,19 @@ namespace ThorusCommon
         [Range(-1f, 1f)]
         public float JetStreamVariabilitySeed { get; set; }
 
+        [Category(" Atmosphere model / Jet Stream")]
+        [Description("Jet stream model plugin name")]
+        [DefaultValue("Default")]
+        public string JetStreamPluginName { get; set; }
+
+        [Category(" Atmosphere model / Jet Stream")]
+        [Description("Mid-Level Temperature minimum absolute difference for a front")]
+        [DefaultValue(0.2f)]
+        public float FrontsDelta { get; set; }
+
         #endregion
 
-        
+
 
     }
 }

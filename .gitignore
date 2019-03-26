@@ -1,2 +1,6 @@
 bin
 packages
+*.cache
+/GribImporter/obj/Debug/*.CopyComplete
+*.CopyComplete
+*.baml

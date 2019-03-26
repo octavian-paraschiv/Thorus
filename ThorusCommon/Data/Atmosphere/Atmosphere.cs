@@ -11,6 +11,7 @@ using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
 using MathNet.Numerics;
+using ThorusCommon.Utility;
 
 namespace ThorusCommon.Engine
 {
@@ -94,10 +95,10 @@ namespace ThorusCommon.Engine
             SeaLevel.RebuildState();
 
             CalculateAirMassType();
+            CalculateFronts();
 
             CalculateMixingRatio();
             CalculateEnvironmentalLapseRate();
-            CalculateFronts();
         }
 
         private void CalculateMixingRatio()
@@ -183,16 +184,21 @@ namespace ThorusCommon.Engine
             _oldTMid = MidLevel.T.Clone() as DenseMatrix;
             _oldAirMass = AirMass.Clone() as DenseMatrix;
 
+            var BP = JetLevel.P.BP();
+
             Fronts.Assign((r, c) =>
             {
                 var dt = DT[r, c];
                 var dm = DM[r, c];
+                var bp = BP[r, c];
+                var fp = Utils.BP_to_FP(bp);
 
-                var adt = Math.Abs(DT[r, c]);
+                var adt = fp * Math.Abs(DT[r, c]);
+
                 if (adt >= 0.1f)
                     adt = 1f;
                 else
-                    adt = (float)Math.Ceiling(adt);
+                    adt = 0f;
 
                 var f = Math.Sign(dm) * adt;
 

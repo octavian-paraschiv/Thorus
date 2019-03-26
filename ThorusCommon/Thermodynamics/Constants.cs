@@ -135,8 +135,8 @@ namespace ThorusCommon.Thermodynamics
 
         public const float AngleBetweenWindAndIsobars = (float)(-(float)Math.PI / 2);
 
-        public static readonly float TEST_Lon = 24f;
-        public static readonly float TEST_Lat = 53f;
+        public static readonly float TEST_Lon = 20f;
+        public static readonly float TEST_Lat = 30f;
 
         public static bool SimBreakPoint(int r, int c, EarthModel model = null)
         {

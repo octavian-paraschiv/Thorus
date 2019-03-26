@@ -8,6 +8,7 @@ using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
+using ThorusCommon.Utility;
 
 namespace ThorusCommon.Data
 {
@@ -434,6 +435,8 @@ namespace ThorusCommon.Data
             // Calculate convective precipitation (thunderstorms)
             CalculateInstabilityIndex(eqFronts);
 
+            var BP = this.Earth.ATM.JetLevel.P.BP();
+
             Precip.Assign((r, c) =>
             {
                 var hgt = Earth.SFC.Height[r, c];
@@ -453,15 +456,10 @@ namespace ThorusCommon.Data
                 var lidx = LIDX[r, c];
                 var gp = GP[r, c];
                 var gt = GT[r, c];
-
-                float lidxRate = 0;
-                if (lidx >= 0)
-                    lidxRate = 0;
-                else
-                    lidxRate = Math.Abs(lidx);
+                var bp = BP[r, c];
 
                 // Baric gradient precipitation
-                var pRate = Math.Abs(gp);
+                var pRate = 0.5f * Math.Abs(gp);
 
                   // Frontal precipitation
                 var f = eqFronts[r, c];
@@ -472,18 +470,27 @@ namespace ThorusCommon.Data
                 var oRate = 0.3f * ((hgt >= 900) ? h : 0);
 
                 // Convective precipitation
-                var mul = 1;
-                if (lidx > 3)
-                    mul = 2;
-                if (lidx > 5)
-                    mul = 3;
-                if (lidx > 7)
-                    mul = 4;
-                if (lidx > 9)
-                    mul = 5;
+                var cRate = 0f;
+                if (lidx < 0)
+                {
+                    var lidxRate = Math.Abs(lidx);
 
-                var cRate = mul * Math.Abs(lidxRate);
-                
+                    var fp = 1;// Utils.BP_to_FP(bp);
+
+                    var mul = 1;
+                    if (lidx > 3)
+                        mul = 2;
+                    if (lidx > 5)
+                        mul = 3;
+                    if (lidx > 7)
+                        mul = 4;
+                    if (lidx > 9)
+                        mul = 5;
+
+                    cRate = fp * mul * Math.Abs(lidxRate);
+                }
+
+
                 var totalRate = (pRate + fRate + oRate + cRate) * h / 100;
 
                 return Math.Min(300, totalRate);
@@ -916,7 +923,7 @@ namespace ThorusCommon.Data
             float fl = 1 - fog / 100;
 
             // Total cloudiness
-            float nn = (float)Math.Min(1, cl + 0.3 * fl);
+            float nn = (float)Math.Min(1, cl + 0.15 * fl);
 
             return nn;
         }

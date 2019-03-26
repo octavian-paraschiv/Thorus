@@ -41,7 +41,7 @@ namespace ThorusViewer
             dtpSimStart.Value = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
 
             dt = dt.AddDays(5);
-            dtpSimStop.Value = new DateTime(dt.Year, dt.Month, dt.Day, 23, 0, 0);
+            dtpSimStop.Value = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
 
             cmbRange.SelectedIndex = 0;
             cmbStepLen.SelectedIndex = 0;

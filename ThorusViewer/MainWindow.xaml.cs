@@ -98,6 +98,11 @@ namespace ThorusViewer
 
             if (allFiles != null)
             {
+                string submatrixFolder = Path.Combine(SimulationData.WorkFolder, $"subMatrix_{viewPort.Name}");
+
+                if (Directory.Exists(submatrixFolder))
+                    Directory.Delete(submatrixFolder, true);
+
                 foreach (string file in allFiles)
                 {
                     string title = Path.GetFileNameWithoutExtension(file).ToUpperInvariant();
@@ -123,7 +128,6 @@ namespace ThorusViewer
                     }
 
 
-                    string submatrixFolder = Path.Combine(SimulationData.WorkFolder, $"subMatrix_{viewPort.Name}");
                     string subMatrixPath = file.Replace(SimulationData.DataFolder, submatrixFolder);
 
                     var rawMatrix = FileSupport.LoadSubMatrixFromFile(file, viewPort.MinLon, viewPort.MaxLon, viewPort.MinLat, viewPort.MaxLat);

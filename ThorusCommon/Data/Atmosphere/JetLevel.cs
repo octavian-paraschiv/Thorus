@@ -7,6 +7,8 @@ using ThorusCommon.Thermodynamics;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using MathNet.Numerics.LinearAlgebra.Single;
+using ThorusCommon.Plugins;
+using Thorus.PluginsApi;
 
 namespace ThorusCommon.Data
 {
@@ -19,6 +21,8 @@ namespace ThorusCommon.Data
         static readonly float RidgeDevFactor_X = 1 - JetDevFactor_X;
         static readonly float RidgeDevFactor_Y = 1 - JetDevFactor_Y;
 
+        IJetPlugin plugin = null;
+
         protected override float[] PressureExtremes
         {
             get
@@ -30,6 +34,8 @@ namespace ThorusCommon.Data
         public JetLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.JetLevel, loadFromStateFiles, defaultValue)
         {
+            if (SimulationParameters.Instance.JetStreamPattern == SimulationParameters.JetStreamPatterns.Plugin)
+                plugin = JetPluginInstance.Build(SimulationParameters.Instance.JetStreamPluginName);
         }
 
         public override void Advance()
@@ -54,6 +60,20 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(BP, Earth.UTC.Title, "D_BP");
 
+            DenseMatrix[] extDev = null;
+
+            var pattern = SimulationParameters.Instance.JetStreamPattern;
+            if (SimulationParameters.Instance.JetStreamPattern == SimulationParameters.JetStreamPatterns.Plugin)
+            {
+                extDev = CalcDevs_ByPlugin();
+                if (extDev == null)
+                {
+                    // fallback
+                    Console.WriteLine("Jet stream model plugin is failing => fallback to Variable_SeasonalReversal model...");
+                    pattern = SimulationParameters.JetStreamPatterns.Variable_SeasonalReversal;
+                }
+            }
+
             _actualDev.Assign2D
             (
                 (r, c) =>
@@ -65,22 +85,53 @@ namespace ThorusCommon.Data
                     float f = 0;
                     float devE = 0;
 
-                    switch (SimulationParameters.Instance.JetStreamPattern)
+                    var devX = 0f;
+
+                    switch (pattern)
                     {
                         case SimulationParameters.JetStreamPatterns.SingleJet_WithReversal:
-                            f = SingleJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                            {
+                                f = SingleJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
+
+                            }
                             break;
 
                         case SimulationParameters.JetStreamPatterns.DualJet_WithReversal:
-                            f = DualJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                            {
+                                f = DualJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
+                            }
                             break;
 
                         case SimulationParameters.JetStreamPatterns.SingleJet_SeasonalReversal:
-                            f = SingleJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+                            {
+                                f = SingleJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
+                            }
                             break;
 
                         case SimulationParameters.JetStreamPatterns.DualJet_SeasonalReversal:
-                            f = DualJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+                            {
+                                f = DualJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
+                            }
+                            break;
+
+                        case SimulationParameters.JetStreamPatterns.Plugin:
+                            devX = extDev[Direction.X][r, c];
                             break;
 
                         case SimulationParameters.JetStreamPatterns.Variable_WithReversal:
@@ -90,39 +141,49 @@ namespace ThorusCommon.Data
 
                                 var fVar = GetVariability(daysElapsed);
                                 f = (1 - fVar) * fSingle + fVar * fDual;
+
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
+                            }
+                            break;
+
+
+                        case SimulationParameters.JetStreamPatterns.Variable_SeasonalAndBlock_Reversal:
+                            {
+                                var fSingle = SingleJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+                                var fDual = DualJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
+
+                                var fVar = GetVariability(daysElapsed);
+                                f = (1 - fVar) * fSingle + fVar * fDual;
+
+                                var bp = BP[r, c];
+
+                                var devX1 = (f - 0.5f * bp) * dailyJetAdvance;
+
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
                             }
                             break;
 
                         case SimulationParameters.JetStreamPatterns.Variable_SeasonalReversal:
+                        default:
                             {
                                 var fSingle = SingleJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
-                                var fDual =   DualJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
-
-                                var fVar = GetVariability(daysElapsed);
-                                f = (1 - fVar) * fSingle + fVar * fDual;
-                            }
-                            break;
-
-                        case SimulationParameters.JetStreamPatterns.Experimental:
-                            {
-                                var fSingle = SingleJet_WithReversal(Earth.UTC.DayOfYear, latRad);
-                                var fDual = DualJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                                var fDual = DualJet_SeasonalReversal(Earth.UTC.DayOfYear, latRad);
 
                                 var fVar = GetVariability(daysElapsed);
                                 f = (1 - fVar) * fSingle + fVar * fDual;
 
-                                float bp = BP[r, c];
-                                if (bp > 0)
-                                    f = -f;
+                                var devX1 = f * dailyJetAdvance;
+                                devX = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_X * (devX1 + devE) +
+                                    RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
                             }
                             break;
                     }
-
-                    var devX1 = f * dailyJetAdvance;
-
-                    var devX = Earth.SnapshotDivFactor * (
-                        JetDevFactor_X * (devX1 + devE) +
-                        RidgeDevFactor_X * _ridgePatternDevs[Direction.X][r, c]);
 
                     return (devX % 360);
                 },
@@ -141,17 +202,50 @@ namespace ThorusCommon.Data
                     float cosLat = (float)Math.Cos(latRad);
                     float sinLon = (float)Math.Sin(SimulationParameters.Instance.JetStreamPeaks * (lonRad - deltaLonRad));
 
-                    float f = sinLat * cosLat * sinLon * GetVariability(daysElapsed);
+                    var devY = 0f;
 
-                    var devY1 = f * SimulationParameters.Instance.JetStreamWaveSpeed;
+                    switch (pattern)
+                    {
+                        case SimulationParameters.JetStreamPatterns.Plugin:
+                            devY = extDev[Direction.Y][r, c];
+                            break;
 
-                    var devY = Earth.SnapshotDivFactor * (
-                        JetDevFactor_Y * devY1 +
-                        RidgeDevFactor_Y * _ridgePatternDevs[Direction.Y][r, c]);
+                        default:
+                            {
+                                float f = sinLat * cosLat * sinLon * GetVariability(daysElapsed);
+
+                                var devY1 = f * SimulationParameters.Instance.JetStreamWaveSpeed;
+
+                                devY = Earth.SnapshotDivFactor * (
+                                    JetDevFactor_Y * devY1 +
+                                    RidgeDevFactor_Y * _ridgePatternDevs[Direction.Y][r, c]);
+                            }
+                            break;
+                    }
 
                     return (devY % 180);
                 }
             );
+        }
+
+        private DenseMatrix[] CalcDevs_ByPlugin()
+        {
+            DenseMatrix[] ret = null;
+
+            try
+            {
+                if (plugin != null)
+                {
+                    var grad = P.Gradient();
+                    ret = plugin.GetJetDeviations(grad[Direction.X], grad[Direction.Y]);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return ret;
         }
 
         private static float SingleJet_WithReversal(int dayOfYear, float latRad)

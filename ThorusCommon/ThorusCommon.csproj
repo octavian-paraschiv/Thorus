@@ -73,7 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MatrixExtensions\Calculus.cs" />
     <Compile Include="Thermodynamics\HypsometricEquation.cs" />
-    <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ADJ_LR.thd">

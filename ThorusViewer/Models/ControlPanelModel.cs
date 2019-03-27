@@ -190,8 +190,8 @@ namespace ThorusViewer.Models
 
 
             var c00 = new DataType("C_00", "Total precipitation volume");
-            c00.Comments = "\r\nLEGEND: Snow => Blue (Magenta when heavy); Rain => Green (Red when heavy);    " +
-                "Sleet => Gray; Freezing rain => Yellow";
+            //c00.Comments = "\r\nLEGEND: Snow => Blue (Magenta when heavy); Rain => Green (Red when heavy);    " +
+              //  "Sleet => Gray; Freezing rain => Yellow";
             DataTypes.Add(c00);
 
             DataTypes.Add(new DataType("L_00", "Lifted Index (Thunderstorm odds)"));
@@ -240,6 +240,7 @@ namespace ThorusViewer.Models
             DataTypes.Add(new DataType("D_AA", "Custom data"));
 
             DataTypes.Add(new DataType("D_BP", "Blocking potential"));
+            DataTypes.Add(new DataType("D_FP", "Cyclogenetic potential"));
 
             #endregion
 

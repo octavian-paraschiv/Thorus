@@ -467,13 +467,34 @@ namespace ThorusViewer.Pallettes
         }
     }
 
-    public class D_BP_Palette : CustomDataPalette
+    public class D_BP_Palette : WeatherDataPalette
     {
         public D_BP_Palette()
+            : base("D")
         {
             _minMax = new Range<float>(-2, 2);
 
+            _lineWidth = 1;
+            _lineSpacing = .1f;
+
             this.Description = "Blocking potential";
+            this.Unit = "";
+            this.ShowContours = false;
+            this.ShowHeatmap = true;
+        }
+    }
+
+    public class D_FP_Palette : WeatherDataPalette
+    {
+        public D_FP_Palette()
+            : base("H")
+        {
+            _minMax = new Range<float>(0, 1);
+
+            _lineWidth = 1;
+            _lineSpacing = .1f;
+
+            this.Description = "Cyclogenetic potential";
             this.Unit = "";
             this.ShowContours = false;
             this.ShowHeatmap = true;

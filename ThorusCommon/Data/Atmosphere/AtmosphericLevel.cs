@@ -178,6 +178,9 @@ namespace ThorusCommon.Engine
                     break;
             }
 
+            var weakBlock = Earth.ATM.JetLevel.WeakBlockTH;
+            var strongBlock = Earth.ATM.JetLevel.StrongBlockTH;
+
             rawP.Assign((r, c) =>
             {
                 var front = Earth.ATM.Fronts[r, c];
@@ -198,8 +201,8 @@ namespace ThorusCommon.Engine
                 const float weak = 0.3f;
                 const float pseudoStationary = 0.1f;
 
-                bool stable = ((lapseRate > SimulationParameters.Instance.HumidLapseRate) || (pJetLevel < 295));
-                bool unstable = ((lapseRate < SimulationParameters.Instance.HumidLapseRate) || (pJetLevel > 305));
+                bool stable = ((lapseRate > SimulationParameters.Instance.HumidLapseRate) || (pJetLevel > strongBlock));
+                bool unstable = ((lapseRate < SimulationParameters.Instance.HumidLapseRate) || (pJetLevel < weakBlock));
 
                 float actualDp = 0;
 
@@ -250,6 +253,59 @@ namespace ThorusCommon.Engine
             projP.SetSubMatrix(pNorth.RowCount, pSouth.RowCount, 0, pSouth.ColumnCount, projPSouth);
 
             P = projP.EQ(4).ApplyDeviations(applyDevs, null).EQ(4);
+        }
+
+        float _weakBlock = -1;
+        public float WeakBlockTH
+        {
+            get
+            {
+                if (_weakBlock < 0)
+                {
+                    float[] range = this.PressureExtremes;
+                    _weakBlock = 0.5f * (range[0] + range[1]);
+                }
+
+                return _weakBlock;
+            }
+        }
+
+        float _strongBlock = -1;
+        public float StrongBlockTH
+        {
+            get
+            {
+                if (_strongBlock < 0)
+                    _strongBlock = 1.025f * WeakBlockTH;
+
+                return _strongBlock;
+            }
+        }
+
+        public DenseMatrix BP
+        {
+            get
+            {
+                return MatrixFactory.New((r, c) =>
+                {
+                    var p = P[r, c];
+                    var bp = (p - WeakBlockTH) / (StrongBlockTH - WeakBlockTH);
+                    return Math.Max(0f, bp);
+                });
+            }
+        }
+
+        public DenseMatrix FP
+        {
+            get
+            {
+                return MatrixFactory.New((r, c) =>
+                {
+                    var p = P[r, c];
+                    var fp = 1f - (p - WeakBlockTH) / (StrongBlockTH - WeakBlockTH);
+                    return Math.Min(1f, Math.Max(0f, fp));
+                });
+            }
         }
     }
 }

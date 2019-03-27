@@ -8,7 +8,6 @@ using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
-using ThorusCommon.Utility;
 
 namespace ThorusCommon.Data
 {
@@ -435,7 +434,7 @@ namespace ThorusCommon.Data
             // Calculate convective precipitation (thunderstorms)
             CalculateInstabilityIndex(eqFronts);
 
-            var BP = this.Earth.ATM.JetLevel.P.BP();
+            var FP = Earth.ATM.JetLevel.FP;
 
             Precip.Assign((r, c) =>
             {
@@ -456,7 +455,7 @@ namespace ThorusCommon.Data
                 var lidx = LIDX[r, c];
                 var gp = GP[r, c];
                 var gt = GT[r, c];
-                var bp = BP[r, c];
+                var fp = FP[r, c];
 
                 // Baric gradient precipitation
                 var pRate = 0.5f * Math.Abs(gp);
@@ -475,8 +474,6 @@ namespace ThorusCommon.Data
                 {
                     var lidxRate = Math.Abs(lidx);
 
-                    var fp = 1;// Utils.BP_to_FP(bp);
-
                     var mul = 1;
                     if (lidx > 3)
                         mul = 2;
@@ -489,7 +486,6 @@ namespace ThorusCommon.Data
 
                     cRate = fp * mul * Math.Abs(lidxRate);
                 }
-
 
                 var totalRate = (pRate + fRate + oRate + cRate) * h / 100;
 

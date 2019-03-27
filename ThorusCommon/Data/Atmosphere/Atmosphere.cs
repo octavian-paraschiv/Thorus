@@ -11,7 +11,6 @@ using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
 using MathNet.Numerics;
-using ThorusCommon.Utility;
 
 namespace ThorusCommon.Engine
 {
@@ -184,14 +183,13 @@ namespace ThorusCommon.Engine
             _oldTMid = MidLevel.T.Clone() as DenseMatrix;
             _oldAirMass = AirMass.Clone() as DenseMatrix;
 
-            var BP = JetLevel.P.BP();
+            var FP = JetLevel.FP;
 
             Fronts.Assign((r, c) =>
             {
                 var dt = DT[r, c];
                 var dm = DM[r, c];
-                var bp = BP[r, c];
-                var fp = Utils.BP_to_FP(bp);
+                var fp = FP[r, c];
 
                 var adt = fp * Math.Abs(DT[r, c]);
 

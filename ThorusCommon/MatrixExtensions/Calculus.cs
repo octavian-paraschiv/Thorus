@@ -35,24 +35,6 @@ namespace ThorusCommon.MatrixExtensions
         }
 
         // TODO: move to dedicated atmosheric calculus class
-        public static DenseMatrix BP(this DenseMatrix V)
-        {
-            float[] range = V.IdentifyPressureRange();
-            float lowBlockThreshold = 0.5f * (range[0] + range[1]);
-            float strongBlockThreahold = 1.012f * lowBlockThreshold;
-
-            return MatrixFactory.New((r, c) =>
-                {
-                    var v = V[r, c];
-
-                    if (v < lowBlockThreshold)
-                        return v / lowBlockThreshold - 1;
-
-                    return (v - lowBlockThreshold) / (strongBlockThreahold - lowBlockThreshold);
-                });
-        }
-
-        // TODO: move to dedicated atmosheric calculus class
         public static float[] IdentifyPressureRange(this float p)
         {
             var M = DenseMatrix.Create(1, 1, (r, c) => p);

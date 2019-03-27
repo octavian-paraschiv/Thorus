@@ -27,7 +27,7 @@ namespace ThorusCommon.Data
         {
             get
             {
-                return LevelPressureExtremes.TopLevelExtremes;
+                return LevelPressureExtremes.JetLevelExtremes;
             }
         }
 
@@ -56,9 +56,8 @@ namespace ThorusCommon.Data
 
             var _ridgePatternDevs = P.ToWindComponents();
 
-            var BP = P.BP();
-
             FileSupport.Save(BP, Earth.UTC.Title, "D_BP");
+            FileSupport.Save(FP, Earth.UTC.Title, "D_FP");
 
             DenseMatrix[] extDev = null;
 
@@ -285,13 +284,11 @@ namespace ThorusCommon.Data
             return (float)Math.Sin((2 * (float)Math.PI * (varSeed / 4 + daysElapsed / varPeriod)));
         }
 
-
-
-
-
         public override void SaveStats(string title, string category)
         {
             FileSupport.SaveAsStats(P, title, string.Format("P_{0:d2}_MAP", _levelType), category);
+            FileSupport.SaveAsStats(BP, title, "D_BP_MAP", category);
+            FileSupport.SaveAsStats(FP, title, "D_FP_MAP", category);
         }
     }
 }

@@ -175,7 +175,10 @@ namespace ThorusViewer.Models
 
             var fieldMatrix = FileSupport.LoadSubMatrixFromFile(fieldDataFile, minLon, maxLon, minLat, maxLat);
 
-            bool notRomania = (App.ControlPanelModel.SelectedViewport.Name != "Romania");
+            bool interpolate = (fieldMatrix.RowCount < 10);
+
+            if (interpolate)
+                fieldMatrix = fieldMatrix.Interpolate();
 
             float[,] data = null;
             float[,] data2 = null;
@@ -204,8 +207,15 @@ namespace ThorusViewer.Models
                 DenseMatrix T01 = FileSupport.LoadSubMatrixFromFile(t01File, minLon, maxLon, minLat, maxLat);
                 DenseMatrix TE = FileSupport.LoadSubMatrixFromFile(teFile, minLon, maxLon, minLat, maxLat);
                 DenseMatrix TS = FileSupport.LoadSubMatrixFromFile(tsFile, minLon, maxLon, minLat, maxLat);
-
                 DenseMatrix C00 = fieldMatrix;
+
+                if (interpolate)
+                {
+                    T01 = T01.Interpolate();
+                    TE = TE.Interpolate();
+                    TS = TS.Interpolate();
+                    C00 = C00.Interpolate();
+                }
 
                 float sRain = 0;
                 float sSnow = 300;
@@ -273,15 +283,16 @@ namespace ThorusViewer.Models
             float lineSpacing = wdp.LineSpacing;
 
             m = m.MIN(minMax.Max).MAX(minMax.Min);
-
             data = m.Transpose().ToArray();
 
+            float step = interpolate ? 0.5f : 1;
+
             List<float> cols = new List<float>();
-            for (int i = minLon; i <= maxLon; i++)
+            for (float i = minLon; i <= maxLon; i += step)
                 cols.Add(i);
 
             List<float> rows = new List<float>();
-            for (int i = maxLat; i >= minLat; i--)
+            for (float i = maxLat; i >= minLat; i -= step)
                 rows.Add(i);
 
 
@@ -444,7 +455,10 @@ namespace ThorusViewer.Models
                         StrokeThickness = wdp.LineWidth,
                         FontSize = 15,
                         FontWeight = 500,
+
+                        
                     };
+
 
                     model.Series.Add(contour);
                 }

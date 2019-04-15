@@ -56,8 +56,11 @@ namespace ThorusCommon.Data
 
             var _ridgePatternDevs = P.ToWindComponents();
 
-            FileSupport.Save(BP, Earth.UTC.Title, "D_BP");
-            FileSupport.Save(FP, Earth.UTC.Title, "D_FP");
+            var this_BP = this.BP;
+            var this_FP = this.FP;
+
+            FileSupport.Save(this_BP, Earth.UTC.Title, "D_BP");
+            FileSupport.Save(this_FP, Earth.UTC.Title, "D_FP");
 
             DenseMatrix[] extDev = null;
 
@@ -157,7 +160,7 @@ namespace ThorusCommon.Data
                                 var fVar = GetVariability(daysElapsed);
                                 f = (1 - fVar) * fSingle + fVar * fDual;
 
-                                var bp = BP[r, c];
+                                var bp = this_FP[r, c];
 
                                 var devX1 = (f - 0.5f * bp) * dailyJetAdvance;
 
@@ -287,8 +290,12 @@ namespace ThorusCommon.Data
         public override void SaveStats(string title, string category)
         {
             FileSupport.SaveAsStats(P, title, string.Format("P_{0:d2}_MAP", _levelType), category);
-            FileSupport.SaveAsStats(BP, title, "D_BP_MAP", category);
-            FileSupport.SaveAsStats(FP, title, "D_FP_MAP", category);
+
+            var this_BP = this.BP;
+            var this_FP = this.FP;
+
+            FileSupport.SaveAsStats(this_BP, title, "D_BP_MAP", category);
+            FileSupport.SaveAsStats(this_FP, title, "D_FP_MAP", category);
         }
     }
 }

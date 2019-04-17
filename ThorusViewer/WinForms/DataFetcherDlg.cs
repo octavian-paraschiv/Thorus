@@ -40,21 +40,21 @@ namespace ThorusViewer.WinForms
         private void PopulateSstDates()
         {
             DateTime dtEnd = DateTime.Today;
-            DateTime dtStart = dtEnd.AddYears(-10);
+            DateTime dtStart = DateTime.Parse("2000-01-01");
             object sel = -1;
+
+            List<DateTime> ldt = new List<DateTime>();
 
             for (DateTime dt = dtStart; dt <= dtEnd; dt = dt.AddDays(1))
             {
                 if (dt.DayOfWeek != DayOfWeek.Sunday)
                     continue;
 
-                cmbSstDate.Items.Add(dt);
-                if (dtEnd.Subtract(dt).TotalDays <= 3)
-                    sel = dt;
+                ldt.Add(dt);
             }
 
-            if (sel != null)
-                cmbSstDate.SelectedItem = sel;
+            cmbSstDate.DataSource = (from dt in ldt orderby dt descending select dt).ToList();
+            cmbSstDate.SelectedIndex = 0;
         }
 
         private void btnFetchSstData_Click(object sender, EventArgs e)

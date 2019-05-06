@@ -135,12 +135,12 @@ namespace ThorusCommon.Thermodynamics
 
         public const float AngleBetweenWindAndIsobars = (float)(-(float)Math.PI / 2);
 
-        public static readonly float TEST_Lon = 20f;
-        public static readonly float TEST_Lat = 30f;
+        public static readonly float TEST_Lon = 25f;
+        public static readonly float TEST_Lat = 44f;
 
         public static bool SimBreakPoint(int r, int c, EarthModel model = null)
         {
-            SimDateTime compareTo = new SimDateTime("2017-06-13_00");
+            SimDateTime compareTo = new SimDateTime("2019-06-20_00");
 
 #if HAVE_TESTSIMBREAKPOINT
 

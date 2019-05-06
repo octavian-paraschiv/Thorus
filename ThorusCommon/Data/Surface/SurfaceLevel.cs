@@ -170,16 +170,17 @@ namespace ThorusCommon.Data
                 throw new FileNotFoundException();
 
             var wlMask = FileSupport.LoadMatrixFromFile(filePath);
-            var he = Height;
+            var he = Height.EQ(8);
 
             WL.Assign((r, c) =>
             {
-                var sgn = Math.Sign(wlMask[r, c]);
-                if (sgn == 0)
-                    return 0;
+                var sgn = 0f;
 
-                sgn = Math.Sign(he[r, c]);
-                if (sgn > 0)
+                sgn = Math.Sign(wlMask[r, c]);
+                if (sgn == 1)
+                  return 1;
+
+                if (he[r, c] >= 50f)
                     return 0;
 
                 return 1;
@@ -281,16 +282,16 @@ namespace ThorusCommon.Data
 
         public void Save(string title)
         {
-            FileSupport.Save(TE.EQ(), title, "T_TE_MAP");
-            FileSupport.Save(TW.EQ(), title, "T_TW_MAP");
-            FileSupport.Save(TL.EQ(), title, "T_TL_MAP");
-            FileSupport.Save(TS.EQ(), title, "T_TS_MAP");
+            FileSupport.Save(TE, title, "T_TE_MAP");
+            FileSupport.Save(TW, title, "T_TW_MAP");
+            FileSupport.Save(TL, title, "T_TL_MAP");
+            FileSupport.Save(TS, title, "T_TS_MAP");
 
             FileSupport.Save(SNOW, title, "N_00_MAP");
-            FileSupport.Save(RAIN.EQ(), title, "R_00_MAP");
+            FileSupport.Save(RAIN, title, "R_00_MAP");
 
-            FileSupport.Save(BLIZZARD.EQ(), title, "B_00_MAP");
-            FileSupport.Save(ALBEDO.EQ(), title, "A_00_MAP");
+            FileSupport.Save(BLIZZARD, title, "B_00_MAP");
+            FileSupport.Save(ALBEDO, title, "A_00_MAP");
 
             FileSupport.Save(Precip, title, "C_00_MAP");
             FileSupport.Save(TLow, title, "T_SL_MAP");
@@ -306,6 +307,7 @@ namespace ThorusCommon.Data
             FileSupport.Save(THigh - TNormHigh, title, "T_DH_MAP");
             FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP");
 
+            FileSupport.Save((1000 * WL - MatrixFactory.Init(500)), title, "E_00_MAP");
         }
 
         public void SaveStats(string title, string category)
@@ -321,20 +323,20 @@ namespace ThorusCommon.Data
             FileSupport.SaveAsStats(BLIZZARD, title, "B_00_MAP", category);
             FileSupport.SaveAsStats(ALBEDO, title, "A_00_MAP", category);
 
-            FileSupport.SaveAsStats(Precip.EQ(), title, "C_00_MAP", category);
-            FileSupport.SaveAsStats(TLow.EQ(), title, "T_SL_MAP", category);
-            FileSupport.SaveAsStats(THigh.EQ(), title, "T_SH_MAP", category);
-            FileSupport.SaveAsStats(LIDX.EQ(), title, "L_00_MAP", category);
+            FileSupport.SaveAsStats(Precip, title, "C_00_MAP", category);
+            FileSupport.SaveAsStats(TLow, title, "T_SL_MAP", category);
+            FileSupport.SaveAsStats(THigh, title, "T_SH_MAP", category);
+            FileSupport.SaveAsStats(LIDX, title, "L_00_MAP", category);
 
-            FileSupport.SaveAsStats(FOG.EQ(), title, "F_SI_MAP", category);
+            FileSupport.SaveAsStats(FOG, title, "F_SI_MAP", category);
 
             FileSupport.SaveAsStats(TNormLow, title, "T_NL_MAP", category);
             FileSupport.SaveAsStats(TNormHigh, title, "T_NH_MAP", category);
 
-            FileSupport.SaveAsStats((TLow - TNormLow).EQ(), title, "T_DL_MAP", category);
-            FileSupport.SaveAsStats((THigh - TNormHigh).EQ(), title, "T_DH_MAP", category);
+            FileSupport.SaveAsStats((TLow - TNormLow), title, "T_DL_MAP", category);
+            FileSupport.SaveAsStats((THigh - TNormHigh), title, "T_DH_MAP", category);
 
-            FileSupport.SaveAsStats(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP", category);
+            FileSupport.SaveAsStats(0.5f * (TLow - TNormLow + THigh - TNormHigh), title, "T_DA_MAP", category);
         }
 
         #endregion
@@ -667,6 +669,11 @@ namespace ThorusCommon.Data
                 var te1 = (0.5f * (t1 + t2) - lr * dh / 1000);
                 //var te1 = (t1 - lr * dh / 1000);
 
+                if (SimConstants.SimBreakPoint(r, c, Earth))
+                {
+                    int ss = 0;
+                }
+
                 var te =  
                     SimulationParameters.Instance.AirTempContribution * te1 + 
                     SimulationParameters.Instance.SurfaceTempContribution * TS[r, c];
@@ -756,10 +763,60 @@ namespace ThorusCommon.Data
             if (Precip == null)
                 CalculateTotalPrecipitation();
 
-            DenseMatrix TE = Earth.SFC.TE;
-
             float sunLatRad = References.GetSunLatitude_Radians(Earth.UTC);
             var refTemp = References.GetRefTemp(Earth);
+
+            TNormHigh.Assign((r, c) =>
+            {
+                // latitude
+                float lat = EarthModel.MaxLat - r;
+
+                float height = Earth.SFC.Height[r, c];
+
+                float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
+
+                // virtual temp at surface (called also equilibrium temp)
+                float te = refTemp[r, c] - SimulationParameters.Instance.HumidLapseRate * dh / 1000;
+
+                // daylength at specified time of year and latitude
+                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
+
+                // A factor that represents the angle of sun at high noon
+                // True sun angle at high noon is: Actual latitude of the place - Sun current latitude
+                // For example, At 45 grd N, on June 22nd this angle is: 45 - 23 = 22 grd = 0.384 rad
+                // And the sun angle factor is hence Math.Cos(0.384) = 0.99
+                float sunAngle = (float)Math.PI * lat / 180 - sunLatRad;
+                float sf = (float)Math.Cos(sunAngle);
+
+                float albedoFactor = DEF_ALBEDO[r, c] / 100;
+
+                float max_t = te + dl * 0.5f * sf * (1 - albedoFactor);
+
+                return max_t;
+            });
+
+            TNormLow.Assign((r, c) =>
+            {
+                // latitude
+                float lat = EarthModel.MaxLat - r;
+
+                float height = Earth.SFC.Height[r, c];
+
+                float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
+
+                // virtual temp at surface (called also equilibrium temp)
+                float te = refTemp[r, c] - SimulationParameters.Instance.HumidLapseRate * dh / 1000;
+
+                // daylength at specified time of year and latitude
+                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
+
+                float albedoFactor = DEF_ALBEDO[r, c] / 100;
+
+                float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * 0.5f * (albedoFactor);
+
+                return min_t;
+            });
+
 
             THigh.Assign((r, c) =>
             {
@@ -798,14 +855,16 @@ namespace ThorusCommon.Data
 
                 // 5: Fog: in a foggy day the earth sfc does not receive the same amount of energy
 
-                if (SimConstants.SimBreakPoint(r, c, Earth))
-                {
-                    int ss = 0;
-                }
-
                 // Finally the max temp can be calculated as being roughly the equilibrium temp (te) 
                 // plus an amount that represents the extra energy transmitted to the near-surface air during day time.
                 float max_t = te + dl * (1 - nn) * sf * (1 - albedoFactor);
+
+                float wl = WL[r, c];
+                if (wl != 0)
+                {
+                    float max_t_norm = TNormHigh[r, c];
+                    max_t = 0.6f * max_t + 0.4f * max_t_norm;
+                }
 
                 return max_t;
             });
@@ -841,65 +900,16 @@ namespace ThorusCommon.Data
                 // 5. Fog: In a foggy night, the earth sfc loses less energy than in a clear night
                 // OBS: the fog is included in the total cloudiness factor
 
-                if (SimConstants.SimBreakPoint(r, c, Earth))
-                {
-                    int ss = 0;
-                }
-
                 // Finally the min temp can be calculated as being roughly the equilibrium temp (te) 
                 // minus an amount that represents the extra energy lost by the near-surface air during night time.
                 float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * (1 - nn) * (albedoFactor);
 
-                return min_t;
-            });
-
-            TNormHigh.Assign((r, c) =>
-            {
-                // latitude
-                float lat = EarthModel.MaxLat - r;
-
-                float height = Earth.SFC.Height[r, c];
-
-                float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
-
-                // virtual temp at surface (called also equilibrium temp)
-                float te = refTemp[r, c] - SimulationParameters.Instance.HumidLapseRate * dh / 1000;
-                
-                // daylength at specified time of year and latitude
-                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
-
-                // A factor that represents the angle of sun at high noon
-                // True sun angle at high noon is: Actual latitude of the place - Sun current latitude
-                // For example, At 45 grd N, on June 22nd this angle is: 45 - 23 = 22 grd = 0.384 rad
-                // And the sun angle factor is hence Math.Cos(0.384) = 0.99
-                float sunAngle = (float)Math.PI * lat / 180 - sunLatRad;
-                float sf = (float)Math.Cos(sunAngle);
-
-                float albedoFactor = DEF_ALBEDO[r, c] / 100;
-
-                float max_t = te + dl * 0.5f * sf * (1 - albedoFactor);
-
-                return max_t;
-            });
-
-            TNormLow.Assign((r, c) =>
-            {
-                // latitude
-                float lat = EarthModel.MaxLat - r;
-
-                float height = Earth.SFC.Height[r, c];
-
-                float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
-
-                // virtual temp at surface (called also equilibrium temp)
-                float te = refTemp[r, c] - SimulationParameters.Instance.HumidLapseRate * dh / 1000;
-
-                // daylength at specified time of year and latitude
-                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
-
-                float albedoFactor = DEF_ALBEDO[r, c] / 100;
-
-                float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * 0.5f * (albedoFactor);
+                float wl = WL[r, c];
+                if (wl != 0)
+                {
+                    float min_t_norm = TNormLow[r, c];
+                    min_t = 0.6f * min_t + 0.4f * min_t_norm;
+                }
 
                 return min_t;
             });

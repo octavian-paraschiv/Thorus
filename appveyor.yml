@@ -9,10 +9,11 @@ environment:
 before_build:
 - git checkout master
 - ps: .\prep_build.ps1 "$env:APPVEYOR_BUILD_VERSION"
-- nuget restore ".\Thorus.sln" -Verbosity Quiet
+- nuget restore ".\Thorus.sln"
+- dir .\packages
 
 build_script:
-- msbuild /restore /p:Configuration=Debug /t:Rebuild ".\Thorus.sln" /v:minimal 
+- msbuild /p:Configuration=Debug /t:Rebuild ".\Thorus.sln" /v:minimal 
   
 after_build:
 - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"

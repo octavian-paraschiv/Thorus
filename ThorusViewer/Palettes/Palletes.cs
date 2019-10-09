@@ -35,7 +35,7 @@ namespace ThorusViewer.Pallettes
             : base("N_00")
         {
             _lineWidth = 1;
-            _lineSpacing = 10f;
+            _lineSpacing = 1f;
             _minMax = new Range<float>(0, 100f);
             _acceptsContourLines = true;
             this.Description = "SNOW COVER";
@@ -137,7 +137,7 @@ namespace ThorusViewer.Pallettes
             : base("T")
         {
             _lineWidth = 1;
-            _lineSpacing = 2f;
+            _lineSpacing = 1f;
             _minMax = TempRange;
             _acceptsContourLines = true;
             this.Unit = "°C";
@@ -149,7 +149,6 @@ namespace ThorusViewer.Pallettes
     {
         public T_SL_Palette()
         {
-            _lineSpacing = 1f;
         }
     }
 
@@ -157,7 +156,6 @@ namespace ThorusViewer.Pallettes
     {
         public T_SH_Palette()
         {
-            _lineSpacing = 1f;
         }
     }
 
@@ -165,7 +163,6 @@ namespace ThorusViewer.Pallettes
     {
         public T_NL_Palette()
         {
-            _lineSpacing = 1f;
         }
     }
 
@@ -173,7 +170,6 @@ namespace ThorusViewer.Pallettes
     {
         public T_NH_Palette()
         {
-            _lineSpacing = 1f;
         }
     }
 
@@ -205,7 +201,6 @@ namespace ThorusViewer.Pallettes
     {
         public T_TE_Palette()
         {
-            _lineSpacing = 5f;
         }
     }
 
@@ -243,8 +238,7 @@ namespace ThorusViewer.Pallettes
     {
         public T_01_Palette()
         {
-            _minMax = TMidLevelRange;
-            this.Unit = "°C";
+            //_minMax = TMidLevelRange;
         }
     }
 
@@ -252,9 +246,8 @@ namespace ThorusViewer.Pallettes
     {
         public T_02_Palette()
         {
-            _lineSpacing = 5;
-            _minMax = new Range<float>(-60, 0);
-            this.Unit = "°C";
+            //_lineSpacing = 5;
+            //_minMax = new Range<float>(-60, 0);
         }
     }
     #endregion
@@ -545,7 +538,7 @@ namespace ThorusViewer.Pallettes
             : base("L")
         {
             _lineWidth = 1;
-            _lineSpacing = 0.5f;
+            _lineSpacing = 1f;
             _minMax = new Range<float>(-15, 15);
             _acceptsContourLines = true;
 

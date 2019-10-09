@@ -214,7 +214,6 @@ namespace ThorusViewer.Models
                     T01 = T01.Interpolate();
                     TE = TE.Interpolate();
                     TS = TS.Interpolate();
-                    C00 = C00.Interpolate();
                 }
 
                 float sRain = 0;

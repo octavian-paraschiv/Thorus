@@ -26,6 +26,8 @@ namespace ThorusViewer
 
         private ConcurrentQueue<string> _SimStdOut = new ConcurrentQueue<string>();
 
+        const int SimStopDaysToAdd = 7 * 14;
+
         public SimControlPanel()
         {
             InitializeComponent();
@@ -40,7 +42,7 @@ namespace ThorusViewer
             DateTime dt = DateTime.Now;
             dtpSimStart.Value = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
 
-            dt = dt.AddDays(5);
+            dt = dt.AddDays(SimStopDaysToAdd);
             dtpSimStop.Value = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
 
             cmbRange.SelectedIndex = 0;
@@ -49,6 +51,8 @@ namespace ThorusViewer
             ValidateInitialConditionFiles(true);
 
             this.dtpSimStart.ValueChanged += dtpSimStart_ValueChanged;
+
+            
         }
 
         void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -286,7 +290,7 @@ namespace ThorusViewer
 
         private void dtpSimStart_ValueChanged(object sender, EventArgs e)
         {
-            DateTime dt = dtpSimStart.Value.AddDays(5);
+            DateTime dt = dtpSimStart.Value.AddDays(SimStopDaysToAdd);
             dtpSimStop.Value = new DateTime(dt.Year, dt.Month, dt.Day, 23, 0, 0);
         }
 

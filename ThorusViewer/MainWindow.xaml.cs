@@ -108,6 +108,10 @@ namespace ThorusViewer
                     string title = Path.GetFileNameWithoutExtension(file).ToUpperInvariant();
 
                     string type = title.Substring(0, 4);
+
+                    DenseMatrix rawMatrix = null;
+                    string subMatrixPath = null;
+
                     switch (type)
                     {
                         case "C_00":
@@ -121,6 +125,18 @@ namespace ThorusViewer
                         case "F_SI":
                         case "T_NL":
                         case "T_NH":
+                            rawMatrix = FileSupport.LoadSubMatrixFromFile(file, viewPort.MinLon, viewPort.MaxLon, viewPort.MinLat, viewPort.MaxLat);
+                            subMatrixPath = file.Replace(SimulationData.DataFolder, submatrixFolder);
+                            break;
+
+                        case "P_00":
+                        case "P_01":
+                            {
+                                var temp = FileSupport.LoadSubMatrixFromFile(file, viewPort.MinLon, viewPort.MaxLon, viewPort.MinLat, viewPort.MaxLat);
+                                rawMatrix = temp.Gradient2();
+
+                                subMatrixPath = file.Replace(SimulationData.DataFolder, submatrixFolder).Replace("P_0", "W_0");
+                            }
                             break;
 
                         default:
@@ -128,9 +144,7 @@ namespace ThorusViewer
                     }
 
 
-                    string subMatrixPath = file.Replace(SimulationData.DataFolder, submatrixFolder);
-
-                    var rawMatrix = FileSupport.LoadSubMatrixFromFile(file, viewPort.MinLon, viewPort.MaxLon, viewPort.MinLat, viewPort.MaxLat);
+                    
 
                     DenseMatrix output = null;
 

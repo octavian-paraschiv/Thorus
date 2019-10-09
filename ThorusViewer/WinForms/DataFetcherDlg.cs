@@ -45,16 +45,31 @@ namespace ThorusViewer.WinForms
 
             List<DateTime> ldt = new List<DateTime>();
 
-            for (DateTime dt = dtStart; dt <= dtEnd; dt = dt.AddDays(1))
+            bool skip = true;
+
+            for (DateTime dt = dtEnd; dt >= dtStart; dt = dt.AddDays(-1))
             {
                 if (dt.DayOfWeek != DayOfWeek.Sunday)
                     continue;
 
+                if (skip)
+                {
+                    skip = false;
+                    continue;
+                }
+
                 ldt.Add(dt);
             }
 
-            cmbSstDate.DataSource = (from dt in ldt orderby dt descending select dt).ToList();
+            cmbSstDate.DataSource = ldt;
             cmbSstDate.SelectedIndex = 0;
+            cmbSstDate.Format += CmbSstDate_Format;
+        }
+
+        private void CmbSstDate_Format(object sender, ListControlConvertEventArgs e)
+        {
+            var dt = (DateTime)e.ListItem;
+            e.Value = dt.ToString("yyyy-MM-dd");
         }
 
         private void btnFetchSstData_Click(object sender, EventArgs e)
@@ -67,6 +82,8 @@ namespace ThorusViewer.WinForms
             DateTime selDate = (DateTime)cmbSstDate.SelectedItem;
 
             Log($"Initial condition download started for date: {selDate:yyyy-MM-dd}");
+
+            // selDate = selDate.AddDays(4);
 
             Task.Factory.StartNew(() => _downloadEmails.Reset())
                 .ContinueWith(_ => DeleteClientSideData())
@@ -117,17 +134,20 @@ namespace ThorusViewer.WinForms
             if (_abort.WaitOne(0))
                 return;
 
-            string vid_pid_tid = "";
+            string vid_did_tid = "";
 
+            string vid = ConfigurationManager.AppSettings["noaaSst_VID"];
+            string did = ConfigurationManager.AppSettings["noaaSst_DID"];
+            string lookupText = ConfigurationManager.AppSettings["noaaSst_Lookup"];
             string sstSearchUrl = ConfigurationManager.AppSettings["noaaSstSearchUrl"];
+
             if (string.IsNullOrEmpty(sstSearchUrl) == false)
             {
                 using (WebClientEx wc = new WebClientEx())
                 {
-                    Log($"Requesting VID_PID_TID data from: {sstSearchUrl}");
+                    Log($"Requesting TID data from: {sstSearchUrl}");
 
                     string response = wc.DownloadString(sstSearchUrl);
-                    string lookupText = "/psd/cgi-bin/DataAccess.pl?DB_dataset=NOAA+Optimum+Interpolation+(OI)+SST+V2&DB_variable=Sea+Surface+Temperature&DB_statistic=Mean&";
 
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
@@ -139,19 +159,28 @@ namespace ThorusViewer.WinForms
                                 return string.Compare(s2, s1, true);
                             });
 
-                            vid_pid_tid = elements[0].Replace(lookupText, string.Empty);
+                            foreach (var elem in elements)
+                            {
+                                var text = elem.ToLowerInvariant();
+
+                                if (text.Contains($"db_did={did}") && text.Contains($"db_vid={vid}"))
+                                {
+                                    vid_did_tid = elements[0].Replace(lookupText, string.Empty);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            if (string.IsNullOrEmpty(vid_pid_tid))
+            if (string.IsNullOrEmpty(vid_did_tid))
             {
-                Log($"Invalid VID_PID_TID data. Cannot continue.");
+                Log($"Invalid VID_DID_TID data. Cannot continue.");
                 return;
             }
 
-            Log($"Using: {vid_pid_tid}");
+            Log($"Using: {vid_did_tid}");
 
             string sstRequestUrlFmt = ConfigurationManager.AppSettings["noaaSstGetUrl"];
             if (string.IsNullOrEmpty(sstRequestUrlFmt) == false)
@@ -160,7 +189,7 @@ namespace ThorusViewer.WinForms
                     .Replace("##YEAR##", selDate.Year.ToString())
                     .Replace("##MONTH##", selDate.ToString("MMM"))
                     .Replace("##DAY##", selDate.Day.ToString())
-                    .Replace("##VID_PID_TID##", vid_pid_tid);
+                    .Replace("##VID_PID_TID##", vid_did_tid);
 
                 using (WebClientEx wc = new WebClientEx())
                 {

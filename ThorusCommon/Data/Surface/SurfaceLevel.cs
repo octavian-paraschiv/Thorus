@@ -535,7 +535,7 @@ namespace ThorusCommon.Data
                     else
                     {
                         // Old snow cover is slowly compacting due to daytime melt / night time freeze
-                        totalSnow -= 0.05f * (1 + fogMeltFactor) * Earth.SnapshotLength;
+                        totalSnow -= 0.025f * (1 + fogMeltFactor) * Earth.SnapshotLength;
 
                         if (totalSnow < 0)
                             totalSnow = 0;
@@ -939,10 +939,12 @@ namespace ThorusCommon.Data
             // Based on FSI formula: fsi = 4ts - 2(t850 + tds) + w850
 
             var W850 = Earth.ATM.MidLevel.P.Gradient2();
+            var DIV = (Earth.ATM.MidLevel.P.Divergence()).EQ(4);
 
             FOG.Assign((r, c) =>
             {
-                if (Height[r, c] <= SimConstants.LevelHeights[LevelType.MidLevel])
+                var div = DIV[r, c];
+                if (div <= 0)
                 {
                     var ts = TS[r, c];
                     var t850 = Earth.ATM.MidLevel.T[r, c];

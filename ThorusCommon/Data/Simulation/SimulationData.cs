@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace ThorusCommon.Engine
 {
@@ -101,6 +102,8 @@ namespace ThorusCommon.Engine
         
         static SimulationData()
         {
+            Init();
+
             // Init work folder
             string wf = DefaultWorkFolder;
 
@@ -122,6 +125,24 @@ namespace ThorusCommon.Engine
             catch
             {
                 _workFolder = "c:\\";
+            }
+        }
+
+        static bool _init = false;
+        public static void Init()
+        {
+            if (_init)
+                return;
+
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+                _init = true;
+            }
+            catch
+            {
+                _init = false;
             }
         }
 

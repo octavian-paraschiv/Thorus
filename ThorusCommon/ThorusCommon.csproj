@@ -64,7 +64,6 @@
     <Compile Include="IO\FileImporter.cs" />
     <Compile Include="IO\FileSupport.cs" />
     <Compile Include="MatrixExtensions\Algebraic.cs" />
-    <Compile Include="Plugins\JetPlugin.cs" />
     <Compile Include="SimParams\SimulationParameters.cs" />
     <Compile Include="Thermodynamics\Constants.cs" />
     <Compile Include="Thermodynamics\LapseRate.cs" />

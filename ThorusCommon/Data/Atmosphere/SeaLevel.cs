@@ -22,20 +22,16 @@ namespace ThorusCommon.Data
         public SeaLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.SeaLevel, loadFromStateFiles, defaultValue)
         {
+            _fNonAdvect = 0.5f;
+            _fProAdvect = 1 - _fNonAdvect;
+
+            _fScaleWindX = 0.75f;
+            _fScaleWindY = 0.75f;
         }
 
         public override void RebuildState()
         {
         }
-
-        private static readonly float _fNonAdvect = 0.5f;
-        private static readonly float _fProAdvect = 1 - _fNonAdvect;
-
-        private static readonly float _fScaleWindX = 0.75f;
-        private static readonly float _fScaleWindY = 0.75f;
-
-        private static readonly float _fNonHypso = 0.9f;
-        private static readonly float _fProHypso = 1 - _fNonHypso;
 
         public override void Advance()
         {
@@ -64,22 +60,7 @@ namespace ThorusCommon.Data
             var projT = (shiftedT + warmup).EQ();
             var projH = H.ApplyDeviations(applyDevs, null).EQ();
 
-            DenseMatrix[] wind = P.ToWindComponents();
-            DenseMatrix[] advDev = new DenseMatrix[]
-            {
-                _fScaleWindX * Earth.SnapshotDivFactor * wind[Direction.X],
-                _fScaleWindY * Earth.SnapshotDivFactor * wind[Direction.Y],
-            };
-
-            DenseMatrix projT_adv = T.ApplyDeviations(advDev, null).EQ();
-            DenseMatrix projH_adv = H.ApplyDeviations(advDev, null).EQ();
-
-            T = (_fNonAdvect * projT + _fProAdvect * projT_adv).EQ();
-
-            H = (_fNonAdvect * projH + _fProAdvect * projH_adv)
-                // Can't be lower than 0 or higher than 100
-                .MAX(0).MIN(100)
-                .EQ();
+            ApplyAdvection(projT, projH);
 
             ApplyCyclogenesys(applyDevs, T0, P0);
         }

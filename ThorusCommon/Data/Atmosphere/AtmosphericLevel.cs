@@ -9,6 +9,7 @@ using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
 using ThorusCommon.Data;
 using System.IO;
+using static ThorusCommon.SimulationParameters;
 
 namespace ThorusCommon.Engine
 {
@@ -25,6 +26,12 @@ namespace ThorusCommon.Engine
         protected DenseMatrix[] _accumulatedFieldDevs = MatrixFactory.Init2D();
         protected DenseMatrix[] _actualDev = MatrixFactory.Init2D();
         protected DenseMatrix[] _advDev = MatrixFactory.Init2D();
+
+        protected float _fNonAdvect = 0.9f;
+        protected float _fProAdvect = 0.1f;
+        
+        protected float _fScaleWindX = 0.25f;
+        protected float _fScaleWindY = 0.25f;
 
         public DenseMatrix[] ActualDev
         {
@@ -125,7 +132,7 @@ namespace ThorusCommon.Engine
         public abstract void RebuildState();
 
 
-        protected void ApplyAccumulatedDeviations()
+        protected virtual void ApplyAccumulatedDeviations()
         {
             for (int r = 0; r < SurfaceLevel.GridRowCount; r++)
                 for (int c = 0; c < SurfaceLevel.GridColumnCount; c++)
@@ -146,7 +153,50 @@ namespace ThorusCommon.Engine
                 }
         }
 
-        protected void ApplyCyclogenesys(DenseMatrix[] applyDevs, DenseMatrix T0, DenseMatrix P0)
+        protected virtual void ApplyAdvection(DenseMatrix projT, DenseMatrix projH)
+        {
+            DenseMatrix[] wind = P.ToWindComponents();
+
+            DenseMatrix projT_adv = projT.Clone() as DenseMatrix;
+            DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
+
+            float mul = 1;
+            int count = 1;
+
+            switch (SimulationParameters.Instance.AdvectionModel)
+            {
+                case AdvectionModels.Coarse:
+                    mul = 1;
+                    count = 1;
+                    break;
+
+                case AdvectionModels.Fine:
+                    mul = (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
+                    count = Earth.SnapshotLength;
+                    break;
+            }
+
+            DenseMatrix[] advDev = new DenseMatrix[]
+            {
+                mul * _fScaleWindX * wind[Direction.X],
+                mul * _fScaleWindY * wind[Direction.Y],
+            };
+
+            for (int i = 0; i < count; i++)
+            {
+                projT_adv = projT_adv.ApplyDeviations(advDev, null);
+                projH_adv = projH_adv.ApplyDeviations(advDev, null);
+            }
+
+            T = (_fNonAdvect * projT + _fProAdvect * projT_adv).EQ();
+
+            H = (_fNonAdvect * projH + _fProAdvect * projH_adv)
+                // Can't be lower than 0 or higher than 100
+                .MAX(0).MIN(100)
+                .EQ();
+        }
+
+        protected virtual void ApplyCyclogenesys(DenseMatrix[] applyDevs, DenseMatrix T0, DenseMatrix P0)
         {
             DenseMatrix rawP = P0.Clone() as DenseMatrix;
 
@@ -181,6 +231,8 @@ namespace ThorusCommon.Engine
             var weakBlock = Earth.ATM.JetLevel.WeakBlockTH;
             var strongBlock = Earth.ATM.JetLevel.StrongBlockTH;
 
+            var DIV = (10 * Earth.ATM.JetLevel.P.Divergence()).EQ(4);
+
             rawP.Assign((r, c) =>
             {
                 var front = Earth.ATM.Fronts[r, c];
@@ -197,12 +249,20 @@ namespace ThorusCommon.Engine
                 var cf = -SimulationParameters.Instance.CyclogeneticFactor;
                 var acf = SimulationParameters.Instance.AntiCyclogeneticFactor;
 
-                const float strong = 1.1f;
-                const float weak = 0.3f;
+                var div = DIV[r, c];
+
+                const float strong = 2.5f;
+                const float weak = 0.5f;
                 const float pseudoStationary = 0.1f;
 
-                bool stable = ((lapseRate > SimulationParameters.Instance.HumidLapseRate) || (pJetLevel > strongBlock));
-                bool unstable = ((lapseRate < SimulationParameters.Instance.HumidLapseRate) || (pJetLevel < weakBlock));
+                //bool stable = ((lapseRate > SimulationParameters.Instance.HumidLapseRate) || (pJetLevel > strongBlock));
+                //bool unstable = ((lapseRate < SimulationParameters.Instance.HumidLapseRate) || (pJetLevel < weakBlock));
+
+                //bool stable = ((pJetLevel >= strongBlock));
+                //bool unstable = ((pJetLevel <= weakBlock));
+
+                bool stable = ((div <= -1));
+                bool unstable = ((div >= 1));
 
                 float actualDp = 0;
 

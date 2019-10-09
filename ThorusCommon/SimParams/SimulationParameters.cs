@@ -83,7 +83,7 @@ namespace ThorusCommon
             this.MinTsForMelting = 0.1f;
             this.MaxFreezingRainDelta = 5f;
 
-            this.JetStreamPattern = JetStreamPatterns.Variable_SeasonalReversal;
+            this.JetStreamPattern = JetStreamPatterns.VariableJet_SeasonalReversal;
             this.JetStreamVariabilityPeriod = 7f;
             this.JetStreamVariabilitySeed = 0f;
 
@@ -216,7 +216,18 @@ namespace ThorusCommon
         [Range(0f, 1f)]
         [DefaultValue(0.5f)]
         public float AntiCyclogeneticFactor { get { return (1 - CyclogeneticFactor); } }
-        
+
+        public enum AdvectionModels
+        {
+            Coarse = 0,
+            Fine,
+        }
+
+        [Category("Atmosphere model / Advection")]
+        [Description("Model to use to calculate air mass advection")]
+        [DefaultValue(AdvectionModels.Coarse)]
+        public AdvectionModels AdvectionModel { get; set; }
+
         #endregion
 
         #region Temperature models
@@ -404,22 +415,27 @@ namespace ThorusCommon
             /// <summary>
             /// Variable jet with reversal (Combination of Single and Dual with reversal)
             /// </summary>
-            Variable_WithReversal,
+            VariableJet_WithReversal,
 
             /// <summary>
             /// Variable jet with reversal depending on season  (Combination of Single and Dual with seasonal reversal)
             /// </summary>
-            Variable_SeasonalReversal,
+            VariableJet_SeasonalReversal,
 
             /// <summary>
             /// Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)
             /// </summary>
-            Variable_SeasonalAndBlock_Reversal,
+            VariableJet_SeasonalAndBlock_Reversal,
 
             /// <summary>
-            /// Jet stream is modeled by an external plugin
+            /// Adaptive model
             /// </summary>
-            Plugin,
+            AdaptiveJet,
+
+            /// <summary>
+            /// Adaptive with high pressure block model
+            /// </summary>
+            AdaptiveJet_WithBlock,
         }
 
         [Category(" Atmosphere model / Jet Stream")]
@@ -434,11 +450,10 @@ namespace ThorusCommon
 
             "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
             "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n" +
-            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n" +
+            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n"
+        )]
 
-            "Plugin => Jet stream is modeled by an external plugin")]
-
-        [DefaultValue(JetStreamPatterns.Variable_SeasonalReversal)]
+        [DefaultValue(JetStreamPatterns.VariableJet_SeasonalReversal)]
         public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]

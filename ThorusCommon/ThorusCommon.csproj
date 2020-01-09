@@ -51,7 +51,18 @@
     <Compile Include="Data\Atmosphere\AtmosphericLevel.cs" />
     <Compile Include="Data\Atmosphere\Atmosphere.cs" />
     <Compile Include="Data\Atmosphere\JetLevel.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\AdaptiveJet_WithBlock.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\JetModelFunctions.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\SingleJet_SeasonalReversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\DualJet_WithReversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\DualJet_SeasonalReversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\VariableJet_WithReversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\VariableJet_SeasonalReversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\VariableJet_SeasonalAndBlock_Reversal.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\AdaptiveJet.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\SingleJet_WithReversal.cs" />
     <Compile Include="Data\Atmosphere\SeaLevel.cs" />
+    <Compile Include="Data\AtmosphericLevelFactory.cs" />
     <Compile Include="Data\Earth\EarthModel.cs" />
     <Compile Include="Data\Earth\IEarthFeature.cs" />
     <Compile Include="Data\Atmosphere\MidLevel.cs" />
@@ -100,5 +111,6 @@
       <Name>ThorusCommon.IO</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

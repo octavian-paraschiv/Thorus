@@ -56,10 +56,15 @@ namespace ThorusCommon.Engine
         {
             this.Earth = earth;
 
-            SeaLevel = new SeaLevel(earth, loadFromStateFiles, defaultValue);
-            MidLevel = new MidLevel(earth, loadFromStateFiles, defaultValue);
-            TopLevel = new TopLevel(earth, loadFromStateFiles, defaultValue);
-            JetLevel = new JetLevel(earth, loadFromStateFiles, defaultValue);
+            SeaLevel = this.CreateLevel(LevelType.SeaLevel, loadFromStateFiles, defaultValue) as SeaLevel;
+            MidLevel = this.CreateLevel(LevelType.MidLevel, loadFromStateFiles, defaultValue) as MidLevel;
+            TopLevel = this.CreateLevel(LevelType.TopLevel, loadFromStateFiles, defaultValue) as TopLevel;
+            JetLevel = this.CreateLevel(LevelType.JetLevel, loadFromStateFiles, defaultValue) as JetLevel;
+
+            Console.WriteLine($"  -> Using {SeaLevel.GetType().Name} as sea level model ...");
+            Console.WriteLine($"  -> Using {MidLevel.GetType().Name} as mid level model ...");
+            Console.WriteLine($"  -> Using {TopLevel.GetType().Name} as top level model ...");
+            Console.WriteLine($"  -> Using {JetLevel.GetType().Name} as jet level model ...");
 
             if (loadFromStateFiles == false)
             {

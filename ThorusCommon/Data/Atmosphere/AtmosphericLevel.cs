@@ -27,12 +27,6 @@ namespace ThorusCommon.Engine
         protected DenseMatrix[] _actualDev = MatrixFactory.Init2D();
         protected DenseMatrix[] _advDev = MatrixFactory.Init2D();
 
-        protected float _fNonAdvect = 0.9f;
-        protected float _fProAdvect = 0.1f;
-        
-        protected float _fScaleWindX = 0.25f;
-        protected float _fScaleWindY = 0.25f;
-
         public DenseMatrix[] ActualDev
         {
             get
@@ -161,25 +155,15 @@ namespace ThorusCommon.Engine
             DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
 
             float mul = 1;
-            int count = 1;
+            int count = Earth.SnapshotLength;
 
-            switch (SimulationParameters.Instance.AdvectionModel)
-            {
-                case AdvectionModels.Coarse:
-                    mul = 1;
-                    count = 1;
-                    break;
-
-                case AdvectionModels.Fine:
-                    mul = (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
-                    count = Earth.SnapshotLength;
-                    break;
-            }
+            float fNonAdvect = 0.5f;
+            float fProAdvect = 1 - fNonAdvect;
 
             DenseMatrix[] advDev = new DenseMatrix[]
             {
-                mul * _fScaleWindX * wind[Direction.X],
-                mul * _fScaleWindY * wind[Direction.Y],
+                mul * wind[Direction.X],
+                mul * wind[Direction.Y],
             };
 
             for (int i = 0; i < count; i++)
@@ -188,9 +172,9 @@ namespace ThorusCommon.Engine
                 projH_adv = projH_adv.ApplyDeviations(advDev, null);
             }
 
-            T = (_fNonAdvect * projT + _fProAdvect * projT_adv).EQ();
+            T = (fNonAdvect * projT + fProAdvect * projT_adv).EQ();
 
-            H = (_fNonAdvect * projH + _fProAdvect * projH_adv)
+            H = (fNonAdvect * projH + fProAdvect * projH_adv)
                 // Can't be lower than 0 or higher than 100
                 .MAX(0).MIN(100)
                 .EQ();

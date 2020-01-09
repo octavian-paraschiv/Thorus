@@ -208,25 +208,14 @@ namespace ThorusCommon
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
         [Range(0f, 1f)]
-        [DefaultValue(0.5f)]
+        [DefaultValue(0.33f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate anticyclones")]
         [Range(0f, 1f)]
-        [DefaultValue(0.5f)]
-        public float AntiCyclogeneticFactor { get { return (1 - CyclogeneticFactor); } }
-
-        public enum AdvectionModels
-        {
-            Coarse = 0,
-            Fine,
-        }
-
-        [Category("Atmosphere model / Advection")]
-        [Description("Model to use to calculate air mass advection")]
-        [DefaultValue(AdvectionModels.Coarse)]
-        public AdvectionModels AdvectionModel { get; set; }
+        [DefaultValue(0.33f)]
+        public float AntiCyclogeneticFactor { get; set; }
 
         #endregion
 
@@ -439,21 +428,8 @@ namespace ThorusCommon
         }
 
         [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the pattern of the jet stream oscillation.\n\n" +
-            "SingleJet_NoReversal => Single hemispherical jet, without reversal [Theoretical pattern only]\n" +
-            "SingleJet_WithReversal => Single hemispherical jet, with reversal at Poles and Equator [Applicable in cold season]\n" +
-            "SingleJet_SeasonalReversal => Single hemispherical jet with reversal zones depending on season" +
-
-            "DualJet_NoReversal => Dual hemispherical jet without reversal. [Theoretical pattern only]\n\n" +
-            "DualJet_WithReversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
-            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season\n\n" +
-
-            "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
-            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n" +
-            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n"
-        )]
-
-        [DefaultValue(JetStreamPatterns.VariableJet_SeasonalReversal)]
+        [Description("A virtual variable that represents the pattern of the jet stream oscillation")]
+        [DefaultValue(JetStreamPatterns.AdaptiveJet)]
         public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]

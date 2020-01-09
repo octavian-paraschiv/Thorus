@@ -51,20 +51,16 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix Assign(this DenseMatrix m, Func<int, int, float> vFunc)
         {
             if (m == null)
-            {
                 m = MatrixFactory.New(vFunc);
-            }
-            else
-            {
-                for (int r = 0; r < m.RowCount; r++)
-                    for (int c = 0; c < m.ColumnCount; c++)
-                    {
-                        if (vFunc != null)
-                            m[r, c] = vFunc(r, c);
-                        else
-                            m[r, c] = 0;
-                    }
-            }
+
+            for (int r = 0; r < m.RowCount; r++)
+                for (int c = 0; c < m.ColumnCount; c++)
+                {
+                    if (vFunc != null)
+                        m[r, c] = vFunc(r, c);
+                    else
+                        m[r, c] = 0;
+                }
 
             return m;
         }
@@ -72,21 +68,16 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix[] Assign2D(this DenseMatrix[] m2d, Func<int, int, float> vFuncX, Func<int, int, float> vFuncY)
         {
             if (m2d == null)
-            {
                 m2d = MatrixFactory.New2D(vFuncX, vFuncY);
-            }
-            else
-            {
-                if (m2d[Direction.X] == null)
-                    m2d[Direction.X] = MatrixFactory.New(vFuncX);
-                else
-                    m2d[Direction.X].Assign(vFuncX);
 
-                if (m2d[Direction.Y] == null)
-                    m2d[Direction.Y] = MatrixFactory.New(vFuncY);
-                else
-                    m2d[Direction.Y].Assign(vFuncY);
-            }
+            if (m2d[Direction.X] == null)
+                m2d[Direction.X] = MatrixFactory.New(vFuncX);
+
+            if (m2d[Direction.Y] == null)
+                m2d[Direction.Y] = MatrixFactory.New(vFuncY);
+
+            m2d[Direction.X].Assign(vFuncX);
+            m2d[Direction.Y].Assign(vFuncY);
 
             return m2d;
         }

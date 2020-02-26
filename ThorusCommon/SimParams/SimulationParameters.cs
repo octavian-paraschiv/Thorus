@@ -159,7 +159,14 @@ namespace ThorusCommon
                                 Type t = p.PropertyType.UnderlyingSystemType;
                                 if (t.IsEnum)
                                 {
-                                    value = Enum.Parse(p.PropertyType.UnderlyingSystemType, valStr);
+                                    try
+                                    {
+                                        value = Enum.Parse(p.PropertyType.UnderlyingSystemType, valStr);
+                                    }
+                                    catch
+                                    {
+                                        value = Enum.GetValues(p.PropertyType.UnderlyingSystemType).GetValue(0);
+                                    }
                                 }
                                 else
                                 {
@@ -216,6 +223,18 @@ namespace ThorusCommon
         [Range(0f, 1f)]
         [DefaultValue(0.33f)]
         public float AntiCyclogeneticFactor { get; set; }
+
+        public enum AdvectionSteppingModel
+        {
+            One_Step_Per_Day,
+            One_Step_Per_Snapshot,
+            One_Step_Per_Hour
+        }
+
+        [Category(" Atmosphere model / Advection")]
+        [Description("Stepping model for calculating advection")]
+        [DefaultValue(AdvectionSteppingModel.One_Step_Per_Day)]
+        public AdvectionSteppingModel SteppingModel { get; set; }
 
         #endregion
 
@@ -425,6 +444,8 @@ namespace ThorusCommon
             /// Adaptive with high pressure block model
             /// </summary>
             AdaptiveJet_WithBlock,
+
+            ExperimentalJet,
         }
 
         [Category(" Atmosphere model / Jet Stream")]
@@ -456,6 +477,8 @@ namespace ThorusCommon
         [Description("Mid-Level Temperature minimum absolute difference for a front")]
         [DefaultValue(0.2f)]
         public float FrontsDelta { get; set; }
+
+       
 
         #endregion
 

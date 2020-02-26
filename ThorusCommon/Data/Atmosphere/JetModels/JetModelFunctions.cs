@@ -95,7 +95,6 @@ namespace ThorusCommon.Data
 
         public static float ComposeDevs(int direction, float jetDev, float ridgeDev)
         {
-            /*
             float jf = 0, rf = 0;
 
             switch (direction)
@@ -112,9 +111,6 @@ namespace ThorusCommon.Data
             }
 
             return (jf * jetDev + rf * ridgeDev);
-            */
-
-            return (jetDev + ridgeDev);
         }
     }
 }

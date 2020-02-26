@@ -51,6 +51,7 @@
     <Compile Include="Data\Atmosphere\AtmosphericLevel.cs" />
     <Compile Include="Data\Atmosphere\Atmosphere.cs" />
     <Compile Include="Data\Atmosphere\JetLevel.cs" />
+    <Compile Include="Data\Atmosphere\JetModels\ExperimentalJet.cs" />
     <Compile Include="Data\Atmosphere\JetModels\AdaptiveJet_WithBlock.cs" />
     <Compile Include="Data\Atmosphere\JetModels\JetModelFunctions.cs" />
     <Compile Include="Data\Atmosphere\JetModels\SingleJet_SeasonalReversal.cs" />

@@ -32,6 +32,14 @@ namespace ThorusCommon.Data
 
                     case LevelType.JetLevel:
                         levelTypeToCreate = Type.GetType($"ThorusCommon.Data.{SimulationParameters.Instance.JetStreamPattern}");
+                        try
+                        {
+                            Activator.CreateInstance(levelTypeToCreate, atm.Earth, loadFromStateFiles, defaultValue);
+                        }
+                        catch
+                        {
+                            levelTypeToCreate = typeof(AdaptiveJet);
+                        }
                         break;
                 }
 

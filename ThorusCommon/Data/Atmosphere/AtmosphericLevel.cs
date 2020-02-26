@@ -155,7 +155,31 @@ namespace ThorusCommon.Engine
             DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
 
             float mul = 1;
-            int count = Earth.SnapshotLength;
+            int count = 1;
+
+            switch (SimulationParameters.Instance.SteppingModel)
+            {
+                case AdvectionSteppingModel.One_Step_Per_Day:
+                    {
+                        if (Earth.UTC.Hour != 0)
+                            return;
+
+                        mul = 1 / Earth.SnapshotDivFactor;
+                        count = 1;
+                    }
+                    break;
+
+                case AdvectionSteppingModel.One_Step_Per_Snapshot:
+                    mul = 1;
+                    count = 1;
+                    break;
+
+                case AdvectionSteppingModel.One_Step_Per_Hour:
+                    mul = (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
+                    count = Earth.SnapshotLength;
+                    break;
+            }
+           
 
             float fNonAdvect = 0.5f;
             float fProAdvect = 1 - fNonAdvect;
@@ -238,12 +262,6 @@ namespace ThorusCommon.Engine
                 const float strong = 2.5f;
                 const float weak = 0.5f;
                 const float pseudoStationary = 0.1f;
-
-                //bool stable = ((lapseRate > SimulationParameters.Instance.HumidLapseRate) || (pJetLevel > strongBlock));
-                //bool unstable = ((lapseRate < SimulationParameters.Instance.HumidLapseRate) || (pJetLevel < weakBlock));
-
-                //bool stable = ((pJetLevel >= strongBlock));
-                //bool unstable = ((pJetLevel <= weakBlock));
 
                 bool stable = ((div <= -1));
                 bool unstable = ((div >= 1));

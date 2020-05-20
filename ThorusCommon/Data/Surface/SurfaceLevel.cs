@@ -305,9 +305,7 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(TLow - TNormLow, title, "T_DL_MAP");
             FileSupport.Save(THigh - TNormHigh, title, "T_DH_MAP");
-            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP");
-
-            FileSupport.Save((1000 * WL - MatrixFactory.Init(500)), title, "E_00_MAP");
+            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh), title, "T_DA_MAP");
         }
 
         public void SaveStats(string title, string category)

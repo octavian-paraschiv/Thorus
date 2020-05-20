@@ -180,7 +180,7 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix EQ(this DenseMatrix m, int order = 1)
         {
             var me = m.Clone() as DenseMatrix;
-
+                        
             for (int i = 0; i < order; i++)
                 me = EQ_Type_2(me);
 
@@ -239,6 +239,7 @@ namespace ThorusCommon.MatrixExtensions
             });
         }
 
+        /*
         private static DenseMatrix EQ_Type_1(DenseMatrix m)
         {
             int lim_r = m.RowCount - 1;
@@ -323,6 +324,7 @@ namespace ThorusCommon.MatrixExtensions
             DenseMatrix mm = (m1+m2+m3+m4+m5+m6+m7+m8+m9).Divide(9) as DenseMatrix;
             return mm.SubMatrix(1, lim_r+1, 1, lim_c+1) as DenseMatrix;
         }
+        */
 
         public static float[] MinMax(this DenseMatrix V)
         {

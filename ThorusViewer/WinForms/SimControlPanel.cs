@@ -170,6 +170,11 @@ namespace ThorusViewer
                 string dtStop = dtpSimStop.Text;
                 string snapshotLen = cmbStepLen.Text;
 
+                if (runStats)
+                    pbSimProgress.Style = ProgressBarStyle.Marquee;
+                else
+                    pbSimProgress.Style = ProgressBarStyle.Continuous;
+
                 _SimStdOut = new ConcurrentQueue<string>();
 
                 ThreadPool.QueueUserWorkItem((c) =>

@@ -116,9 +116,9 @@ namespace ThorusCommon.Engine
 
         public virtual void Save(string title)
         {
-            FileSupport.Save(P.EQ(), title, string.Format("P_{0:d2}_MAP", _levelType));
-            FileSupport.Save(T.EQ(), title, string.Format("T_{0:d2}_MAP", _levelType));
-            FileSupport.Save(H.EQ(), title, string.Format("H_{0:d2}_MAP", _levelType));
+            FileSupport.Save(P, title, string.Format("P_{0:d2}_MAP", _levelType));
+            FileSupport.Save(T, title, string.Format("T_{0:d2}_MAP", _levelType));
+            FileSupport.Save(H, title, string.Format("H_{0:d2}_MAP", _levelType));
         }
         #endregion
 

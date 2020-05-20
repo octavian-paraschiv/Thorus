@@ -599,7 +599,7 @@
             // 
             this.pbSimProgress.Location = new System.Drawing.Point(122, 19);
             this.pbSimProgress.Name = "pbSimProgress";
-            this.pbSimProgress.Size = new System.Drawing.Size(440, 23);
+            this.pbSimProgress.Size = new System.Drawing.Size(641, 23);
             this.pbSimProgress.TabIndex = 1;
             // 
             // btnSimStart

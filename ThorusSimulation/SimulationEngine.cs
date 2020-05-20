@@ -12,14 +12,10 @@ namespace ThorusSimulation
 {
     public class SimulationEngine
     {
-        SimDateTime _baselineStart = null;
+        SimDateTime _simStart = null;
+        Simulation _sim = null;
 
-        Simulation _baselineSim = null;
-        List<Simulation> _branchedSims = new List<Simulation>();
-        List<ManualResetEvent> _doneEvents = new List<ManualResetEvent>();
-
-        int _baselineLength = 0;
-        int _totalDays = 0;
+        int _simLength = 0;
         int _snapshotLength = 0;
 
         public SimulationEngine(SimDateTime sdtStart, int totalDays, int nofSnapshots)
@@ -30,32 +26,32 @@ namespace ThorusSimulation
                 sdtStart, sdtSimEnd, totalDays));
 
             // The length of the baseline is equal to the total number of days.
-            _baselineLength = totalDays;
+            _simLength = totalDays;
 
             _snapshotLength = (int)(AbsoluteConstants.HoursPerDay / nofSnapshots);
 
-            Console.WriteLine(string.Format("  -> snapshotLength: {0} hrs, baselineLength: {1} days...", 
-                _snapshotLength, _baselineLength));
+            Console.WriteLine(string.Format("  -> snapshot: {0} hrs, total sim length: {1} days...", 
+                _snapshotLength, _simLength));
 
             Console.WriteLine("********");
             Console.WriteLine("Using parameters:");
             Console.Write(SimulationParameters.Instance.ToString());
             Console.WriteLine("********");
 
-            _baselineStart = sdtStart;
-            _totalDays = totalDays;
+            _simStart = sdtStart;
             
-            SimDateTime sdtBaselineEnd = _baselineStart.AddHours((int)(AbsoluteConstants.HoursPerDay * _baselineLength));
+            SimDateTime sdtBaselineEnd = _simStart.AddHours((int)(AbsoluteConstants.HoursPerDay * _simLength));
 
-            _baselineSim = new Simulation(sdtStart, sdtBaselineEnd, _snapshotLength, false);
-            _baselineSim.ID = 0;
+            _sim = new Simulation(sdtStart, sdtBaselineEnd, _snapshotLength, false);
+            _sim.ID = 0;
         }
 
         public void Run(DateTime dtInit)
         {
-            Console.WriteLine("  -> Running baseline...");
-            if (_baselineSim != null)
-                _baselineSim.Run(dtInit);
+            Console.WriteLine("  -> Starting simulation ...");
+
+            if (_sim != null)
+                _sim.Run(dtInit);
 
             GC.Collect();
 

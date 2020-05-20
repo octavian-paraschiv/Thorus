@@ -44,7 +44,7 @@ namespace ThorusSimulation
                 ManualResetEvent.WaitAll(_doneEvents.ToArray());
 
                 TimeSpan tsDiff = DateTime.Now - dtInit;
-                Console.WriteLine($"  -> Statistrics completed after {(int)tsDiff.TotalMilliseconds} msec.");
+                Console.WriteLine($"  -> Statistics completed after {(int)tsDiff.TotalMilliseconds} msec.");
             }
 
             FileSupport.WaitForPendingWriteOperations();
@@ -57,7 +57,7 @@ namespace ThorusSimulation
 
             SimDateTime dtStart = firstSnapshotStart.AddHours((int)(AbsoluteConstants.HoursPerDay * rangeSize * (idx)));
 
-            Console.WriteLine(string.Format("[STAT] Intializing range {0} + {2}days [elapsed {1} msec]",
+            Console.WriteLine(string.Format("STAT: Initializing range {0} + {2}days [elapsed {1} msec]",
                 dtStart, (int)tsDiff.TotalMilliseconds, rangeSize));
 
             SimDateTimeRange sdtr = SimDateTimeRange.BuildRange(dtStart, rangeSize);
@@ -67,7 +67,7 @@ namespace ThorusSimulation
 
             tsDiff = DateTime.Now - dtInit;
 
-            Console.WriteLine(string.Format("[STAT] Starting processing on range {0} [elapsed {1} msec]",
+            Console.WriteLine(string.Format("STAT: Starting processing on range {0} [elapsed {1} msec]",
                 sdtr, (int)tsDiff.TotalMilliseconds));
 
             var c1 = sdtr.AtmList.Count;
@@ -80,7 +80,7 @@ namespace ThorusSimulation
 
             tsDiff = DateTime.Now - dtInit;
 
-            Console.WriteLine(string.Format("[STAT] Done range {0} [elapsed {1} msec]",
+            Console.WriteLine(string.Format("STAT: Done range {0} [elapsed {1} msec]",
                 sdtr, (int)tsDiff.TotalMilliseconds));
 
             _doneEvents[idx].Set();

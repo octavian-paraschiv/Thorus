@@ -13,13 +13,11 @@ namespace ThorusCommon.Data
 {
     public class TopLevel : AtmosphericLevel
     {
-        protected override float[] PressureExtremes
-        {
-            get
-            {
-                return LevelPressureExtremes.TopLevelExtremes;
-            }
-        }
+        protected override float[] LevelPressureExtremes
+            => ThorusCommon.LevelPressureExtremes.TopLevelExtremes;
+
+        protected override float LevelPressure
+            => ThorusCommon.LevelPressure.TopLevelPressure;
 
         public TopLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.TopLevel, loadFromStateFiles, defaultValue)
@@ -59,7 +57,7 @@ namespace ThorusCommon.Data
 
             ApplyAdvection(projT, projH);
 
-            ApplyCyclogenesys(applyDevs, T0, P0);
+            CalculatePressureField(applyDevs, T0, P0);
         }
         
     }

@@ -394,8 +394,9 @@ namespace ThorusViewer.Models
                         model.Series.Add(line);
 
                         ArrowAnnotation arrow = new ArrowAnnotation();
-                        arrow.StartPoint = new DataPoint(x + sf * dx, y + sf * dy);
-                        arrow.EndPoint = new DataPoint(x + dx, y + dy);
+                        var edy = Math.Min(dy, 2);
+                        arrow.StartPoint = new DataPoint(x + sf * dx, y + sf * edy);
+                        arrow.EndPoint = new DataPoint(x + dx, y + edy);
                         arrow.Color = line.Color;
                         arrow.StrokeThickness = line.StrokeThickness;
                         arrow.HeadWidth = 1.5 * line.StrokeThickness;

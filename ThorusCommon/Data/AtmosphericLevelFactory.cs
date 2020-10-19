@@ -1,15 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using ThorusCommon.Engine;
 
 namespace ThorusCommon.Data
 {
     public static class AtmosphericLevelFactory
     {
+        public static bool IsValidJetStreamPattern(string pattern)
+        {
+            try
+            {
+                var levelTypeToCreate = Type.GetType($"ThorusCommon.Data.{pattern}");
+                return (levelTypeToCreate != null);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static AtmosphericLevel CreateLevel(this Atmosphere atm, int levelType, bool loadFromStateFiles, float defaultValue)
         {
             try
@@ -31,10 +39,11 @@ namespace ThorusCommon.Data
                         break;
 
                     case LevelType.JetLevel:
-                        levelTypeToCreate = Type.GetType($"ThorusCommon.Data.{SimulationParameters.Instance.JetStreamPattern}");
                         try
                         {
-                            Activator.CreateInstance(levelTypeToCreate, atm.Earth, loadFromStateFiles, defaultValue);
+                            levelTypeToCreate = Type.GetType($"ThorusCommon.Data.{SimulationParameters.Instance.JetStreamPattern}");
+                            if (levelTypeToCreate == null)
+                                levelTypeToCreate = typeof(AdaptiveJet);
                         }
                         catch
                         {

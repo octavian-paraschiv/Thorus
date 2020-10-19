@@ -8,6 +8,9 @@ using System.IO;
 using System.ComponentModel.DataAnnotations;
 using ThorusCommon.IO;
 using ThorusCommon.Engine;
+using System.Drawing.Design;
+using ThorusCommon.Data;
+using System.Globalization;
 
 namespace ThorusCommon
 {
@@ -83,7 +86,7 @@ namespace ThorusCommon
             this.MinTsForMelting = 0.1f;
             this.MaxFreezingRainDelta = 5f;
 
-            this.JetStreamPattern = JetStreamPatterns.VariableJet_SeasonalReversal;
+            this.JetStreamPattern = "AdaptiveJet";
             this.JetStreamVariabilityPeriod = 7f;
             this.JetStreamVariabilitySeed = 0f;
 
@@ -214,14 +217,14 @@ namespace ThorusCommon
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
-        [Range(0f, 1f)]
-        [DefaultValue(0.33f)]
+        [Range(0f, 0.33f)]
+        [DefaultValue(0.1f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate anticyclones")]
-        [Range(0f, 1f)]
-        [DefaultValue(0.33f)]
+        [Range(0f, 0.33f)]
+        [DefaultValue(0.1f)]
         public float AntiCyclogeneticFactor { get; set; }
 
         public enum AdvectionSteppingModel
@@ -398,60 +401,13 @@ namespace ThorusCommon
             }
         }
 
-        public enum JetStreamPatterns
-        {
-            /// <summary>
-            /// Single hemispherical jet, with reversal at Poles and Equator
-            /// </summary>
-            SingleJet_WithReversal = 0,
-
-            /// <summary>
-            /// Single hemispherical jet, with reversal zones depending on season
-            /// </summary>
-            SingleJet_SeasonalReversal,
-
-            /// <summary>
-            /// Dual jet with reversal at Tropics and Polar Circles
-            /// </summary>
-            DualJet_WithReversal,
-
-            /// <summary>
-            /// Dual jet with reversal zones depending on season
-            /// </summary>
-            DualJet_SeasonalReversal,
-
-            /// <summary>
-            /// Variable jet with reversal (Combination of Single and Dual with reversal)
-            /// </summary>
-            VariableJet_WithReversal,
-
-            /// <summary>
-            /// Variable jet with reversal depending on season  (Combination of Single and Dual with seasonal reversal)
-            /// </summary>
-            VariableJet_SeasonalReversal,
-
-            /// <summary>
-            /// Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)
-            /// </summary>
-            VariableJet_SeasonalAndBlock_Reversal,
-
-            /// <summary>
-            /// Adaptive model
-            /// </summary>
-            AdaptiveJet,
-
-            /// <summary>
-            /// Adaptive with high pressure block model
-            /// </summary>
-            AdaptiveJet_WithBlock,
-
-            ExperimentalJet,
-        }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the pattern of the jet stream oscillation")]
-        [DefaultValue(JetStreamPatterns.AdaptiveJet)]
-        public JetStreamPatterns JetStreamPattern { get; set; }
+        [DefaultValue("AdaptiveJet")]
+        [Editor("ThorusCommon.Data.JetStreamPatternEditor, ThorusCommon", typeof(UITypeEditor))]
+        [JetStreamPattern]
+        public string JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A variable that represents the variation period of the jet stream oscillation.\n\n" +
@@ -481,8 +437,43 @@ namespace ThorusCommon
        
 
         #endregion
-
-
-
     }
+    /*
+    public class FlatTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return true;
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return true;
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            try
+            {
+                return base.ConvertFrom(context, culture, value);
+            }
+            catch
+            {
+                return value;
+            }
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            try
+            {
+                return base.ConvertTo(context, culture, value, destinationType);
+            }
+            catch
+            {
+                return value;
+            }
+        }
+    }
+    */
 }

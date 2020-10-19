@@ -12,13 +12,11 @@ namespace ThorusCommon.Data
 {
     public abstract class JetLevel : AtmosphericLevel
     {
-        protected override float[] PressureExtremes
-        {
-            get
-            {
-                return LevelPressureExtremes.JetLevelExtremes;
-            }
-        }
+        protected override float[] LevelPressureExtremes
+            => ThorusCommon.LevelPressureExtremes.JetLevelExtremes;
+
+        protected override float LevelPressure
+            => ThorusCommon.LevelPressure.JetLevelPressure;
 
         public JetLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.JetLevel, loadFromStateFiles, defaultValue)
@@ -31,9 +29,9 @@ namespace ThorusCommon.Data
 
         public override void RebuildState()
         {
-            P = ((Earth.ATM.SeaLevel.P.Multiply(100 / LevelPressure.SeaLevelPressure) +
-                  Earth.ATM.TopLevel.P.Multiply(100 / LevelPressure.TopLevelPressure) +
-                  Earth.ATM.MidLevel.P.Multiply(100 / LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
+            P = ((Earth.ATM.SeaLevel.P.Multiply(100 / ThorusCommon.LevelPressure.SeaLevelPressure) +
+                  Earth.ATM.TopLevel.P.Multiply(100 / ThorusCommon.LevelPressure.TopLevelPressure) +
+                  Earth.ATM.MidLevel.P.Multiply(100 / ThorusCommon.LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
 
             var BP = this.BP;
             var FP = this.FP;

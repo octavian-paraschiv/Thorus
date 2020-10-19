@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using ThorusCommon.Data;
+using System.ComponentModel;
 
 namespace ThorusViewer.WinForms
 {
@@ -13,6 +15,7 @@ namespace ThorusViewer.WinForms
         public PropertyGridEx()
             : base()
         {
+            base.CausesValidation = false;
         }
 
         public bool ResizeDescriptionArea(int nNumLines)
@@ -67,7 +70,26 @@ namespace ThorusViewer.WinForms
                     }
                     catch (ValidationException ve)
                     {
-                        MessageBox.Show(ve.Message, "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        var msg = $"Value '{e.ChangedItem.Value}' is not a valid value for field '{e.ChangedItem.PropertyDescriptor.Name}'";
+                        MessageBox.Show(ParentForm, msg, "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        PropertyFallback(e.ChangedItem.PropertyDescriptor.Name, e.OldValue);
+                    }
+
+                    break;
+                }
+
+                JetStreamPatternAttribute jspa = a as JetStreamPatternAttribute;
+                if (jspa != null)
+                {
+                    try
+                    {
+                        jspa.Validate(e.ChangedItem.Value, e.ChangedItem.PropertyDescriptor.Name);
+                        isValid = true;
+                    }
+                    catch (ValidationException ve)
+                    {
+                        var msg = $"Value '{e.ChangedItem.Value}' is not a valid value for field '{e.ChangedItem.PropertyDescriptor.Name}'";
+                        MessageBox.Show(ParentForm, msg, "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         PropertyFallback(e.ChangedItem.PropertyDescriptor.Name, e.OldValue);
                     }
 
@@ -76,7 +98,16 @@ namespace ThorusViewer.WinForms
             }
 
             if (isValid)
-                base.OnPropertyValueChanged(e);
+            {
+                try
+                {
+                    base.OnPropertyValueChanged(e);
+                }
+                catch (ValidationException ve)
+                {
+                    var s = ve.Message;
+                }
+            }
 
             this.Select();
             this.Focus();

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon", "ThorusCommon\ThorusCommon.csproj", "{33317F8C-B42E-4F21-AE91-E160D6E25CFE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusSimulation", "ThorusS
 	ProjectSection(ProjectDependencies) = postProject
 		{C50AD334-4773-4554-8C81-FCAC2168C325} = {C50AD334-4773-4554-8C81-FCAC2168C325}
 		{76033137-7758-4B97-B2A5-D7C135419E72} = {76033137-7758-4B97-B2A5-D7C135419E72}
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37} = {C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCdfImporter", "NetCdfImporter\NetCdfImporter.csproj", "{C50AD334-4773-4554-8C81-FCAC2168C325}"
@@ -21,6 +22,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusViewer", "ThorusViewer\ThorusViewer.csproj", "{A2A19837-E1BD-4703-B452-C071DFE1B5E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76033137-7758-4B97-B2A5-D7C135419E72} = {76033137-7758-4B97-B2A5-D7C135419E72}
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37} = {C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F7B08F4-A52A-48F4-A0FB-927B4887BAAA}"
@@ -36,46 +38,45 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon.IO", "ThorusCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "package-builder", "package-builder\package-builder.csproj", "{76033137-7758-4B97-B2A5-D7C135419E72}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{5F451CF7-0ECF-4E82-A049-764EC799A9DE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thorus.JetPlugin.Default", "Plugins\Thorus.JetPlugin\Thorus.JetPlugin.Default.csproj", "{87D3BA6E-1673-486A-AA82-DD5C0A961D0D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{76033137-7758-4B97-B2A5-D7C135419E72} = {76033137-7758-4B97-B2A5-D7C135419E72}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thorus.PluginsApi", "Plugins\Thorus.PluginsApi\Thorus.PluginsApi.csproj", "{8D23BD4A-F591-4D8A-BD45-6BC25C3770E9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{76033137-7758-4B97-B2A5-D7C135419E72} = {76033137-7758-4B97-B2A5-D7C135419E72}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSoc-FFD", "GSoc-FFD\GSoc-FFD.csproj", "{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33317F8C-B42E-4F21-AE91-E160D6E25CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C50AD334-4773-4554-8C81-FCAC2168C325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C50AD334-4773-4554-8C81-FCAC2168C325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A19837-E1BD-4703-B452-C071DFE1B5E6}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F186CF5-5B63-440B-A5BE-98E597F0B076}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76033137-7758-4B97-B2A5-D7C135419E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76033137-7758-4B97-B2A5-D7C135419E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87D3BA6E-1673-486A-AA82-DD5C0A961D0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87D3BA6E-1673-486A-AA82-DD5C0A961D0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D23BD4A-F591-4D8A-BD45-6BC25C3770E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D23BD4A-F591-4D8A-BD45-6BC25C3770E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76033137-7758-4B97-B2A5-D7C135419E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76033137-7758-4B97-B2A5-D7C135419E72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5D7D94E-60BE-47BD-B4BA-31DF59D85E37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{87D3BA6E-1673-486A-AA82-DD5C0A961D0D} = {5F451CF7-0ECF-4E82-A049-764EC799A9DE}
-		{8D23BD4A-F591-4D8A-BD45-6BC25C3770E9} = {5F451CF7-0ECF-4E82-A049-764EC799A9DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FA3AD2E-FD36-48B1-A27A-2217DAA10226}

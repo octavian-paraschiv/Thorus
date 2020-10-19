@@ -27,6 +27,8 @@ namespace ThorusCommon.Engine
         protected DenseMatrix[] _actualDev = MatrixFactory.Init2D();
         protected DenseMatrix[] _advDev = MatrixFactory.Init2D();
 
+        protected bool _enableCyclogenesys = true;
+
         public DenseMatrix[] ActualDev
         {
             get
@@ -35,7 +37,8 @@ namespace ThorusCommon.Engine
             }
         }
 
-        protected abstract float[] PressureExtremes { get; }
+        protected abstract float[] LevelPressureExtremes { get; }
+        protected abstract float LevelPressure { get; }
 
         public AtmosphericLevel(EarthModel earth, int levelType, bool loadFromStateFiles, float defaultValue = 0)
         {
@@ -125,7 +128,6 @@ namespace ThorusCommon.Engine
         public abstract void Advance();
         public abstract void RebuildState();
 
-
         protected virtual void ApplyAccumulatedDeviations()
         {
             for (int r = 0; r < SurfaceLevel.GridRowCount; r++)
@@ -184,55 +186,52 @@ namespace ThorusCommon.Engine
             float fNonAdvect = 0.5f;
             float fProAdvect = 1 - fNonAdvect;
 
+            mul = 1;
+
             DenseMatrix[] advDev = new DenseMatrix[]
             {
                 mul * wind[Direction.X],
                 mul * wind[Direction.Y],
             };
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Earth.SnapshotLength * count; i++)
             {
                 projT_adv = projT_adv.ApplyDeviations(advDev, null);
                 projH_adv = projH_adv.ApplyDeviations(advDev, null);
             }
 
-            T = (fNonAdvect * projT + fProAdvect * projT_adv).EQ();
+            T = (fNonAdvect * projT + fProAdvect * projT_adv).EQ(4);
 
             H = (fNonAdvect * projH + fProAdvect * projH_adv)
                 // Can't be lower than 0 or higher than 100
                 .MAX(0).MIN(100)
-                .EQ();
+                .EQ(4);
         }
 
-        protected virtual void ApplyCyclogenesys(DenseMatrix[] applyDevs, DenseMatrix T0, DenseMatrix P0)
+        protected virtual void CalculatePressureField(DenseMatrix[] applyDevs, DenseMatrix T0, DenseMatrix P0)
         {
             DenseMatrix rawP = P0.Clone() as DenseMatrix;
-
             DenseMatrix deltaT = null;
             DenseMatrix deltaP = null;
 
             float thickness = 0;
-            float levelPressure = 0;
-
+            
             switch (_levelType)
             {
                 case LevelType.TopLevel:
                     deltaT = (Earth.ATM.TopLevel.T - MatrixFactory.Init(-55));
                     deltaP = (Earth.ATM.TopLevel.P - MatrixFactory.Init(300));
                     thickness = -4.5f;
-                    levelPressure = LevelPressure.TopLevelPressure;
                     break;
                 case LevelType.MidLevel:
                     deltaT = (Earth.ATM.MidLevel.T - Earth.ATM.TopLevel.T);
                     deltaP = (Earth.ATM.MidLevel.P - Earth.ATM.TopLevel.P);
                     thickness = -4f;
-                    levelPressure = LevelPressure.MidLevelPressure;
                     break;
                 case LevelType.SeaLevel:
                     deltaT = (Earth.ATM.SeaLevel.T - Earth.ATM.MidLevel.T);
                     deltaP = (Earth.ATM.SeaLevel.P - Earth.ATM.MidLevel.P);
                     thickness = -1.5f;
-                    levelPressure = LevelPressure.SeaLevelPressure;
                     break;
             }
 
@@ -252,7 +251,7 @@ namespace ThorusCommon.Engine
 
                 var lapseRate = Math.Abs(deltaT[r, c] / thickness);
 
-                var unitDp = levelPressure * Math.Abs((t - t0) / AbsoluteConstants.WaterFreezePoint);
+                var unitDp = this.LevelPressure * Math.Abs((t - t0) / AbsoluteConstants.WaterFreezePoint);
 
                 var cf = -SimulationParameters.Instance.CyclogeneticFactor;
                 var acf = SimulationParameters.Instance.AntiCyclogeneticFactor;
@@ -295,10 +294,10 @@ namespace ThorusCommon.Engine
 
                 var p = p0 + Earth.SnapshotDivFactor * actualDp;
 
-                if (p < PressureExtremes[0])
-                    p = PressureExtremes[0];
-                if (p > PressureExtremes[1])
-                    p = PressureExtremes[1];
+                if (p < LevelPressureExtremes[0])
+                    p = LevelPressureExtremes[0];
+                if (p > LevelPressureExtremes[1])
+                    p = LevelPressureExtremes[1];
 
                 return p;
             });
@@ -306,11 +305,10 @@ namespace ThorusCommon.Engine
             var pNorth = rawP.RegionSubMatrix(-180, 179, 0, 89);
             var pSouth = rawP.RegionSubMatrix(-180, 179, -89, -1);
 
-            var projPNorth = pNorth.Divide(pNorth.Mean()).Multiply(levelPressure) as DenseMatrix;
-            var projPSouth = pSouth.Divide(pSouth.Mean()).Multiply(levelPressure) as DenseMatrix;
+            var projPNorth = pNorth.Divide(pNorth.Mean()).Multiply(this.LevelPressure) as DenseMatrix;
+            var projPSouth = pSouth.Divide(pSouth.Mean()).Multiply(this.LevelPressure) as DenseMatrix;
 
-            var projP = MatrixFactory.Init();
-
+            DenseMatrix projP = MatrixFactory.Init();
             projP.SetSubMatrix(0, pNorth.RowCount, 0, pNorth.ColumnCount, projPNorth);
             projP.SetSubMatrix(pNorth.RowCount, pSouth.RowCount, 0, pSouth.ColumnCount, projPSouth);
 
@@ -324,7 +322,7 @@ namespace ThorusCommon.Engine
             {
                 if (_weakBlock < 0)
                 {
-                    float[] range = this.PressureExtremes;
+                    float[] range = this.LevelPressureExtremes;
                     _weakBlock = 0.5f * (range[0] + range[1]);
                 }
 

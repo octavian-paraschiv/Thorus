@@ -194,7 +194,7 @@ namespace ThorusCommon.Engine
                 mul * wind[Direction.Y],
             };
 
-            for (int i = 0; i < Earth.SnapshotLength * count; i++)
+            for (int i = 0; i < count; i++)
             {
                 projT_adv = projT_adv.ApplyDeviations(advDev, null);
                 projH_adv = projH_adv.ApplyDeviations(advDev, null);

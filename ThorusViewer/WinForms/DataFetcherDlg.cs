@@ -87,10 +87,10 @@ namespace ThorusViewer.WinForms
 
             Task.Factory.StartNew(() => _downloadEmails.Reset())
                 .ContinueWith(_ => DeleteClientSideData())
-                .ContinueWith(_ => DeleteServerSideData())
+                // .ContinueWith(_ => DeleteServerSideData())
                 .ContinueWith(_ => FetchSstFile(selDate))
-                .ContinueWith(_ => FetchOtherFiles())
-                .ContinueWith(_ => _downloadEmails.Set());
+                // .ContinueWith(_ => FetchOtherFiles())
+                .ContinueWith(_ => FetchGribFile());
         }
 
         private void DeleteClientSideData()
@@ -99,11 +99,15 @@ namespace ThorusViewer.WinForms
                 return;
 
             FileDelete("SST.nc");
+            FileDelete("input.grib");
+
+            /*
             FileDelete("TMP_BGRND.nc");
             FileDelete("WEASD_SFC.nc");
             FileDelete("SPFH_PRES.nc");
             FileDelete("TMP_PRES.nc");
             FileDelete("HGT_PRES.nc");
+            */
 
             Log($"Client side data deleted...");
 
@@ -113,6 +117,7 @@ namespace ThorusViewer.WinForms
                 ValidateInitialConditionFiles();
         }
 
+        /*
         private void DeleteServerSideData()
         {
             if (_abort.WaitOne(0))
@@ -128,6 +133,7 @@ namespace ThorusViewer.WinForms
                 }
             }
         }
+        */
 
         private void FetchSstFile(DateTime selDate)
         {
@@ -216,6 +222,25 @@ namespace ThorusViewer.WinForms
             }
         }
 
+        private void FetchGribFile()
+        {
+            if (_abort.WaitOne(0))
+                return;
+
+            if (FileExists("SST.NC"))
+            {
+                DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
+                string url = $"https://noaa-gefs-pds.s3.amazonaws.com/gefs.{dtSst:yyyyMMdd}/00/atmos/pgrb2ap5/gec00.t00z.pgrb2a.0p50.f000";
+                using (WebClientEx wex = new WebClientEx())
+                {
+                    string file = Path.Combine(SimulationData.WorkFolder, "input.grib");
+                    Log($"Downloading GRIB data from: {url}");
+                    wex.DownloadFile(url, file);
+                }
+            }
+        }
+
+        /*
         private void FetchOtherFiles()
         {
             if (_abort.WaitOne(0))
@@ -263,7 +288,8 @@ namespace ThorusViewer.WinForms
         }
 
         private object _emailDownloadInProgress = new object();
-        
+        */
+
         private void ValidateInitialConditionFiles()
         {
             if (this.DesignMode)
@@ -296,9 +322,9 @@ namespace ThorusViewer.WinForms
                     Log($"Initial condition files are present.");
                     Log($"You can press Done to exit this dialog, or press Start to get a new set of files.");
                     Log($"**********************************************************************");
-                    _downloadEmails.Reset();
                 }
 
+                /*
                 if (_downloadEmails.WaitOne(0))
                 {
                     Task.Factory.StartNew(() =>
@@ -327,6 +353,7 @@ namespace ThorusViewer.WinForms
                         }
                     });
                 }
+                */
             }
             finally
             {
@@ -338,12 +365,16 @@ namespace ThorusViewer.WinForms
         private bool ValidateFiles()
         {
             bool allFilesPresent = true;
+            
             pbSST.Image = ValidateFile("SST.nc", ref allFilesPresent);
+            pbGrib.Image = ValidateFile("input.grib", ref allFilesPresent);
+            /*
             pbHH.Image = ValidateFile("SPFH_PRES.nc", ref allFilesPresent);
             pbTT.Image = ValidateFile("TMP_PRES.nc", ref allFilesPresent);
             pbZZ.Image = ValidateFile("HGT_PRES.nc", ref allFilesPresent);
             pbSNOW.Image = ValidateFile("WEASD_SFC.nc", ref allFilesPresent);
             pbSOIL.Image = ValidateFile("TMP_BGRND.nc", ref allFilesPresent);
+            */
             return allFilesPresent;
         }
 

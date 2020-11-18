@@ -50,23 +50,15 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.pbZZ = new System.Windows.Forms.PictureBox();
-            this.pbTT = new System.Windows.Forms.PictureBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.pbHH = new System.Windows.Forms.PictureBox();
-            this.pbSNOW = new System.Windows.Forms.PictureBox();
             this.pbSST = new System.Windows.Forms.PictureBox();
-            this.pbSOIL = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.btnFetchData = new System.Windows.Forms.Button();
             this.gbSimControl = new System.Windows.Forms.GroupBox();
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
             this.pbSimProgress = new System.Windows.Forms.ProgressBar();
             this.btnSimStart = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.pbGrib = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.gbSimParams.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -76,13 +68,9 @@
             this.tableLayoutPanel5.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZZ)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTT)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHH)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSNOW)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSST)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSOIL)).BeginInit();
             this.gbSimControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -102,7 +90,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 551);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -123,7 +110,7 @@
             this.gbSimParams.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.gbSimParams.Controls.Add(this.tableLayoutPanel2);
             this.gbSimParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbSimParams.Location = new System.Drawing.Point(3, 134);
+            this.gbSimParams.Location = new System.Drawing.Point(3, 103);
             this.gbSimParams.Name = "gbSimParams";
             this.gbSimParams.Size = new System.Drawing.Size(766, 126);
             this.gbSimParams.TabIndex = 1;
@@ -350,10 +337,9 @@
             // gbInitialConditions
             // 
             this.gbInitialConditions.Controls.Add(this.tableLayoutPanel5);
-            this.gbInitialConditions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbInitialConditions.Location = new System.Drawing.Point(3, 3);
             this.gbInitialConditions.Name = "gbInitialConditions";
-            this.gbInitialConditions.Size = new System.Drawing.Size(766, 125);
+            this.gbInitialConditions.Size = new System.Drawing.Size(766, 94);
             this.gbInitialConditions.TabIndex = 0;
             this.gbInitialConditions.TabStop = false;
             this.gbInitialConditions.Text = "Initial Model Conditions";
@@ -367,28 +353,26 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel5.Controls.Add(this.groupBox5, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.btnFetchData, 2, 2);
+            this.tableLayoutPanel5.Controls.Add(this.btnFetchData, 1, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 4;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(760, 106);
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(760, 75);
             this.tableLayoutPanel5.TabIndex = 3;
             // 
             // groupBox5
             // 
-            this.groupBox5.AutoSize = true;
             this.groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox5.Controls.Add(this.tableLayoutPanel6);
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox5.Location = new System.Drawing.Point(3, 3);
             this.groupBox5.Name = "groupBox5";
-            this.tableLayoutPanel5.SetRowSpan(this.groupBox5, 4);
-            this.groupBox5.Size = new System.Drawing.Size(413, 100);
+            this.tableLayoutPanel5.SetRowSpan(this.groupBox5, 2);
+            this.groupBox5.Size = new System.Drawing.Size(147, 69);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Initial conditions validity";
@@ -402,108 +386,22 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Controls.Add(this.pbZZ, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.pbTT, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label7, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.label8, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label9, 0, 2);
-            this.tableLayoutPanel6.Controls.Add(this.pbHH, 1, 0);
-            this.tableLayoutPanel6.Controls.Add(this.pbSNOW, 3, 0);
-            this.tableLayoutPanel6.Controls.Add(this.pbSST, 3, 1);
-            this.tableLayoutPanel6.Controls.Add(this.pbSOIL, 3, 2);
-            this.tableLayoutPanel6.Controls.Add(this.label10, 2, 0);
-            this.tableLayoutPanel6.Controls.Add(this.label11, 2, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label12, 2, 2);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Controls.Add(this.pbSST, 3, 0);
+            this.tableLayoutPanel6.Controls.Add(this.pbGrib, 3, 1);
+            this.tableLayoutPanel6.Controls.Add(this.label11, 2, 0);
+            this.tableLayoutPanel6.Controls.Add(this.label12, 2, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 6;
+            this.tableLayoutPanel6.RowCount = 2;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(407, 81);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(141, 52);
             this.tableLayoutPanel6.TabIndex = 0;
-            // 
-            // pbZZ
-            // 
-            this.pbZZ.Location = new System.Drawing.Point(188, 55);
-            this.pbZZ.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbZZ.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbZZ.Name = "pbZZ";
-            this.pbZZ.Size = new System.Drawing.Size(20, 20);
-            this.pbZZ.TabIndex = 6;
-            this.pbZZ.TabStop = false;
-            // 
-            // pbTT
-            // 
-            this.pbTT.Location = new System.Drawing.Point(188, 29);
-            this.pbTT.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbTT.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbTT.Name = "pbTT";
-            this.pbTT.Size = new System.Drawing.Size(20, 20);
-            this.pbTT.TabIndex = 5;
-            this.pbTT.TabStop = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(179, 26);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Absolute humidities (SPFH_PRES)";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Location = new System.Drawing.Point(3, 26);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(179, 26);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Absolute temperatures (TMP_PRES)";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Location = new System.Drawing.Point(3, 52);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(179, 26);
-            this.label9.TabIndex = 2;
-            this.label9.Text = "Geopotential heights (HGT_PRES)";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pbHH
-            // 
-            this.pbHH.Location = new System.Drawing.Point(188, 3);
-            this.pbHH.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbHH.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbHH.Name = "pbHH";
-            this.pbHH.Size = new System.Drawing.Size(20, 20);
-            this.pbHH.TabIndex = 4;
-            this.pbHH.TabStop = false;
-            // 
-            // pbSNOW
-            // 
-            this.pbSNOW.Location = new System.Drawing.Point(384, 3);
-            this.pbSNOW.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbSNOW.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbSNOW.Name = "pbSNOW";
-            this.pbSNOW.Size = new System.Drawing.Size(20, 20);
-            this.pbSNOW.TabIndex = 7;
-            this.pbSNOW.TabStop = false;
             // 
             // pbSST
             // 
-            this.pbSST.Location = new System.Drawing.Point(384, 29);
+            this.pbSST.Location = new System.Drawing.Point(42, 3);
             this.pbSST.MaximumSize = new System.Drawing.Size(20, 20);
             this.pbSST.MinimumSize = new System.Drawing.Size(20, 20);
             this.pbSST.Name = "pbSST";
@@ -511,56 +409,14 @@
             this.pbSST.TabIndex = 10;
             this.pbSST.TabStop = false;
             // 
-            // pbSOIL
-            // 
-            this.pbSOIL.Location = new System.Drawing.Point(384, 55);
-            this.pbSOIL.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbSOIL.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbSOIL.Name = "pbSOIL";
-            this.pbSOIL.Size = new System.Drawing.Size(20, 20);
-            this.pbSOIL.TabIndex = 11;
-            this.pbSOIL.TabStop = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Location = new System.Drawing.Point(214, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(164, 26);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Snow cover (WEASD_SFC)";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Location = new System.Drawing.Point(214, 26);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(164, 26);
-            this.label11.TabIndex = 8;
-            this.label11.Text = "SST (Sea Surface Temperature):";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(214, 52);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(164, 26);
-            this.label12.TabIndex = 9;
-            this.label12.Text = "Soil Temperature (TMP_BGRND)";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // btnFetchData
             // 
             this.btnFetchData.AutoSize = true;
             this.btnFetchData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnFetchData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFetchData.Location = new System.Drawing.Point(612, 43);
+            this.btnFetchData.Location = new System.Drawing.Point(156, 23);
+            this.btnFetchData.Margin = new System.Windows.Forms.Padding(3, 23, 3, 3);
             this.btnFetchData.Name = "btnFetchData";
+            this.tableLayoutPanel5.SetRowSpan(this.btnFetchData, 2);
             this.btnFetchData.Size = new System.Drawing.Size(145, 36);
             this.btnFetchData.TabIndex = 6;
             this.btnFetchData.Text = "Download initial conditions \r\nfiles from NOAA server";
@@ -573,9 +429,9 @@
             this.gbSimControl.Controls.Add(this.pbSimProgress);
             this.gbSimControl.Controls.Add(this.btnSimStart);
             this.gbSimControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbSimControl.Location = new System.Drawing.Point(3, 266);
+            this.gbSimControl.Location = new System.Drawing.Point(3, 235);
             this.gbSimControl.Name = "gbSimControl";
-            this.gbSimControl.Size = new System.Drawing.Size(766, 259);
+            this.gbSimControl.Size = new System.Drawing.Size(766, 290);
             this.gbSimControl.TabIndex = 3;
             this.gbSimControl.TabStop = false;
             this.gbSimControl.Text = "Simulation Progress and Control";
@@ -591,7 +447,7 @@
             this.txtSimProcOut.Name = "txtSimProcOut";
             this.txtSimProcOut.ReadOnly = true;
             this.txtSimProcOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSimProcOut.Size = new System.Drawing.Size(757, 202);
+            this.txtSimProcOut.Size = new System.Drawing.Size(757, 233);
             this.txtSimProcOut.TabIndex = 2;
             this.txtSimProcOut.WordWrap = false;
             // 
@@ -611,6 +467,38 @@
             this.btnSimStart.Text = "Start Simulation";
             this.btnSimStart.UseVisualStyleBackColor = true;
             this.btnSimStart.Click += new System.EventHandler(this.OnStartStopSimulation);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label11.Location = new System.Drawing.Point(3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(33, 26);
+            this.label11.TabIndex = 8;
+            this.label11.Text = "SST";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label12.Location = new System.Drawing.Point(3, 26);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(33, 26);
+            this.label12.TabIndex = 9;
+            this.label12.Text = "GRIB";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pbGrib
+            // 
+            this.pbGrib.Location = new System.Drawing.Point(42, 29);
+            this.pbGrib.MaximumSize = new System.Drawing.Size(20, 20);
+            this.pbGrib.MinimumSize = new System.Drawing.Size(20, 20);
+            this.pbGrib.Name = "pbGrib";
+            this.pbGrib.Size = new System.Drawing.Size(20, 20);
+            this.pbGrib.TabIndex = 11;
+            this.pbGrib.TabStop = false;
             // 
             // SimControlPanel
             // 
@@ -640,14 +528,10 @@
             this.groupBox5.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZZ)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbTT)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHH)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSNOW)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSST)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSOIL)).EndInit();
             this.gbSimControl.ResumeLayout(false);
             this.gbSimControl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -676,22 +560,14 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.PictureBox pbSNOW;
-        private System.Windows.Forms.PictureBox pbZZ;
-        private System.Windows.Forms.PictureBox pbTT;
-        private System.Windows.Forms.PictureBox pbHH;
         private System.Windows.Forms.CheckBox cbRunStatsOnly;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.PictureBox pbSST;
-        private System.Windows.Forms.PictureBox pbSOIL;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbStepLen;
         private System.Windows.Forms.CheckBox cbAutoClose;
         private System.Windows.Forms.Button btnFetchData;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.PictureBox pbGrib;
+        private System.Windows.Forms.Label label12;
     }
 }

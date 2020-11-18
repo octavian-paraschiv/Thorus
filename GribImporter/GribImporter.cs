@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
@@ -15,15 +16,18 @@ namespace ThorusCommon.Data
 {
     public class GribImporter : FileImporter
     {
-        static string InputFile = "input.grb";
+        string _inputFile = null;
 
-        GribFile _gf = null;
+        int[] _levels = { 1000, 850, 500 };
 
-        public GribImporter()
+        bool time = false;
+
+        GribMessage[] _messages = null;
+
+        public GribImporter(string inputFile)
         {
-            CorrectFilePath(ref InputFile);
-
-            
+            _inputFile = inputFile;
+            CorrectFilePath(ref _inputFile);            
 
             bool ok = false;
             while (!ok)
@@ -39,14 +43,19 @@ namespace ThorusCommon.Data
                 }
             }
 
-            _gf = new Grib.Api.GribFile(InputFile);
-
-            foreach (var msg in _gf)
-                Console.WriteLine(msg);
+            using (var gf = new Grib.Api.GribFile(_inputFile))
+                _messages = gf.ToArray();
         }
 
         protected override void ImportSurface()
         {
+            ImportLevelData(SoilTempFile,
+                "Soil temperature", -1,
+                (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
+
+            ImportLevelData(SnowCoverFile,
+                "Water equivalent of accumulated snow depth", -1,
+                (d) => (d));
         }
 
         protected override void ImportLevel(int idx)
@@ -54,13 +63,13 @@ namespace ThorusCommon.Data
             // T, P, H must be read and built in this order
             // Calculation of P depends on T;
             DenseMatrix t = ImportLevelData(TempFiles[idx], 
-                idx == 0 ? "2t" : "t", idx,
+                "Temperature", idx,
                 (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
 
             if (t != null)
             {
                 DenseMatrix z = ImportLevelData(null,
-                    "gh", idx,
+                    "Geopotential height", idx,
                     (d) => (d));
 
                 if (z != null)
@@ -92,7 +101,7 @@ namespace ThorusCommon.Data
                         FileSupport.SaveMatrixToFile(p, PressureFiles[idx], false);
 
                         DenseMatrix q = ImportLevelData(HumidityFiles[idx],
-                           "r", idx,
+                           "Relative humidity", idx,
                            (d) => (d));
                     }
                 }
@@ -107,10 +116,37 @@ namespace ThorusCommon.Data
                     File.Delete(dataFile);
             }
 
-            DenseMatrix tmp = GetLevelData(paramName, levelIdx);
+            int level = (levelIdx < 0) ? 0 : _levels[levelIdx];
+
+            var messages = _messages.Where(m => m.Name.Contains(paramName) && m.Level == level).First();
+
+            var nodes = messages.GeoSpatialValues.Where(gs => gs.IsMissing == false &&
+                (gs.Latitude >= EarthModel.MinLat && gs.Latitude <= EarthModel.MaxLat) &&
+                (gs.Longitude >= 180 + EarthModel.MinLon && gs.Longitude <= 180 + EarthModel.MaxLon) &&
+                (gs.Latitude == Math.Truncate(gs.Latitude)) &&
+                gs.Longitude == Math.Truncate(gs.Longitude))
+                .ToArray();
+
+            if (!time)
+            {
+                DateTime dt = messages.ReferenceTime;
+                SimDateTime sdt = new SimDateTime(dt);
+
+                string timeSeedFile = "timeSeed.thd";
+                CorrectFilePath(ref timeSeedFile);
+                File.WriteAllText(timeSeedFile, sdt.Title);
+
+                time = true;
+            }
+
             DenseMatrix mat = MatrixFactory.Init();
 
-            mat.Assign((r, c) => conversionFunc(tmp[r, c]));
+            foreach (var node in nodes)
+            {
+                int r = EarthModel.MaxLat - (int)node.Latitude;
+                int c = ((int)node.Longitude - EarthModel.MinLon) % 360;
+                mat[r, c] = conversionFunc((float)node.Value);
+            }
 
             if (string.IsNullOrEmpty(dataFile) == false)
             {
@@ -120,53 +156,5 @@ namespace ThorusCommon.Data
             return mat;
         }
 
-        private DenseMatrix GetLevelData(string paramName, int levelIdx)
-        {
-            DenseMatrix mat = MatrixFactory.Init();
-
-            GribMessage msg = SelectMessage(levelIdx, paramName);
-            if (msg != null && msg.GridCoordinateValues != null)
-            {
-                var list = msg.GridCoordinateValues.ToList();
-
-                for (int lat = EarthModel.MinLat; lat < EarthModel.MaxLat; lat++)
-                    for (int lon = EarthModel.MinLon; lon < EarthModel.MaxLon; lon++)
-                    {
-                        int r = EarthModel.MaxLat - lat;
-                        int c = lon - EarthModel.MinLon;
-
-                        int idx = 360 * r + c;
-                        mat[r, c] = (float)list[idx].Value;
-                    }
-            }
-
-            return mat;
-        }
-
-        private GribMessage SelectMessage(int levelIdx, string paramShortName)
-        {
-            int level;
-
-            switch (levelIdx)
-            {
-                case 0:
-                    level = 2;
-                    break;
-
-                case 1:
-                    level = 850;
-                    break;
-
-                case 2:
-                default:
-                    level = 500;
-                    break;
-            }
-
-
-            return (from msg in _gf
-                    where (msg.Level == level && msg.ParameterShortName == paramShortName)
-                    select msg).FirstOrDefault();
-        }
     }
 }

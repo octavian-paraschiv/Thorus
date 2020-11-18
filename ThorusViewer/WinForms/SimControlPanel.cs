@@ -220,12 +220,13 @@ namespace ThorusViewer
                 return;
 
             bool canSimulate = true;
+            /*
             pbHH.Image = ValidateFile("SPFH_PRES.nc", ref canSimulate);
             pbTT.Image = ValidateFile("TMP_PRES.nc", ref canSimulate);
             pbZZ.Image = ValidateFile("HGT_PRES.nc", ref canSimulate);
             pbSNOW.Image = ValidateFile("WEASD_SFC.nc", ref canSimulate);
-            pbSOIL.Image = ValidateFile("TMP_BGRND.nc", ref canSimulate);
-
+            */            
+            pbGrib.Image = ValidateFile("input.grib", ref canSimulate);
             pbSST.Image = ValidateFile("SST.nc", ref canSimulate);
 
             DateTime? dt = null;

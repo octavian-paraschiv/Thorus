@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Grib.Api">
-      <HintPath>..\packages\Grib.Api.1.0.0-beta4\lib\net45\Grib.Api.dll</HintPath>
+      <HintPath>..\packages\Grib.Api.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -68,13 +68,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /S /E "$(SolutionDir)packages\Grib.Api.1.0.0-beta4\Grib.Api\lib\win\x64\*" "$(OutDir)"
-
-if exist "$(OutDir)Grib.Api" (
+    <PostBuildEvent>if exist "$(OutDir)Grib.Api" (
     echo Grib.Api definitions files are already present.
 ) ELSE (
 mkdir "$(OutDir)Grib.Api"
-xcopy /Y /S /E "$(SolutionDir)packages\Grib.Api.1.0.0-beta4\Grib.Api" "$(OutDir)Grib.Api"
-)</PostBuildEvent>
+)
+
+xcopy /Y /S /E "$(SolutionDir)packages\Grib.Api" "$(OutDir)Grib.Api"</PostBuildEvent>
   </PropertyGroup>
 </Project>

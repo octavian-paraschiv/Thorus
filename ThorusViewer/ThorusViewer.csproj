@@ -37,9 +37,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="OpenPop">
-      <HintPath>..\packages\OpenPop.dll</HintPath>
-    </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.dll</HintPath>
     </Reference>
@@ -71,7 +68,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="EmailClient.cs" />
     <Compile Include="HtmlLookup.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

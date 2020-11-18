@@ -99,10 +99,9 @@ namespace ThorusSimulation
             // Run simulation engine
             if (runSim)
             {
-                DataSourceType type = DataSourceType.NetCdf;
-
-                FileImporterFactory.CreateImporter(type).ImportFiles();
-                
+                // First Grib, then NetCdf. Otherwise it crashes and I don't know why...
+                new GribImporter("input.grib").ImportFiles();
+                new NetCdfImporter(true).ImportFiles();
 
                 string dataDir = SimulationData.DataFolder;
                 if (Directory.Exists(dataDir))

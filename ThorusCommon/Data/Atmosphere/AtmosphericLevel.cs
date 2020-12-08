@@ -25,20 +25,63 @@ namespace ThorusCommon.Engine
 
         protected DenseMatrix[] _accumulatedFieldDevs = MatrixFactory.Init2D();
         protected DenseMatrix[] _actualDev = MatrixFactory.Init2D();
-        protected DenseMatrix[] _advDev = MatrixFactory.Init2D();
 
-        protected bool _enableCyclogenesys = true;
-
-        public DenseMatrix[] ActualDev
+        public virtual DenseMatrix[] AdvectionDev
         {
             get
             {
+                //var advDev = P.ToWindComponents();
+                //return MatrixFactory.New2D(
+                //    (r, c) => 10f * advDev[Direction.X][r, c],
+                //    (r, c) => 10f * advDev[Direction.Y][r, c]
+                //).EQ2D();
                 return _actualDev;
             }
         }
 
-        protected abstract float[] LevelPressureExtremes { get; }
-        protected abstract float LevelPressure { get; }
+        protected float[] LevelPressureExtremes
+        {
+            get
+            {
+                switch(_levelType)
+                {
+                    case LevelType.SeaLevel:
+                        return ThorusCommon.LevelPressureExtremes.SeaLevelExtremes;
+
+                    case LevelType.MidLevel:
+                        return ThorusCommon.LevelPressureExtremes.MidLevelExtremes;
+
+                    case LevelType.TopLevel:
+                        return ThorusCommon.LevelPressureExtremes.TopLevelExtremes;
+
+                    case LevelType.JetLevel:
+                    default:
+                        return ThorusCommon.LevelPressureExtremes.JetLevelExtremes;
+                }
+            }
+        }
+
+        protected float LevelPressure
+        {
+            get
+            {
+                switch (_levelType)
+                {
+                    case LevelType.SeaLevel:
+                        return ThorusCommon.LevelPressure.SeaLevelPressure;
+
+                    case LevelType.MidLevel:
+                        return ThorusCommon.LevelPressure.MidLevelPressure;
+
+                    case LevelType.TopLevel:
+                        return ThorusCommon.LevelPressure.TopLevelPressure;
+
+                    case LevelType.JetLevel:
+                    default:
+                        return ThorusCommon.LevelPressure.JetLevelPressure;
+                }
+            }
+        }
 
         public AtmosphericLevel(EarthModel earth, int levelType, bool loadFromStateFiles, float defaultValue = 0)
         {
@@ -156,37 +199,11 @@ namespace ThorusCommon.Engine
             DenseMatrix projT_adv = projT.Clone() as DenseMatrix;
             DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
 
-            float mul = 1;
-            int count = 1;
-
-            switch (SimulationParameters.Instance.SteppingModel)
-            {
-                case AdvectionSteppingModel.One_Step_Per_Day:
-                    {
-                        if (Earth.UTC.Hour != 0)
-                            return;
-
-                        mul = 1 / Earth.SnapshotDivFactor;
-                        count = 1;
-                    }
-                    break;
-
-                case AdvectionSteppingModel.One_Step_Per_Snapshot:
-                    mul = 1;
-                    count = 1;
-                    break;
-
-                case AdvectionSteppingModel.One_Step_Per_Hour:
-                    mul = (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
-                    count = Earth.SnapshotLength;
-                    break;
-            }
-           
-
+            float mul = 10 * (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
+            int count = (int)(SimulationParameters.Instance.StepsPerDay * Earth.SnapshotDivFactor);
+            
             float fNonAdvect = 0.5f;
             float fProAdvect = 1 - fNonAdvect;
-
-            mul = 1;
 
             DenseMatrix[] advDev = new DenseMatrix[]
             {
@@ -302,13 +319,16 @@ namespace ThorusCommon.Engine
                 return p;
             });
 
+            //DenseMatrix projP = rawP;
+
+            DenseMatrix projP = MatrixFactory.Init();
+
             var pNorth = rawP.RegionSubMatrix(-180, 179, 0, 89);
             var pSouth = rawP.RegionSubMatrix(-180, 179, -89, -1);
 
             var projPNorth = pNorth.Divide(pNorth.Mean()).Multiply(this.LevelPressure) as DenseMatrix;
             var projPSouth = pSouth.Divide(pSouth.Mean()).Multiply(this.LevelPressure) as DenseMatrix;
-
-            DenseMatrix projP = MatrixFactory.Init();
+            
             projP.SetSubMatrix(0, pNorth.RowCount, 0, pNorth.ColumnCount, projPNorth);
             projP.SetSubMatrix(pNorth.RowCount, pSouth.RowCount, 0, pSouth.ColumnCount, projPSouth);
 

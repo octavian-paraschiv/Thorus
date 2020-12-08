@@ -11,12 +11,6 @@ namespace ThorusCommon.Data
 {
     public class SeaLevel : AtmosphericLevel
     {
-        protected override float[] LevelPressureExtremes
-            => ThorusCommon.LevelPressureExtremes.SeaLevelExtremes;
-
-        protected override float LevelPressure
-            => ThorusCommon.LevelPressure.SeaLevelPressure;
-
         public SeaLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.SeaLevel, loadFromStateFiles, defaultValue)
         {
@@ -28,7 +22,7 @@ namespace ThorusCommon.Data
 
         public override void Advance()
         {
-            _actualDev = Earth.ATM.MidLevel.ActualDev;
+            _actualDev = Earth.ATM.MidLevel.AdvectionDev;
             ApplyAccumulatedDeviations();
 
             var applyDevs = new DenseMatrix[]

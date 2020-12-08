@@ -126,7 +126,7 @@ namespace ThorusCommon.MatrixExtensions
 
         public static DenseMatrix DIV(this DenseMatrix m1, float val)
         {
-            return m1.Assign((r, c) => m1[r, c] / val);
+            return m1.Assign((r, c) => m1[r, c] / val); 
         }
 
         public static DenseMatrix MIN(this DenseMatrix m1, float val)
@@ -175,6 +175,15 @@ namespace ThorusCommon.MatrixExtensions
                 }
 
             return m2;
+        }
+
+        public static DenseMatrix[] EQ2D(this DenseMatrix[] m, int order = 1)
+        {
+            return new DenseMatrix[]
+            {
+                m[Direction.X].EQ(order),
+                m[Direction.Y].EQ(order),
+            };
         }
 
         public static DenseMatrix EQ(this DenseMatrix m, int order = 1)

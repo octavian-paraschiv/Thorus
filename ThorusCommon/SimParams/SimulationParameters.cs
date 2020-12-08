@@ -227,17 +227,13 @@ namespace ThorusCommon
         [DefaultValue(0.1f)]
         public float AntiCyclogeneticFactor { get; set; }
 
-        public enum AdvectionSteppingModel
-        {
-            One_Step_Per_Day,
-            One_Step_Per_Snapshot,
-            One_Step_Per_Hour
-        }
+      
 
         [Category(" Atmosphere model / Advection")]
         [Description("Stepping model for calculating advection")]
-        [DefaultValue(AdvectionSteppingModel.One_Step_Per_Day)]
-        public AdvectionSteppingModel SteppingModel { get; set; }
+        [Range(10, 1000)]
+        [DefaultValue(100)]
+        public int StepsPerDay { get; set; }
 
         #endregion
 

@@ -48,11 +48,6 @@ namespace ThorusCommon
         public const int R = Y;
     }
 
-    public static class AdvComp
-    {
-        public const int T = 0;
-        public const int H = 1;
-    }
 }
 
 namespace ThorusCommon.Thermodynamics
@@ -118,11 +113,19 @@ namespace ThorusCommon.Thermodynamics
 
         public static readonly float[] LevelHeights = 
         { 
-            0,
+            50,
             1500,
             5500,
             10000,
         };
+
+        public static readonly float[] LevelJetWeights =
+        {
+           50f / (50 + 1500 + 5500),
+           1500f / (50 + 1500 + 5500),
+           5500f / (50 + 1500 + 5500),
+        };
+      
 
         public static readonly float[] Thicknesses = 
         { 

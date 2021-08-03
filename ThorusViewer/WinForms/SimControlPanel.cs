@@ -170,6 +170,11 @@ namespace ThorusViewer
                 string dtStop = dtpSimStop.Text;
                 string snapshotLen = cmbStepLen.Text;
 
+                if (runStats)
+                    pbSimProgress.Style = ProgressBarStyle.Marquee;
+                else
+                    pbSimProgress.Style = ProgressBarStyle.Continuous;
+
                 _SimStdOut = new ConcurrentQueue<string>();
 
                 ThreadPool.QueueUserWorkItem((c) =>
@@ -187,6 +192,8 @@ namespace ThorusViewer
 
                         if (runStats)
                             args += string.Format("stat {0}", statRange);
+                        else
+                            args += " regen";
 
                         psi.Arguments = args;
                         psi.CreateNoWindow = true;
@@ -215,12 +222,13 @@ namespace ThorusViewer
                 return;
 
             bool canSimulate = true;
+            /*
             pbHH.Image = ValidateFile("SPFH_PRES.nc", ref canSimulate);
             pbTT.Image = ValidateFile("TMP_PRES.nc", ref canSimulate);
             pbZZ.Image = ValidateFile("HGT_PRES.nc", ref canSimulate);
             pbSNOW.Image = ValidateFile("WEASD_SFC.nc", ref canSimulate);
-            pbSOIL.Image = ValidateFile("TMP_BGRND.nc", ref canSimulate);
-
+            */            
+            pbGrib.Image = ValidateFile("input.grib", ref canSimulate);
             pbSST.Image = ValidateFile("SST.nc", ref canSimulate);
 
             DateTime? dt = null;

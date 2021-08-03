@@ -29,6 +29,22 @@ namespace ThorusViewer.Pallettes
         }
     }
 
+    public class E_WL_Palette : WeatherDataPalette
+    {
+        public E_WL_Palette()
+            : base("E_WL")
+        {
+            _lineWidth = 1;
+            _lineSpacing = 1;
+            _minMax = new Range<float>(0, 1);
+            _acceptsContourLines = true;
+            this.Description = "WL mask";
+            this.Unit = "";
+            this.ShowContours = false;
+            this.ShowHeatmap = true;
+        }
+    }
+
     public class N_00_Palette : WeatherDataPalette
     {
         public N_00_Palette()

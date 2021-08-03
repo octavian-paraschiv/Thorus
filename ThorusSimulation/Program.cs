@@ -43,6 +43,7 @@ namespace ThorusSimulation
 
             int totalExpectedArgs = 4;
             bool runSim = true;
+            bool regenerateInitialConditions = Environment.CommandLine.EndsWith(" regen");
 
             if (string.Compare(args[argCnt], "nosim", true) != 0)
             {
@@ -99,10 +100,12 @@ namespace ThorusSimulation
             // Run simulation engine
             if (runSim)
             {
-                DataSourceType type = DataSourceType.NetCdf;
-
-                FileImporterFactory.CreateImporter(type).ImportFiles();
-                
+                if (regenerateInitialConditions)
+                {
+                    // First Grib, then NetCdf. Otherwise it crashes and I don't know why...
+                    new GribImporter("input.grib").ImportFiles();
+                    new NetCdfImporter(true).ImportFiles();
+                }
 
                 string dataDir = SimulationData.DataFolder;
                 if (Directory.Exists(dataDir))

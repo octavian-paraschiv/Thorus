@@ -156,6 +156,7 @@ namespace ThorusViewer.Models
             Viewports.Add(new Viewport("S America", -60, 15, -105, -25, 2));
             Viewports.Add(new Viewport("S Atlantic", EarthModel.MinLat, 0, -70, 30, 2));
             
+            Viewports.Add(new Viewport("Australia + Indonesia", -50, 10, 90, EarthModel.MaxLon, 2));
 
             DataTypes = new List<DataType>();
 
@@ -248,6 +249,7 @@ namespace ThorusViewer.Models
 
             DataTypes.Add(new DataType("M_00", "Air mass type"));
 
+            DataTypes.Add(new DataType("E_WL", "Water/land mask"));
             DataTypes.Add(new DataType("E_00", "Elevation data"));
 
             DataTypes.Add(new DataType("F_00", "Fronts"));

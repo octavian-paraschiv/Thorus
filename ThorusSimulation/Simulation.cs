@@ -36,6 +36,8 @@ namespace ThorusSimulation
 
             for (int i = 0; diff > 0; i++)
             {
+                DateTime dtInitCurrent = DateTime.Now;
+
                 GC.Collect();
 
                 Start = Start.AddHours(_earth.SnapshotLength);
@@ -45,25 +47,29 @@ namespace ThorusSimulation
                 _earth.RebuildState();
                 _earth.Save(Start.Title);
 
-                TimeSpan tsDiff = DateTime.Now - dtInit;
+                DateTime now = DateTime.Now;
+                TimeSpan tsDiffCurrent = now - dtInitCurrent;
+                TimeSpan tsDiff = now - dtInit;
 
                 if (diffStart != diff)
                 {
-                    Console.WriteLine(string.Format(" SIM: [{2:d2}% done..{0:d5}h/{1:d5}h] -> {3} [elapsed {4} msec]",
+                    Console.WriteLine(string.Format(" SIM: [{2:d2}% done @ {0:d5}h/{1:d5}h] -> {3} [current: {5} msec, total: {4} msec]",
                         (diffStart - diff), 
                         diffStart, 
                         (100 * (diffStart - diff) / diffStart), 
                         Start.Title,
-                        (int)tsDiff.TotalMilliseconds));
+                        (int)tsDiff.TotalMilliseconds,
+                        (int)tsDiffCurrent.TotalMilliseconds));
                 }
                 else
                 {
-                    Console.WriteLine(string.Format(" SIM: [{2:d2}% done..{0:d5}h/{1:d5}h] -> {3} [elapsed {4} msec]",
+                    Console.WriteLine(string.Format(" SIM: [{2:d2}% done @ {0:d5}h/{1:d5}h] -> {3} [current: {5} msec, total: {4} msec]",
                         (diffStart - diff), 
                         diffStart, 
                         "100", 
                         Start.Title,
-                        (int)tsDiff.TotalMilliseconds));
+                        (int)tsDiff.TotalMilliseconds,
+                        (int) tsDiffCurrent.TotalMilliseconds));
 
                 }
             }

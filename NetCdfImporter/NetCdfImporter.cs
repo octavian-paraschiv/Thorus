@@ -24,12 +24,20 @@ namespace ThorusCommon.Data
         protected string SnowCoverNcFile = "WEASD_SFC.nc";
 
         protected string SeaTempNcFile = "SST.nc";
+
+        private bool _sstOnly = false;
         
-        public NetCdfImporter()
+        public NetCdfImporter(bool sstOnly = false)
         {
+            _sstOnly = sstOnly;
+
             // ----------------------------------------------
             // Surface files - NC
             CorrectFilePath(ref SeaTempNcFile);
+
+            if (_sstOnly)
+                return;
+
             CorrectFilePath(ref SoilTempNcFile);
             CorrectFilePath(ref SnowCoverNcFile);
 
@@ -40,7 +48,6 @@ namespace ThorusCommon.Data
             CorrectFilePath(ref HumidityNcFile);
         }
 
-
         protected override void ImportSurface()
         {
             ImportNcFile<float>(SeaTempNcFile,
@@ -48,6 +55,16 @@ namespace ThorusCommon.Data
                           SeaTempFile,
                           (d) => (d / 100),
                           false);
+
+            DateTime dt = ImportDateTime(SeaTempNcFile);
+            SimDateTime sdt = new SimDateTime(dt);
+
+            string timeSeedFile = "timeSeed.thd";
+            CorrectFilePath(ref timeSeedFile);
+            File.WriteAllText(timeSeedFile, sdt.Title);
+
+            if (_sstOnly)
+                return;
 
             ImportNcFile<float>(SoilTempNcFile, 
                 "Temperature_depth_below_surface_layer", 1, 0, 
@@ -58,13 +75,6 @@ namespace ThorusCommon.Data
                 "Water_equivalent_of_accumulated_snow_depth", 1, 0,
                 SnowCoverFile,
                 (d) => (d));
-
-            DateTime dt = ImportDateTime(SeaTempNcFile);
-            SimDateTime sdt = new SimDateTime(dt);
-
-            string timeSeedFile = "timeSeed.thd";
-            CorrectFilePath(ref timeSeedFile);
-            File.WriteAllText(timeSeedFile, sdt.Title);
         }
 
         public static DateTime ImportDateTime(string inputNcFile)
@@ -105,6 +115,9 @@ namespace ThorusCommon.Data
 
         protected override void ImportLevel(int idx)
         {
+            if (_sstOnly)
+                return;
+
             // T, P, H must be read and built in this order
             // Calculation of P depends on T;
             // Calculation of H depends on both T and P.

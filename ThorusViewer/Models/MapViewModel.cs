@@ -490,7 +490,8 @@ MapFeatures:
 
                     line = new LineSeries();
                     line.CanTrackerInterpolatePoints = true;
-                    line.Color = OxyColors.Gray;
+                    line.Color = OxyColors.Black;
+                    line.StrokeThickness = 1;
                     continue;
                 }
 
@@ -518,7 +519,7 @@ MapFeatures:
                     line = new LineSeries();
                     line.CanTrackerInterpolatePoints = true;
                     line.Color = OxyColors.Maroon;
-                    line.StrokeThickness = 4;
+                    line.StrokeThickness = 2;
                     continue;
                 }
 

@@ -185,7 +185,7 @@ namespace FastFluidSolver
         /// <param name="ymax">maximum y coordinate of obstacle</param>
         /// <param name="zmin">minimum z coordinate of obstacle</param>
         /// <param name="zmax">maximum z coordinate of obstacle</param>
-        public void add_obstacle(double xmin, double xmax, double ymin, double ymax,
+        public virtual void add_obstacle(double xmin, double xmax, double ymin, double ymax,
                 double zmin, double zmax)
         {
             int i_start = (int)Math.Floor(xmin * (Nx - 2) / length_x);

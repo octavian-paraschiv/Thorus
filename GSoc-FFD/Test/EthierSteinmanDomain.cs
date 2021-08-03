@@ -90,6 +90,30 @@ namespace FastFluidSolver
             boundary_w = old.boundary_w;
         }
 
+        public override void add_obstacle(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
+        {
+            int i_start = (int)Math.Floor(xmin);
+            int i_end = (int)Math.Floor(xmax);
+            int j_start = (int)Math.Floor(ymin);
+            int j_end = (int)Math.Floor(ymax);
+            int k_start = (int)Math.Floor(zmin);
+            int k_end = (int)Math.Floor(zmax);
+
+            for (int i = i_start; i < i_end; i++)
+            {
+                for (int j = j_start; j < j_end; j++)
+                {
+                    for (int k = k_start; k < k_end; k++)
+                    {
+                        obstacle_cells[i + 1, j + 1, k + 1] = 1;
+                        //obstacle_list.Add(new int[] { i, j, k });
+                    }
+                }
+            }
+
+            set_boundary_flags();
+        }
+
         /// <summary>
         /// Updates time dependent boundary conditions.
         /// </summary>

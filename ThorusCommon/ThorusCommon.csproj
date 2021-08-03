@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Data\Atmosphere\AtmosphericLevel.cs" />
     <Compile Include="Data\Atmosphere\Atmosphere.cs" />
+    <Compile Include="Data\Atmosphere\Ffd_JetLevel.cs" />
     <Compile Include="Data\Atmosphere\JetLevel.cs" />
     <Compile Include="Data\Atmosphere\JetModels\DualJet_WithReversal_FastFluidDynamicsJet.cs" />
     <Compile Include="Data\Atmosphere\JetModels\ExperimentalJet.cs" />

@@ -19,7 +19,7 @@ namespace ThorusCommon
         const string DataFileName = "SimParams.thd";
         private readonly string DataFilePath = string.Empty;
 
-        const float DefSolarWarmupDailyQuantum = (60f / 365f);
+        const float DefSolarWarmupDailyQuantum = 0.1644f;
 
         #region Singleton
         public static SimulationParameters __instance = new SimulationParameters();
@@ -70,8 +70,8 @@ namespace ThorusCommon
             this.AirTempContribution=0.8f;
 
 
-            this.WaterTempChangeFactor=0.05f;
-            this.SoilTempChangeFactor=0.182f;
+            this.WaterTempChangeFactor=0.5f;
+            this.SoilTempChangeFactor=1.8f;
 
             this.ContinentalPolarAirMassTemp = -5;
             this.TropicalContinentalAirMassTemp = 18;
@@ -217,22 +217,22 @@ namespace ThorusCommon
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
-        [Range(0f, 0.33f)]
-        [DefaultValue(0.1f)]
+        [Range(0f, 0.5f)]
+        [DefaultValue(0.33f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate anticyclones")]
-        [Range(0f, 0.33f)]
-        [DefaultValue(0.1f)]
+        [Range(0f, 0.5f)]
+        [DefaultValue(0.3f)]
         public float AntiCyclogeneticFactor { get; set; }
 
       
 
         [Category(" Atmosphere model / Advection")]
         [Description("Stepping model for calculating advection")]
-        [Range(10, 1000)]
-        [DefaultValue(100)]
+        [Range(10, 200)]
+        [DefaultValue(50)]
         public int StepsPerDay { get; set; }
 
         #endregion
@@ -300,13 +300,13 @@ namespace ThorusCommon
         [Category("Temperature model / Surface")]
         [Description("How much of the air temperature is daily transmitted to a water-like surface.")]
         [DefaultValue(0.05f)]
-        [Range(0.01, 0.1)]
+        [Range(0.01, 0.1f)]
         public float WaterTempChangeFactor { get; set; }
 
         [Category("Temperature model / Surface")]
         [Description("How much of the air temperature is daily transmitted to a land-like surface.")]
         [DefaultValue(0.182f)]
-        [Range(0.1, 0.2)]
+        [Range(0.15f, 0.2f)]
         public float SoilTempChangeFactor { get; set; }
 
 
@@ -377,13 +377,13 @@ namespace ThorusCommon
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the 'period' of the jet stream oscillation (that is, the interval between two similar phases of the polar jet stream in the same geographical region)")]
-        [DefaultValue(7f)]
+        [DefaultValue(6.5f)]
         [Range(1, 20)]
         public float JetStreamPeriod { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the number of 'peaks' of the jet stream oscillation")]
-        [DefaultValue(7f)]
+        [DefaultValue(6.5f)]
         [Range(3, 15)]
         public float JetStreamPeaks { get; set; }
 

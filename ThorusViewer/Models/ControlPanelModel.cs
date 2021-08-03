@@ -249,6 +249,7 @@ namespace ThorusViewer.Models
 
             DataTypes.Add(new DataType("M_00", "Air mass type"));
 
+            DataTypes.Add(new DataType("E_WL", "Water/land mask"));
             DataTypes.Add(new DataType("E_00", "Elevation data"));
 
             DataTypes.Add(new DataType("F_00", "Fronts"));

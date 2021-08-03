@@ -192,6 +192,8 @@ namespace ThorusViewer
 
                         if (runStats)
                             args += string.Format("stat {0}", statRange);
+                        else
+                            args += " regen";
 
                         psi.Arguments = args;
                         psi.CreateNoWindow = true;

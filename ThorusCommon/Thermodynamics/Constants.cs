@@ -138,16 +138,16 @@ namespace ThorusCommon.Thermodynamics
 
         public const float AngleBetweenWindAndIsobars = (float)(-(float)Math.PI / 2);
 
-        public static readonly float TEST_Lon = 25f;
-        public static readonly float TEST_Lat = 44f;
+        public static readonly float TEST_Lon = 33f;
+        public static readonly float TEST_Lat = 43f;
 
         public static bool SimBreakPoint(int r, int c, EarthModel model = null)
         {
-            SimDateTime compareTo = new SimDateTime("2019-06-20_00");
+            SimDateTime compareTo = new SimDateTime("2021-08-15_00");
 
 #if HAVE_TESTSIMBREAKPOINT
 
-            if (model == null || model.UTC.GetHoursOffset(compareTo) >= 0)
+            if (model?.UTC == null || model.UTC.GetHoursOffset(compareTo) >= 0)
             {
                 return (r == EarthModel.MaxLat - (int)SimConstants.TEST_Lat &&
                     c == EarthModel.MaxLon + (int)SimConstants.TEST_Lon);

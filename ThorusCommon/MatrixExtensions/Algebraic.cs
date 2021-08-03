@@ -51,11 +51,8 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix Assign(this DenseMatrix m, Func<int, int, float> vFunc)
         {
             if (m == null)
-            {
                 m = MatrixFactory.New(vFunc);
-            }
-            else
-            {
+
                 for (int r = 0; r < m.RowCount; r++)
                     for (int c = 0; c < m.ColumnCount; c++)
                     {
@@ -64,7 +61,6 @@ namespace ThorusCommon.MatrixExtensions
                         else
                             m[r, c] = 0;
                     }
-            }
 
             return m;
         }
@@ -72,21 +68,16 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix[] Assign2D(this DenseMatrix[] m2d, Func<int, int, float> vFuncX, Func<int, int, float> vFuncY)
         {
             if (m2d == null)
-            {
                 m2d = MatrixFactory.New2D(vFuncX, vFuncY);
-            }
-            else
-            {
+
                 if (m2d[Direction.X] == null)
                     m2d[Direction.X] = MatrixFactory.New(vFuncX);
-                else
-                    m2d[Direction.X].Assign(vFuncX);
 
                 if (m2d[Direction.Y] == null)
                     m2d[Direction.Y] = MatrixFactory.New(vFuncY);
-                else
+
+            m2d[Direction.X].Assign(vFuncX);
                     m2d[Direction.Y].Assign(vFuncY);
-            }
 
             return m2d;
         }
@@ -186,8 +177,20 @@ namespace ThorusCommon.MatrixExtensions
             return m2;
         }
 
+        public static DenseMatrix[] EQ2D(this DenseMatrix[] m, int order = 1)
+        {
+            return new DenseMatrix[]
+            {
+                m[Direction.X].EQ(order),
+                m[Direction.Y].EQ(order),
+            };
+        }
+
         public static DenseMatrix EQ(this DenseMatrix m, int order = 1)
         {
+            if (order > 2)
+                order = 2;
+
             var me = m.Clone() as DenseMatrix;
 
             for (int i = 0; i < order; i++)
@@ -248,6 +251,7 @@ namespace ThorusCommon.MatrixExtensions
             });
         }
 
+        /*
         private static DenseMatrix EQ_Type_1(DenseMatrix m)
         {
             int lim_r = m.RowCount - 1;
@@ -332,6 +336,7 @@ namespace ThorusCommon.MatrixExtensions
             DenseMatrix mm = (m1+m2+m3+m4+m5+m6+m7+m8+m9).Divide(9) as DenseMatrix;
             return mm.SubMatrix(1, lim_r+1, 1, lim_c+1) as DenseMatrix;
         }
+        */
 
         public static float[] MinMax(this DenseMatrix V)
         {

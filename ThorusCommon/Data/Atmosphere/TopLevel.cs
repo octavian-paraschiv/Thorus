@@ -13,14 +13,6 @@ namespace ThorusCommon.Data
 {
     public class TopLevel : AtmosphericLevel
     {
-        protected override float[] PressureExtremes
-        {
-            get
-            {
-                return LevelPressureExtremes.TopLevelExtremes;
-            }
-        }
-
         public TopLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.TopLevel, loadFromStateFiles, defaultValue)
         {
@@ -32,7 +24,7 @@ namespace ThorusCommon.Data
 
         public override void Advance()
         {
-            _actualDev = Earth.ATM.JetLevel.ActualDev;
+            _actualDev = Earth.ATM.JetLevel.AdvectionDev;
             ApplyAccumulatedDeviations();
 
             var applyDevs = new DenseMatrix[]
@@ -40,6 +32,8 @@ namespace ThorusCommon.Data
                 _actualDev[Direction.X].EQ(),
                 _actualDev[Direction.Y].EQ(),
             };
+
+            var tst = _actualDev[Direction.X][45, 82];
 
             // Pressure field: calculate
             // Temperature field: shift + apply seasonal warmup + apply advection
@@ -59,7 +53,7 @@ namespace ThorusCommon.Data
 
             ApplyAdvection(projT, projH);
 
-            ApplyCyclogenesys(applyDevs, T0, P0);
+            CalculatePressureField(applyDevs, T0, P0);
         }
         
     }

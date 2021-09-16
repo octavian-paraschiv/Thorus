@@ -158,7 +158,7 @@ namespace ThorusViewer.WinForms
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
                         var elements = lookup.GetElements("a", "href", lookupText);
-                        if (elements.Count > 0)
+                        if (elements?.Count > 0)
                         {
                             elements.Sort((s1, s2) =>
                             {
@@ -205,8 +205,8 @@ namespace ThorusViewer.WinForms
 
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
-                        var elements = lookup.GetElements("a", "href", "ftp://");
-                        if (elements.Count > 0)
+                        List<string> elements = lookup.GetElements("a", "href", ".nc");
+                        if (elements?.Count > 0)
                         {
                             string file = Path.Combine(SimulationData.WorkFolder, "SST.nc");
 

@@ -188,13 +188,10 @@ namespace ThorusCommon.MatrixExtensions
 
         public static DenseMatrix EQ(this DenseMatrix m, int order = 1)
         {
-            if (order > 2)
-                order = 2;
-
             var me = m.Clone() as DenseMatrix;
 
             for (int i = 0; i < order; i++)
-                me = EQ_Type_2(me);
+                me = EQ_Type_2(me.Clone() as DenseMatrix);
 
             return me;
         }

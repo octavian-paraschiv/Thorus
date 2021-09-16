@@ -25,13 +25,13 @@ namespace ThorusCommon.Data
 
         public override void RebuildState()
         {
-            // P = 3 * (( SimConstants.LevelJetWeights[LevelType.SeaLevel] * Earth.ATM.SeaLevel.P.Multiply(100 / ThorusCommon.LevelPressure.SeaLevelPressure) +
-            //       SimConstants.LevelJetWeights[LevelType.TopLevel] * Earth.ATM.TopLevel.P.Multiply(100 / ThorusCommon.LevelPressure.TopLevelPressure) +
-            //       SimConstants.LevelJetWeights[LevelType.MidLevel] * Earth.ATM.MidLevel.P.Multiply(100 / ThorusCommon.LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
+            P = 3 * ((SimConstants.LevelJetWeights[LevelType.SeaLevel] * Earth.ATM.SeaLevel.P.Multiply(100 / ThorusCommon.LevelPressure.SeaLevelPressure) +
+                  SimConstants.LevelJetWeights[LevelType.TopLevel] * Earth.ATM.TopLevel.P.Multiply(100 / ThorusCommon.LevelPressure.TopLevelPressure) +
+                  SimConstants.LevelJetWeights[LevelType.MidLevel] * Earth.ATM.MidLevel.P.Multiply(100 / ThorusCommon.LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
 
-            P = ((Earth.ATM.SeaLevel.P.Multiply(100 / ThorusCommon.LevelPressure.SeaLevelPressure) +
-                  Earth.ATM.TopLevel.P.Multiply(100 / ThorusCommon.LevelPressure.TopLevelPressure) +
-                  Earth.ATM.MidLevel.P.Multiply(100 / ThorusCommon.LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
+            //P = ((Earth.ATM.SeaLevel.P.Multiply(100 / ThorusCommon.LevelPressure.SeaLevelPressure) +
+            //      Earth.ATM.TopLevel.P.Multiply(100 / ThorusCommon.LevelPressure.TopLevelPressure) +
+            //      Earth.ATM.MidLevel.P.Multiply(100 / ThorusCommon.LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
 
             var BP = this.BP;
             var FP = this.FP;
@@ -46,7 +46,7 @@ namespace ThorusCommon.Data
             float deltaLonRad = daysElapsed * dailyJetAdvance * (float)Math.PI / 180;
 
             RebuildJetState(ridgePatternDevs, BP, FP, daysElapsed, dailyJetAdvance, deltaLonRad);
-                            }
+        }
 
         protected abstract void RebuildJetState(DenseMatrix[] ridgePatternDevs, DenseMatrix BP, DenseMatrix FP,
             float daysElapsed, float dailyJetAdvance, float deltaLonRad);

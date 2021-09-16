@@ -121,9 +121,9 @@ namespace ThorusCommon.Thermodynamics
 
         public static readonly float[] LevelJetWeights =
         {
-           50f / (50 + 1500 + 5500),
-           1500f / (50 + 1500 + 5500),
-           5500f / (50 + 1500 + 5500),
+           50f / 7050f,
+           1500f / 7050f,
+           5500f / 7050f,
         };
       
 

@@ -170,22 +170,15 @@ namespace ThorusCommon.Data
                 throw new FileNotFoundException();
 
             var wlMask = FileSupport.LoadMatrixFromFile(filePath);
-            var he = Height.EQ(8);
+            var HE = Height.EQ(2);
 
-            WL.Assign((r, c) =>
+            WL.Assign(delegate (int r, int c)
             {
-                var sgn = 0f;
+                if (wlMask[r, c] > 0)
+                    return 1f;
 
-                sgn = Math.Sign(wlMask[r, c]);
-                if (sgn == 1)
-                  return 1;
-
-                if (he[r, c] >= 50f)
-                    return 0;
-
-                return 1;
+                return (HE[r, c] >= SimConstants.LevelHeights[LevelType.SeaLevel]) ? 0 : 1;
             });
-
 
             // ------------
             filePath = ".\\ADJ_LR.thd";
@@ -282,6 +275,9 @@ namespace ThorusCommon.Data
 
         public void Save(string title)
         {
+            FileSupport.Save(Height, title, "E_00_MAP");
+            FileSupport.Save(WL, title, "E_WL_MAP");
+
             FileSupport.Save(TE, title, "T_TE_MAP");
             FileSupport.Save(TW, title, "T_TW_MAP");
             FileSupport.Save(TL, title, "T_TL_MAP");
@@ -305,9 +301,7 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(TLow - TNormLow, title, "T_DL_MAP");
             FileSupport.Save(THigh - TNormHigh, title, "T_DH_MAP");
-            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP");
-
-            FileSupport.Save((1000 * WL - MatrixFactory.Init(500)), title, "E_00_MAP");
+            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh), title, "T_DA_MAP");
         }
 
         public void SaveStats(string title, string category)

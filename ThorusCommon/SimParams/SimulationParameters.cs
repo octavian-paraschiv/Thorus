@@ -217,7 +217,7 @@ namespace ThorusCommon
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
         [Range(0f, 0.5f)]
-        [DefaultValue(0.33f)]
+        [DefaultValue(0.3f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]

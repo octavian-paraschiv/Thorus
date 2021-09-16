@@ -72,7 +72,7 @@ namespace ThorusViewer
                     if (string.IsNullOrEmpty(elem))
                         continue;
 
-                    if (elem.StartsWith(lookupText))
+                    if (elem.ToUpperInvariant().Contains(lookupText.ToUpperInvariant()))
                         return elem;
                 }
             }

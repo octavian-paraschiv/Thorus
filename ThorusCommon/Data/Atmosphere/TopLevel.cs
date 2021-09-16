@@ -33,8 +33,6 @@ namespace ThorusCommon.Data
                 _actualDev[Direction.Y].EQ(),
             };
 
-            var tst = _actualDev[Direction.X][45, 82];
-
             // Pressure field: calculate
             // Temperature field: shift + apply seasonal warmup + apply advection
             // Humidity field: shift + apply advection

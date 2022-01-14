@@ -48,6 +48,11 @@ namespace ThorusCommon
         public const int R = Y;
     }
 
+    public static class AdvComp
+    {
+        public const int T = 0;
+        public const int H = 1;
+    }
 }
 
 namespace ThorusCommon.Thermodynamics
@@ -113,19 +118,11 @@ namespace ThorusCommon.Thermodynamics
 
         public static readonly float[] LevelHeights = 
         { 
-            50,
+            0,
             1500,
             5500,
             10000,
         };
-
-        public static readonly float[] LevelJetWeights =
-        {
-           50f / (50 + 1500 + 5500),
-           1500f / (50 + 1500 + 5500),
-           5500f / (50 + 1500 + 5500),
-        };
-      
 
         public static readonly float[] Thicknesses = 
         { 
@@ -138,16 +135,16 @@ namespace ThorusCommon.Thermodynamics
 
         public const float AngleBetweenWindAndIsobars = (float)(-(float)Math.PI / 2);
 
-        public static readonly float TEST_Lon = 33f;
-        public static readonly float TEST_Lat = 43f;
+        public static readonly float TEST_Lon = 25f;
+        public static readonly float TEST_Lat = 44f;
 
         public static bool SimBreakPoint(int r, int c, EarthModel model = null)
         {
-            SimDateTime compareTo = new SimDateTime("2021-08-15_00");
+            SimDateTime compareTo = new SimDateTime("2019-06-20_00");
 
 #if HAVE_TESTSIMBREAKPOINT
 
-            if (model?.UTC == null || model.UTC.GetHoursOffset(compareTo) >= 0)
+            if (model == null || model.UTC.GetHoursOffset(compareTo) >= 0)
             {
                 return (r == EarthModel.MaxLat - (int)SimConstants.TEST_Lat &&
                     c == EarthModel.MaxLon + (int)SimConstants.TEST_Lon);

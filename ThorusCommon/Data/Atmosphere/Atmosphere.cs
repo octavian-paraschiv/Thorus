@@ -56,15 +56,10 @@ namespace ThorusCommon.Engine
         {
             this.Earth = earth;
 
-            SeaLevel = this.CreateLevel(LevelType.SeaLevel, loadFromStateFiles, defaultValue) as SeaLevel;
-            MidLevel = this.CreateLevel(LevelType.MidLevel, loadFromStateFiles, defaultValue) as MidLevel;
-            TopLevel = this.CreateLevel(LevelType.TopLevel, loadFromStateFiles, defaultValue) as TopLevel;
-            JetLevel = this.CreateLevel(LevelType.JetLevel, loadFromStateFiles, defaultValue) as JetLevel;
-
-            Console.WriteLine($"  -> Using {SeaLevel.GetType().Name} as sea level model ...");
-            Console.WriteLine($"  -> Using {MidLevel.GetType().Name} as mid level model ...");
-            Console.WriteLine($"  -> Using {TopLevel.GetType().Name} as top level model ...");
-            Console.WriteLine($"  -> Using {JetLevel.GetType().Name} as jet level model ...");
+            SeaLevel = new SeaLevel(earth, loadFromStateFiles, defaultValue);
+            MidLevel = new MidLevel(earth, loadFromStateFiles, defaultValue);
+            TopLevel = new TopLevel(earth, loadFromStateFiles, defaultValue);
+            JetLevel = new JetLevel(earth, loadFromStateFiles, defaultValue);
 
             if (loadFromStateFiles == false)
             {
@@ -129,9 +124,10 @@ namespace ThorusCommon.Engine
         private void CalculateEnvironmentalLapseRate()
         {
             var midLevelHeight = SimConstants.LevelHeights[LevelType.MidLevel];
-            var seaLevelHeight = SimConstants.LevelHeights[LevelType.SeaLevel];
 
             var ADJ_LR = Earth.SFC.ADJ_LR;
+            var ALBEDO = Earth.SFC.ALBEDO;
+            var WL = Earth.SFC.WL;
             var ELV = Earth.SFC.Height;
 
             ELR.Assign((r, c) =>
@@ -142,6 +138,8 @@ namespace ThorusCommon.Engine
                     // Assume dry air above the mid level boundary
                     return SimulationParameters.Instance.DryLapseRate;
 
+                var wl = WL[r, c];
+                var albedo = ALBEDO[r, c];
                 var adj_lr = ADJ_LR[r, c];
 
                 AirMassType amt = (AirMassType)AirMass[r, c];
@@ -149,9 +147,7 @@ namespace ThorusCommon.Engine
 
                 var tMid = MidLevel.T[r, c];
                 var tSea = SeaLevel.T[r, c];
-
-                var f = Math.Abs((elv - seaLevelHeight) / (midLevelHeight - seaLevelHeight));
-                var t = f * tMid + (1 - f) * tSea;
+                var t = 0.5f * (tMid + tSea);
 
                 float lr = LapseRate.EnvironmentalLapseRate(amt, t, mr);
 
@@ -160,6 +156,8 @@ namespace ThorusCommon.Engine
 
                 if (elv > 900)
                     lr -= (int)(elv / 900);
+
+                lr -= 0.05f * albedo;
 
                 // We verify lapse rate remains in atmospheric physical limnits
                 lr = Math.Max(-SimulationParameters.Instance.DryLapseRate, Math.Min(SimulationParameters.Instance.DryLapseRate, lr));

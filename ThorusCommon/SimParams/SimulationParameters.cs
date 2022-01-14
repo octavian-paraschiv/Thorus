@@ -8,9 +8,6 @@ using System.IO;
 using System.ComponentModel.DataAnnotations;
 using ThorusCommon.IO;
 using ThorusCommon.Engine;
-using System.Drawing.Design;
-using ThorusCommon.Data;
-using System.Globalization;
 
 namespace ThorusCommon
 {
@@ -19,7 +16,7 @@ namespace ThorusCommon
         const string DataFileName = "SimParams.thd";
         private readonly string DataFilePath = string.Empty;
 
-        const float DefSolarWarmupDailyQuantum = 0.1644f;
+        const float DefSolarWarmupDailyQuantum = (60f / 365f);
 
         #region Singleton
         public static SimulationParameters __instance = new SimulationParameters();
@@ -70,8 +67,8 @@ namespace ThorusCommon
             this.AirTempContribution=0.8f;
 
 
-            this.WaterTempChangeFactor=0.5f;
-            this.SoilTempChangeFactor=1.8f;
+            this.WaterTempChangeFactor=0.05f;
+            this.SoilTempChangeFactor=0.182f;
 
             this.ContinentalPolarAirMassTemp = -5;
             this.TropicalContinentalAirMassTemp = 18;
@@ -86,7 +83,7 @@ namespace ThorusCommon
             this.MinTsForMelting = 0.1f;
             this.MaxFreezingRainDelta = 5f;
 
-            this.JetStreamPattern = "AdaptiveJet";
+            this.JetStreamPattern = JetStreamPatterns.VariableJet_SeasonalReversal;
             this.JetStreamVariabilityPeriod = 7f;
             this.JetStreamVariabilitySeed = 0f;
 
@@ -162,14 +159,7 @@ namespace ThorusCommon
                                 Type t = p.PropertyType.UnderlyingSystemType;
                                 if (t.IsEnum)
                                 {
-                                    try
-                                    {
-                                        value = Enum.Parse(p.PropertyType.UnderlyingSystemType, valStr);
-                                    }
-                                    catch
-                                    {
-                                        value = Enum.GetValues(p.PropertyType.UnderlyingSystemType).GetValue(0);
-                                    }
+                                    value = Enum.Parse(p.PropertyType.UnderlyingSystemType, valStr);
                                 }
                                 else
                                 {
@@ -217,23 +207,26 @@ namespace ThorusCommon
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
-        [Range(0f, 0.5f)]
-        [DefaultValue(0.33f)]
+        [Range(0f, 1f)]
+        [DefaultValue(0.5f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate anticyclones")]
-        [Range(0f, 0.5f)]
-        [DefaultValue(0.3f)]
+        [Range(0f, 1f)]
+        [DefaultValue(0.5f)]
         public float AntiCyclogeneticFactor { get; set; }
 
-      
+        public enum AdvectionModels
+        {
+            Coarse = 0,
+            Fine,
+        }
 
-        [Category(" Atmosphere model / Advection")]
-        [Description("Stepping model for calculating advection")]
-        [Range(10, 200)]
-        [DefaultValue(50)]
-        public int StepsPerDay { get; set; }
+        [Category("Atmosphere model / Advection")]
+        [Description("Model to use to calculate air mass advection")]
+        [DefaultValue(AdvectionModels.Coarse)]
+        public AdvectionModels AdvectionModel { get; set; }
 
         #endregion
 
@@ -300,13 +293,13 @@ namespace ThorusCommon
         [Category("Temperature model / Surface")]
         [Description("How much of the air temperature is daily transmitted to a water-like surface.")]
         [DefaultValue(0.05f)]
-        [Range(0.01, 0.1f)]
+        [Range(0.01, 0.1)]
         public float WaterTempChangeFactor { get; set; }
 
         [Category("Temperature model / Surface")]
         [Description("How much of the air temperature is daily transmitted to a land-like surface.")]
         [DefaultValue(0.182f)]
-        [Range(0.15f, 0.2f)]
+        [Range(0.1, 0.2)]
         public float SoilTempChangeFactor { get; set; }
 
 
@@ -377,13 +370,13 @@ namespace ThorusCommon
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the 'period' of the jet stream oscillation (that is, the interval between two similar phases of the polar jet stream in the same geographical region)")]
-        [DefaultValue(6.5f)]
+        [DefaultValue(7f)]
         [Range(1, 20)]
         public float JetStreamPeriod { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the number of 'peaks' of the jet stream oscillation")]
-        [DefaultValue(6.5f)]
+        [DefaultValue(7f)]
         [Range(3, 15)]
         public float JetStreamPeaks { get; set; }
 
@@ -397,13 +390,71 @@ namespace ThorusCommon
             }
         }
 
+        public enum JetStreamPatterns
+        {
+            /// <summary>
+            /// Single hemispherical jet, with reversal at Poles and Equator
+            /// </summary>
+            SingleJet_WithReversal = 0,
+
+            /// <summary>
+            /// Single hemispherical jet, with reversal zones depending on season
+            /// </summary>
+            SingleJet_SeasonalReversal,
+
+            /// <summary>
+            /// Dual jet with reversal at Tropics and Polar Circles
+            /// </summary>
+            DualJet_WithReversal,
+
+            /// <summary>
+            /// Dual jet with reversal zones depending on season
+            /// </summary>
+            DualJet_SeasonalReversal,
+
+            /// <summary>
+            /// Variable jet with reversal (Combination of Single and Dual with reversal)
+            /// </summary>
+            VariableJet_WithReversal,
+
+            /// <summary>
+            /// Variable jet with reversal depending on season  (Combination of Single and Dual with seasonal reversal)
+            /// </summary>
+            VariableJet_SeasonalReversal,
+
+            /// <summary>
+            /// Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)
+            /// </summary>
+            VariableJet_SeasonalAndBlock_Reversal,
+
+            /// <summary>
+            /// Adaptive model
+            /// </summary>
+            AdaptiveJet,
+
+            /// <summary>
+            /// Adaptive with high pressure block model
+            /// </summary>
+            AdaptiveJet_WithBlock,
+        }
 
         [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the pattern of the jet stream oscillation")]
-        [DefaultValue("AdaptiveJet")]
-        [Editor("ThorusCommon.Data.JetStreamPatternEditor, ThorusCommon", typeof(UITypeEditor))]
-        [JetStreamPattern]
-        public string JetStreamPattern { get; set; }
+        [Description("A virtual variable that represents the pattern of the jet stream oscillation.\n\n" +
+            "SingleJet_NoReversal => Single hemispherical jet, without reversal [Theoretical pattern only]\n" +
+            "SingleJet_WithReversal => Single hemispherical jet, with reversal at Poles and Equator [Applicable in cold season]\n" +
+            "SingleJet_SeasonalReversal => Single hemispherical jet with reversal zones depending on season" +
+
+            "DualJet_NoReversal => Dual hemispherical jet without reversal. [Theoretical pattern only]\n\n" +
+            "DualJet_WithReversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
+            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season\n\n" +
+
+            "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
+            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n" +
+            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n"
+        )]
+
+        [DefaultValue(JetStreamPatterns.VariableJet_SeasonalReversal)]
+        public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A variable that represents the variation period of the jet stream oscillation.\n\n" +
@@ -430,46 +481,9 @@ namespace ThorusCommon
         [DefaultValue(0.2f)]
         public float FrontsDelta { get; set; }
 
-       
-
         #endregion
+
+
+
     }
-    /*
-    public class FlatTypeConverter : TypeConverter
-    {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return true;
-        }
-
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            return true;
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            try
-            {
-                return base.ConvertFrom(context, culture, value);
-            }
-            catch
-            {
-                return value;
-            }
-        }
-
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            try
-            {
-                return base.ConvertTo(context, culture, value, destinationType);
-            }
-            catch
-            {
-                return value;
-            }
-        }
-    }
-    */
 }

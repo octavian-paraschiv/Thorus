@@ -12,9 +12,22 @@ namespace ThorusCommon.Data
 {
     public class MidLevel : AtmosphericLevel
     {
+        protected override float[] PressureExtremes
+        {
+            get
+            {
+                return LevelPressureExtremes.MidLevelExtremes;
+            }
+        }
+
         public MidLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.MidLevel, loadFromStateFiles, defaultValue)
         {
+            _fNonAdvect = 0.75f;
+            _fProAdvect = 1 - _fNonAdvect;
+
+            _fScaleWindX = 0.5f;
+            _fScaleWindY = 0.5f;
         }
 
         public override void RebuildState()
@@ -23,7 +36,7 @@ namespace ThorusCommon.Data
 
         public override void Advance()
         {
-            _actualDev = Earth.ATM.TopLevel.AdvectionDev;
+            _actualDev = Earth.ATM.TopLevel.ActualDev;
             ApplyAccumulatedDeviations();
 
             var applyDevs = new DenseMatrix[]
@@ -50,7 +63,7 @@ namespace ThorusCommon.Data
 
             ApplyAdvection(projT, projH);
 
-            CalculatePressureField(applyDevs, T0, P0);
+            ApplyCyclogenesys(applyDevs, T0, P0);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace ThorusViewer.WinForms
 
         private void btnFetchSstData_Click(object sender, EventArgs e)
         {
-            var res = MessageBox.Show(this, "This will delete any existing initial condition files. Are you sure you want to proceed ?", 
+            var res = MessageBox.Show(this, "This will delete any existing initial condition files. Are you sure you want to proceed ?",
                 "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res != DialogResult.Yes)
                 return;
@@ -158,7 +158,7 @@ namespace ThorusViewer.WinForms
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
                         var elements = lookup.GetElements("a", "href", lookupText);
-                        if (elements.Count > 0)
+                        if (elements?.Count > 0)
                         {
                             elements.Sort((s1, s2) =>
                             {
@@ -205,8 +205,8 @@ namespace ThorusViewer.WinForms
 
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
-                        var elements = lookup.GetElements("a", "href", "ftp://");
-                        if (elements.Count > 0)
+                        List<string> elements = lookup.GetElements("a", "href", ".nc");
+                        if (elements?.Count > 0)
                         {
                             string file = Path.Combine(SimulationData.WorkFolder, "SST.nc");
 
@@ -365,7 +365,7 @@ namespace ThorusViewer.WinForms
         private bool ValidateFiles()
         {
             bool allFilesPresent = true;
-            
+
             pbSST.Image = ValidateFile("SST.nc", ref allFilesPresent);
             pbGrib.Image = ValidateFile("input.grib", ref allFilesPresent);
             /*

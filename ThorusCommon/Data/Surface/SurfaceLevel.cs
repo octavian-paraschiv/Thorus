@@ -170,19 +170,22 @@ namespace ThorusCommon.Data
                 throw new FileNotFoundException();
 
             var wlMask = FileSupport.LoadMatrixFromFile(filePath);
-            var HE = Height.EQ(2);
+            var he = Height.EQ(8);
 
             WL.Assign((r, c) =>
             {
-                // 0 == land; 1 == water
-                var wl = (wlMask[r, c] <= 0) ? 0 : 1;
-                var he = HE[r, c];
+                var sgn = 0f;
 
-                if (he > 2f * SimConstants.LevelHeights[LevelType.SeaLevel])
-                    wl = 0;
+                sgn = Math.Sign(wlMask[r, c]);
+                if (sgn == 1)
+                  return 1;
 
-                return wl;
+                if (he[r, c] >= 50f)
+                    return 0;
+
+                return 1;
             });
+
 
             // ------------
             filePath = ".\\ADJ_LR.thd";
@@ -279,9 +282,6 @@ namespace ThorusCommon.Data
 
         public void Save(string title)
         {
-            FileSupport.Save(Height, title, "E_00_MAP");
-            FileSupport.Save(WL, title, "E_WL_MAP");
-
             FileSupport.Save(TE, title, "T_TE_MAP");
             FileSupport.Save(TW, title, "T_TW_MAP");
             FileSupport.Save(TL, title, "T_TL_MAP");
@@ -305,7 +305,9 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(TLow - TNormLow, title, "T_DL_MAP");
             FileSupport.Save(THigh - TNormHigh, title, "T_DH_MAP");
-            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh), title, "T_DA_MAP");
+            FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP");
+
+            FileSupport.Save((1000 * WL - MatrixFactory.Init(500)), title, "E_00_MAP");
         }
 
         public void SaveStats(string title, string category)
@@ -623,20 +625,28 @@ namespace ThorusCommon.Data
 
             Earth.SFC.ALBEDO.Assign((r, c) =>
             {
+                var wl = WL[r, c];
                 var defAlbedo = DEF_ALBEDO[r, c];
 
-                var snowAlbedo = 0f;
-                var rainAlbedo = 0f;
+                //if (wl == 0)
+                {
+                    var snowAlbedo = 0f;
+                    var rainAlbedo = 0f;
 
-                if (SNOW[r, c] > 3f)
-                    snowAlbedo = SNOW[r, c] + 20f * Math.Max(0, 5 - DaysSinceLastSnowFall[r, c]);
+                    if (SNOW[r, c] > 3f)
+                        snowAlbedo = SNOW[r, c] + 20f * Math.Max(0, 5 - DaysSinceLastSnowFall[r, c]);
 
-                if (RAIN[r, c] >= 10f)
-                    rainAlbedo = 0.5f * RAIN[r, c] + 10f * Math.Max(0, 3 - DaysSinceLastRainFall[r, c]);
+                    if (RAIN[r, c] >= 10f)
+                        rainAlbedo = 0.5f * RAIN[r, c] + 10f * Math.Max(0, 3 - DaysSinceLastRainFall[r, c]);
 
-                var total = Math.Max(defAlbedo, Math.Min(100f, defAlbedo + snowAlbedo + rainAlbedo));
+                    var total = Math.Min(100f, defAlbedo + snowAlbedo + rainAlbedo);
 
-                return total;
+                    return total;
+
+                    //return Math.Max(total, defAlbedo);
+                }
+
+                //return defAlbedo;
             });
         }
         
@@ -656,7 +666,13 @@ namespace ThorusCommon.Data
                     
                 float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
 
-                var te1 = t1 - lr * dh / 1000;
+                var te1 = (0.5f * (t1 + t2) - lr * dh / 1000);
+                //var te1 = (t1 - lr * dh / 1000);
+
+                if (SimConstants.SimBreakPoint(r, c, Earth))
+                {
+                    int ss = 0;
+                }
 
                 var te =  
                     SimulationParameters.Instance.AirTempContribution * te1 + 
@@ -674,28 +690,49 @@ namespace ThorusCommon.Data
                 float dt = (te - old_ts);
                 float ts = old_ts;
 
-                float swf = GetDailyWarmupFactor(r, c, false);
-                float dts = 0.1f * swf * dt * Earth.SnapshotDivFactor;
+                // Frozen surfaces warm up waay slower
+                // And also - heaten surfaces cool down waay slower :)
+                float extremeTempSurfaceFactor = 1;
 
+                if (old_ts <= 0)
+                    extremeTempSurfaceFactor = (dt > 0) ? 0.5f : 1f;
+                else if (old_ts >= 30)
+                    extremeTempSurfaceFactor = (dt > 0) ? 1f : 0.5f;
+                    
                 if (dt > 0)
                 {
-                    // Surface warms up. High albedo => slower warmup, low albedo => faster warmup.
-                    float albedoFactor = 1f - ALBEDO[r, c] / 100f;
-
-                    ts += albedoFactor * dts;
-
-                    if (wl != 0)
+                    if (wl == 0)
+                    {
+                        // soil warms up
+                        var dts = SimulationParameters.Instance.SoilTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
+                        ts += dts;
+                    }
+                    else
+                    {
+                        // water warms up
+                        var dts = SimulationParameters.Instance.WaterTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
+                        ts += dts;
                         // We can't have water colder than -5 C
                         ts = Math.Max(-5, ts);
-
+                    }
                 }
                 else if (dt < 0)
                 {
-                    ts += dts;
+                    if (wl == 0)
+                    {
+                        // soil cools down
+                        var dts = SimulationParameters.Instance.SoilTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
+                        ts += dts;
+                    }
+                    else
+                    {
+                        // water cools down
+                        var dts = SimulationParameters.Instance.WaterTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
+                        ts += dts;
 
-                    if (wl != 0)
                         // We can't have water colder than -5 C
                         ts = Math.Max(-5, ts);
+                    }
                 }
 
                 return ts;
@@ -783,8 +820,6 @@ namespace ThorusCommon.Data
 
             THigh.Assign((r, c) =>
             {
-                float swf = GetDailyWarmupFactor(r, c, true);
-
                 // latitude
                 float lat = EarthModel.MaxLat - r;
                 // virtual temp at surface (called also equilibrium temp)
@@ -798,6 +833,8 @@ namespace ThorusCommon.Data
                 // And the sun angle factor is hence Math.Cos(0.384) = 0.99
                 float sunAngle = (float)Math.PI * lat / 180 - sunLatRad;
                 float sf = (float)Math.Cos(sunAngle);
+
+                float albedoFactor = Earth.SFC.ALBEDO[r, c] / 100;
 
                 // Total cloudiness
                 float nn = CalculateTotalCloudiness(Precip[r, c], FOG[r, c]);
@@ -820,15 +857,20 @@ namespace ThorusCommon.Data
 
                 // Finally the max temp can be calculated as being roughly the equilibrium temp (te) 
                 // plus an amount that represents the extra energy transmitted to the near-surface air during day time.
-                float max_t = te + dl * (1 - nn) * sf * swf;
+                float max_t = te + dl * (1 - nn) * sf * (1 - albedoFactor);
+
+                float wl = WL[r, c];
+                if (wl != 0)
+                {
+                    float max_t_norm = TNormHigh[r, c];
+                    max_t = 0.6f * max_t + 0.4f * max_t_norm;
+                }
 
                 return max_t;
             });
 
             TLow.Assign((r, c) =>
             {
-                float swf = GetDailyWarmupFactor(r, c, true);
-
                 // latitude
                 float lat = EarthModel.MaxLat - r;
                 // virtual temp at surface (called also equilibrium temp)
@@ -838,6 +880,8 @@ namespace ThorusCommon.Data
 
                 // Total cloudiness
                 float nn = CalculateTotalCloudiness(Precip[r, c], FOG[r, c]);
+
+                float albedoFactor = Earth.SFC.ALBEDO[r, c] / 100;
 
                 // Factors that affect minimum temp:
 
@@ -858,7 +902,14 @@ namespace ThorusCommon.Data
 
                 // Finally the min temp can be calculated as being roughly the equilibrium temp (te) 
                 // minus an amount that represents the extra energy lost by the near-surface air during night time.
-                float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * (1 - nn) * swf;
+                float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * (1 - nn) * (albedoFactor);
+
+                float wl = WL[r, c];
+                if (wl != 0)
+                {
+                    float min_t_norm = TNormLow[r, c];
+                    min_t = 0.6f * min_t + 0.4f * min_t_norm;
+                }
 
                 return min_t;
             });
@@ -925,18 +976,6 @@ namespace ThorusCommon.Data
 
                 return 100;
             });
-        }
-
-        public float GetDailyWarmupFactor(int r, int c, bool calcDailyExtremes)
-        {
-            var wf = (WL[r, c] != 0) ?
-                    SimulationParameters.Instance.WaterTempChangeFactor :
-                    SimulationParameters.Instance.SoilTempChangeFactor;
-
-            if (calcDailyExtremes)
-                wf *= 4.31f;
-
-            return wf;
         }
     }
 }

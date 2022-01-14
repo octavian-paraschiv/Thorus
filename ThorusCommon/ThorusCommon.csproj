@@ -44,33 +44,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Atmosphere\AtmosphericLevel.cs" />
     <Compile Include="Data\Atmosphere\Atmosphere.cs" />
-    <Compile Include="Data\Atmosphere\Ffd_JetLevel.cs" />
     <Compile Include="Data\Atmosphere\JetLevel.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\DualJet_WithReversal_FastFluidDynamicsJet.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\ExperimentalJet.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\Adaptive_FastFluidDynamicsJet.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\FastFluidDynamicsJet.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\AdaptiveJet_WithBlock.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\JetStreamPatternEditor.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\JetModelFunctions.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\SingleJet_SeasonalReversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\DualJet_WithReversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\DualJet_SeasonalReversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\VariableJet_WithReversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\VariableJet_SeasonalReversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\VariableJet_SeasonalAndBlock_Reversal.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\AdaptiveJet.cs" />
-    <Compile Include="Data\Atmosphere\JetModels\SingleJet_WithReversal.cs" />
     <Compile Include="Data\Atmosphere\SeaLevel.cs" />
-    <Compile Include="Data\AtmosphericLevelFactory.cs" />
     <Compile Include="Data\Earth\EarthModel.cs" />
     <Compile Include="Data\Earth\IEarthFeature.cs" />
     <Compile Include="Data\Atmosphere\MidLevel.cs" />
@@ -110,15 +91,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GSoc-FFD\GSoc-FFD.csproj">
-      <Project>{c5d7d94e-60be-47bd-b4ba-31df59d85e37}</Project>
-      <Name>GSoc-FFD</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
       <Project>{0f186cf5-5b63-440b-a5be-98e597f0b076}</Project>
       <Name>ThorusCommon.IO</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

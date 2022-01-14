@@ -21,7 +21,7 @@ namespace ThorusCommon.Engine
             { 
                 // Only ThorusControlPanel calls this.
                 _workFolder = value;
-                Environment.SetEnvironmentVariable("OpmWeather", _workFolder, EnvironmentVariableTarget.User);
+                Environment.SetEnvironmentVariable("OpmWeather", _workFolder, EnvironmentVariableTarget.Machine);
             }
         }
 
@@ -111,7 +111,7 @@ namespace ThorusCommon.Engine
             {
                 try
                 {
-                    wf = Environment.GetEnvironmentVariable("OpmWeather", EnvironmentVariableTarget.User);
+                    wf = Environment.GetEnvironmentVariable("OpmWeather", EnvironmentVariableTarget.Machine);
                     _workFolder = wf;
                 }
                 catch

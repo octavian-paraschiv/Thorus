@@ -155,7 +155,7 @@ namespace ThorusViewer.Models
 
             Viewports.Add(new Viewport("S America", -60, 15, -105, -25, 2));
             Viewports.Add(new Viewport("S Atlantic", EarthModel.MinLat, 0, -70, 30, 2));
-
+            
             Viewports.Add(new Viewport("Australia + Indonesia", -50, 10, 90, EarthModel.MaxLon, 2));
 
             DataTypes = new List<DataType>();

@@ -78,6 +78,7 @@ namespace ThorusViewer.WinForms
                     break;
                 }
 
+                /*
                 JetStreamPatternAttribute jspa = a as JetStreamPatternAttribute;
                 if (jspa != null)
                 {
@@ -95,13 +96,14 @@ namespace ThorusViewer.WinForms
 
                     break;
                 }
+                */
             }
 
             if (isValid)
             {
                 try
                 {
-                    base.OnPropertyValueChanged(e);
+                base.OnPropertyValueChanged(e);
                 }
                 catch (ValidationException ve)
                 {

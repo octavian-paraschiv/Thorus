@@ -206,20 +206,20 @@ namespace ThorusCommon.MatrixExtensions
             return curl;
         }
 
-        //public static DenseMatrix[] Rotate(this DenseMatrix[] grad, float p)
-        //{
-        //    var x = grad[Direction.X];
-        //    var y = grad[Direction.Y];
+        public static DenseMatrix[] Rotate(DenseMatrix[] grad, float p)
+        {
+            var x = grad[Direction.X];
+            var y = grad[Direction.Y];
 
-        //    int rc = x.RowCount;
-        //    int cc = x.ColumnCount;
+            int rc = x.RowCount;
+            int cc = x.ColumnCount;
 
-        //    return new DenseMatrix[]
-        //    {
-        //        DenseMatrix.Create(rc, cc, (r, c) => (x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p))),
-        //        DenseMatrix.Create(rc, cc, (r, c) => (x[r, c] * (float)Math.Sin(p) + y[r, c] * (float)Math.Cos(p))),
-        //    };
-        //}
+            return new DenseMatrix[]
+            {
+                DenseMatrix.Create(rc, cc, (r, c) => (x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p))),
+                DenseMatrix.Create(rc, cc, (r, c) => (x[r, c] * (float)Math.Sin(p) + y[r, c] * (float)Math.Cos(p))),
+            };
+        }
 
         public static DenseMatrix Interpolate(this DenseMatrix dm)
         {

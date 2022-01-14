@@ -215,7 +215,7 @@ namespace ThorusCommon
         [Description("How prone is the atmosphere to generate anticyclones")]
         [Range(0f, 1f)]
         [DefaultValue(0.5f)]
-        public float AntiCyclogeneticFactor { get { return (1 - CyclogeneticFactor); } }
+        public float AntiCyclogeneticFactor { get; set; }
 
         public enum AdvectionModels
         {

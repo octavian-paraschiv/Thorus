@@ -91,10 +91,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugins\Thorus.PluginsApi\Thorus.PluginsApi.csproj">
-      <Project>{8d23bd4a-f591-4d8a-bd45-6bc25c3770e9}</Project>
-      <Name>Thorus.PluginsApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
       <Project>{0f186cf5-5b63-440b-a5be-98e597f0b076}</Project>
       <Name>ThorusCommon.IO</Name>

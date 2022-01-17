@@ -31,7 +31,7 @@ deploy:
     username: ocparo_ftpops
     password: 
         secure: q5T1rZCQBkgSA0/G7P2vXQ==
-    folder: httpdocs/meteo/Thorus/
+    folder: meteo/Thorus/
     application: thorus-setup
   
 on_success:

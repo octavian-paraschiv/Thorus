@@ -13,7 +13,7 @@ before_build:
 - dir .\packages
 
 build_script:
-- msbuild /p:Configuration=Debug /t:Release ".\Thorus.sln" /v:minimal 
+- msbuild /p:Configuration=Release /t:Rebuild ".\Thorus.sln" /v:minimal 
   
 after_build:
 - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"

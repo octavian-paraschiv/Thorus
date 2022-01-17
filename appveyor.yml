@@ -13,7 +13,7 @@ before_build:
 - dir .\packages
 
 build_script:
-- msbuild /p:Configuration=Debug /t:Rebuild ".\Thorus.sln" /v:minimal 
+- msbuild /p:Configuration=Debug /t:Release ".\Thorus.sln" /v:minimal 
   
 after_build:
 - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
@@ -27,10 +27,10 @@ artifacts:
 deploy:
     provider: FTP
     protocol: ftp
-    host: 188.213.19.151
-    username: ocparo
+    host: 185.247.61.111
+    username: ocparo_ftpops
     password: 
-        secure: Ni2Gm2mHimeSMAgzkaHXJA==
+        secure: q5T1rZCQBkgSA0/G7P2vXQ==
     folder: httpdocs/meteo/Thorus/
     application: thorus-setup
   

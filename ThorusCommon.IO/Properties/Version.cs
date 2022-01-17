@@ -8,6 +8,6 @@ namespace ThorusCommon.IO
 {
     public static class VersionInfo
     {
-        public const string Version = "1.0.15";
+        public const string Version = "1.0.20";
     }
 }

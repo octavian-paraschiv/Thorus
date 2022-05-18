@@ -659,20 +659,14 @@ namespace ThorusCommon.Data
                 float wl = WL[r, c];
                 float lr = Earth.ATM.ELR[r, c];
 
-                float t1 = Earth.ATM.MidLevel.T[r, c];
-                float t2 = refTemp[r, c];
+                float tMid = Earth.ATM.MidLevel.T[r, c];
+                float tRef = refTemp[r, c];
 
                 float height = Earth.SFC.Height[r, c];
                     
                 float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
 
-                var te1 = (0.5f * (t1 + t2) - lr * dh / 1000);
-                //var te1 = (t1 - lr * dh / 1000);
-
-                if (SimConstants.SimBreakPoint(r, c, Earth))
-                {
-                    int ss = 0;
-                }
+                var te1 = (0.5f * (tMid + tRef) - lr * dh / 1000);
 
                 var te =  
                     SimulationParameters.Instance.AirTempContribution * te1 + 

@@ -230,7 +230,9 @@ namespace ThorusViewer.WinForms
             if (FileExists("SST.NC"))
             {
                 DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
-                string url = $"https://noaa-gefs-pds.s3.amazonaws.com/gefs.{dtSst:yyyyMMdd}/00/atmos/pgrb2ap5/gec00.t00z.pgrb2a.0p50.f000";
+                string url = ConfigurationManager.AppSettings["noaaAwsGetUrl"];
+                url = url.Replace("##DATETIME_SST##", $"{dtSst:yyyyMMdd}");
+                
                 using (WebClientEx wex = new WebClientEx())
                 {
                     string file = Path.Combine(SimulationData.WorkFolder, "input.grib");

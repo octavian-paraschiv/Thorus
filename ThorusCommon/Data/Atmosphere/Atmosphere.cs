@@ -49,7 +49,6 @@ namespace ThorusCommon.Engine
         private DenseMatrix _refTemp = null;
         public DenseMatrix Warmup = MatrixFactory.Init();
 
-        public DenseMatrix MR = MatrixFactory.Init();
         public DenseMatrix ELR = MatrixFactory.Init();
 
         public Atmosphere(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0)
@@ -95,30 +94,7 @@ namespace ThorusCommon.Engine
 
             CalculateAirMassType();
             CalculateFronts();
-
-            CalculateMixingRatio();
             CalculateEnvironmentalLapseRate();
-        }
-
-        private void CalculateMixingRatio()
-        {
-            MR.Assign((r, c) =>
-            {
-                var tMid = MidLevel.T[r, c];
-                var tSea = SeaLevel.T[r, c];
-                var t = 0.5f * (tMid + tSea);
-
-                var hMid = MidLevel.H[r, c];
-                var hSea = SeaLevel.H[r, c];
-                var h = 0.5f * (hMid + hSea);
-
-                var pMid = MidLevel.P[r, c];
-                var pSea = SeaLevel.P[r, c];
-                var p = 0.5f * (pMid + pSea);
-
-                var mr = LapseRate.MixingRatio(p, t, h);
-                return mr;
-            });
         }
 
         private void CalculateEnvironmentalLapseRate()
@@ -143,13 +119,10 @@ namespace ThorusCommon.Engine
                 var adj_lr = ADJ_LR[r, c];
 
                 AirMassType amt = (AirMassType)AirMass[r, c];
-                var mr = MR[r, c];
+                
+                var precip = Earth.SFC.Precip[r, c];
 
-                var tMid = MidLevel.T[r, c];
-                var tSea = SeaLevel.T[r, c];
-                var t = 0.5f * (tMid + tSea);
-
-                float lr = LapseRate.EnvironmentalLapseRate(amt, t, mr);
+                float lr = LapseRate.EnvironmentalLapseRate(amt, precip);
 
                 if (adj_lr != 0)
                     lr += adj_lr;

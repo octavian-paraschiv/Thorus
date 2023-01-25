@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +23,11 @@ namespace ThorusViewer.WinForms
         private System.Windows.Forms.Timer _tmrCheckFiles = null;
         private ManualResetEvent _downloadEmails = new ManualResetEvent(false);
         private ManualResetEvent _abort = new ManualResetEvent(false);
+
+        private HttpClient _httpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromMinutes(60),
+        };
 
         public DataFetcherDlg()
         {
@@ -81,16 +88,27 @@ namespace ThorusViewer.WinForms
 
             DateTime selDate = (DateTime)cmbSstDate.SelectedItem;
 
+
+
             Log($"Initial condition download started for date: {selDate:yyyy-MM-dd}");
 
-            // selDate = selDate.AddDays(4);
-
-            Task.Factory.StartNew(() => _downloadEmails.Reset())
-                .ContinueWith(_ => DeleteClientSideData())
-                // .ContinueWith(_ => DeleteServerSideData())
-                .ContinueWith(_ => FetchSstFile(selDate))
-                // .ContinueWith(_ => FetchOtherFiles())
-                .ContinueWith(_ => FetchGribFile());
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    DeleteClientSideData();
+                    await FetchSstFile(selDate).ConfigureAwait(false);
+                    await FetchGribFile().ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    Log("Could not download all required files, although waited for 1 hour.");
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                }
+            });
         }
 
         private void DeleteClientSideData()
@@ -98,16 +116,16 @@ namespace ThorusViewer.WinForms
             if (_abort.WaitOne(0))
                 return;
 
-            FileDelete("SST.nc");
-            FileDelete("input.grib");
+            Process[] procs = Process.GetProcesses();
+            var simProc = (from p in procs
+                           where p.ProcessName.ToLowerInvariant().Contains("thorussimulation")
+                           select p).FirstOrDefault();
 
-            /*
-            FileDelete("TMP_BGRND.nc");
-            FileDelete("WEASD_SFC.nc");
-            FileDelete("SPFH_PRES.nc");
-            FileDelete("TMP_PRES.nc");
-            FileDelete("HGT_PRES.nc");
-            */
+            if (simProc != null)
+                simProc.Kill();
+
+            // FileDelete("SST.nc");
+            FileDelete("input.grib");
 
             Log($"Client side data deleted...");
 
@@ -117,91 +135,36 @@ namespace ThorusViewer.WinForms
                 ValidateInitialConditionFiles();
         }
 
-        /*
-        private void DeleteServerSideData()
+        private async Task FetchSstFile(DateTime selDate)
         {
-            if (_abort.WaitOne(0))
-                return;
-
-            using (EmailClient ec = new EmailClient())
+            try
             {
-                if (ec.Connect())
+                if (_abort.WaitOne(0))
+                    return;
+
+                string vid = txtVID.Text;
+                string did = txtDID.Text;
+                string tid = txtTID.Text;
+
+                string vid_did_tid = $"DB_tid={tid}&DB_did={did}&DB_vid={vid}";
+
+                Log($"Using: {vid_did_tid}");
+
+                string sstRequestUrlFmt = ConfigurationManager.AppSettings["noaaSstGetUrl"];
+                if (string.IsNullOrEmpty(sstRequestUrlFmt) == false)
                 {
-                    ec.DeleteAllMessages();
+                    sstRequestUrlFmt = sstRequestUrlFmt
+                        .Replace("##YEAR##", selDate.Year.ToString())
+                        .Replace("##MONTH##", selDate.ToString("MMM"))
+                        .Replace("##DAY##", selDate.Day.ToString())
+                        .Replace("##VID_PID_TID##", vid_did_tid);
 
-                    Log($"Server side data deleted...");
-                }
-            }
-        }
-        */
-
-        private void FetchSstFile(DateTime selDate)
-        {
-            if (_abort.WaitOne(0))
-                return;
-
-            string vid_did_tid = "";
-
-            string vid = ConfigurationManager.AppSettings["noaaSst_VID"];
-            string did = ConfigurationManager.AppSettings["noaaSst_DID"];
-            string lookupText = ConfigurationManager.AppSettings["noaaSst_Lookup"];
-            string sstSearchUrl = ConfigurationManager.AppSettings["noaaSstSearchUrl"];
-
-            if (string.IsNullOrEmpty(sstSearchUrl) == false)
-            {
-                using (WebClientEx wc = new WebClientEx())
-                {
-                    Log($"Requesting TID data from: {sstSearchUrl}");
-
-                    string response = wc.DownloadString(sstSearchUrl);
-
-                    using (HtmlLookup lookup = new HtmlLookup(response))
-                    {
-                        var elements = lookup.GetElements("a", "href", lookupText);
-                        if (elements?.Count > 0)
-                        {
-                            elements.Sort((s1, s2) =>
-                            {
-                                return string.Compare(s2, s1, true);
-                            });
-
-                            foreach (var elem in elements)
-                            {
-                                var text = elem.ToLowerInvariant();
-
-                                if (text.Contains($"db_did={did}") && text.Contains($"db_vid={vid}"))
-                                {
-                                    vid_did_tid = elements[0].Replace(lookupText, string.Empty);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (string.IsNullOrEmpty(vid_did_tid))
-            {
-                Log($"Invalid VID_DID_TID data. Cannot continue.");
-                return;
-            }
-
-            Log($"Using: {vid_did_tid}");
-
-            string sstRequestUrlFmt = ConfigurationManager.AppSettings["noaaSstGetUrl"];
-            if (string.IsNullOrEmpty(sstRequestUrlFmt) == false)
-            {
-                sstRequestUrlFmt = sstRequestUrlFmt
-                    .Replace("##YEAR##", selDate.Year.ToString())
-                    .Replace("##MONTH##", selDate.ToString("MMM"))
-                    .Replace("##DAY##", selDate.Day.ToString())
-                    .Replace("##VID_PID_TID##", vid_did_tid);
-
-                using (WebClientEx wc = new WebClientEx())
-                {
                     Log($"Requesting SST data from: {sstRequestUrlFmt}");
 
-                    string response = wc.DownloadString(sstRequestUrlFmt);
+                    if (_abort.WaitOne(0))
+                        return;
+
+                    string response = await _httpClient.GetStringAsync(sstRequestUrlFmt).ConfigureAwait(false);
 
                     using (HtmlLookup lookup = new HtmlLookup(response))
                     {
@@ -215,82 +178,57 @@ namespace ThorusViewer.WinForms
 
                             Log($"Downloading effective SST data from: {elements[0]}");
 
-                            wc.DownloadFile(elements[0], file);
+                            if (_abort.WaitOne(0))
+                                return;
+
+                            byte[] data = await _httpClient.GetByteArrayAsync(elements[0]).ConfigureAwait(false);
+
+                            if (_abort.WaitOne(0))
+                                return;
+
+                            File.WriteAllBytes(file, data);
                         }
                     }
                 }
             }
+            catch(Exception ex)
+            {
+                Log(ex.Message);
+            }
         }
 
-        private void FetchGribFile()
+        private async Task FetchGribFile()
         {
-            if (_abort.WaitOne(0))
-                return;
-
-            if (FileExists("SST.NC"))
+            try
             {
-                DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
-                string url = ConfigurationManager.AppSettings["noaaAwsGetUrl"];
-                url = url.Replace("##DATETIME_SST##", $"{dtSst:yyyyMMdd}");
-                
-                using (WebClientEx wex = new WebClientEx())
+                if (_abort.WaitOne(0))
+                    return;
+
+                if (FileExists("SST.NC"))
                 {
+                    DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
+                    string url = ConfigurationManager.AppSettings["noaaAwsGetUrl"];
+                    url = url.Replace("##DATETIME_SST##", $"{dtSst:yyyyMMdd}");
+
                     string file = Path.Combine(SimulationData.WorkFolder, "input.grib");
                     Log($"Downloading GRIB data from: {url}");
-                    wex.DownloadFile(url, file);
+
+                    if (_abort.WaitOne(0))
+                        return;
+
+                    byte[] data = await _httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
+
+                    if (_abort.WaitOne(0))
+                        return;
+
+                    File.WriteAllBytes(file, data);
                 }
             }
-        }
-
-        /*
-        private void FetchOtherFiles()
-        {
-            if (_abort.WaitOne(0))
-                return;
-
-            if (FileExists("SST.NC"))
+            catch(Exception ex)
             {
-                DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
-
-                string[] dataTypes =
-                {
-                    "SPFH_PRES",
-                    "TMP_PRES",
-                    "HGT_PRES",
-                    "WEASD_SFC",
-                    "TMP_BGRND",
-                };
-
-                using (WebClientEx wc = new WebClientEx())
-                {
-                    string postUrl = ConfigurationManager.AppSettings["noaaServerPostUrl"];
-                    string postContentType = ConfigurationManager.AppSettings["noaaPostContentType"];
-                    string emailAccount = ConfigurationManager.AppSettings["emailAccount"];
-
-                    wc.Headers.Add("Content-Type", postContentType);
-
-                    foreach (string dataType in dataTypes)
-                    {
-                        if (_abort.WaitOne(0))
-                            return;
-
-                        string postBody = ConfigurationManager.AppSettings["noaaPostBody"];
-                        postBody = postBody
-                            .Replace("##SST_DATE##", dtSst.ToString("yyyy-MM-dd"))
-                            .Replace("##PARAM_NAME##", dataType)
-                            .Replace("##EMAIL_ACCOUNT##", emailAccount);
-
-                        Log($"Requesting {dataType} data from: {postUrl}...");
-
-                        string s = wc.UploadString(postUrl, postBody);
-                        Log($"... response: {s}");
-                    }
-                }
+                Log(ex.Message);
             }
         }
-
-        private object _emailDownloadInProgress = new object();
-        */
 
         private void ValidateInitialConditionFiles()
         {
@@ -325,37 +263,6 @@ namespace ThorusViewer.WinForms
                     Log($"You can press Done to exit this dialog, or press Start to get a new set of files.");
                     Log($"**********************************************************************");
                 }
-
-                /*
-                if (_downloadEmails.WaitOne(0))
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        if (_abort.WaitOne(0))
-                            return;
-
-                        Log($"Querying email data ...");
-                        if (Monitor.TryEnter(_emailDownloadInProgress))
-                        {
-                            using (EmailClient ec = new EmailClient())
-                            {
-                                if (ec.Connect())
-                                {
-                                    string msg = ec.FetchWeatherData(SimulationData.WorkFolder);
-
-                                    Log($"...{msg}");
-                                }
-                                else
-                                {
-                                    Log($"Failed to connect to POP3 server");
-                                }
-                            }
-
-                            Monitor.Exit(_emailDownloadInProgress);
-                        }
-                    });
-                }
-                */
             }
             finally
             {
@@ -370,13 +277,6 @@ namespace ThorusViewer.WinForms
 
             pbSST.Image = ValidateFile("SST.nc", ref allFilesPresent);
             pbGrib.Image = ValidateFile("input.grib", ref allFilesPresent);
-            /*
-            pbHH.Image = ValidateFile("SPFH_PRES.nc", ref allFilesPresent);
-            pbTT.Image = ValidateFile("TMP_PRES.nc", ref allFilesPresent);
-            pbZZ.Image = ValidateFile("HGT_PRES.nc", ref allFilesPresent);
-            pbSNOW.Image = ValidateFile("WEASD_SFC.nc", ref allFilesPresent);
-            pbSOIL.Image = ValidateFile("TMP_BGRND.nc", ref allFilesPresent);
-            */
             return allFilesPresent;
         }
 
@@ -392,7 +292,8 @@ namespace ThorusViewer.WinForms
         private bool FileExists(string file)
         {
             string path = Path.Combine(SimulationData.WorkFolder, file);
-            return File.Exists(path);
+            FileInfo fileInfo = new FileInfo(path);
+            return fileInfo.Exists && fileInfo.Length > 0;
         }
 
         private void FileDelete(string file)
@@ -415,7 +316,13 @@ namespace ThorusViewer.WinForms
 
             try
             {
-                string line = string.Format(msg, args);
+                if (string.IsNullOrEmpty(msg))
+                {
+                    txtSimProcOut.Clear();
+                    return;
+                }
+
+                string line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {string.Format(msg, args)}";
 
                 List<string> lines = txtSimProcOut.Lines.ToList();
                 lines.Add(line);
@@ -433,6 +340,7 @@ namespace ThorusViewer.WinForms
         private void btnAbort_Click(object sender, EventArgs e)
         {
             _abort.Set();
+            _httpClient.CancelPendingRequests();
         }
     }
 }

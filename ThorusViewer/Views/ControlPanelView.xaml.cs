@@ -40,6 +40,9 @@ namespace ThorusViewer.Views
             try
             {
                 SimDateTime snapshot = App.ControlPanelModel.SelectedSnapshot;
+                if (snapshot == null)
+                    return;
+
                 string folder = SimulationData.DataFolder;
                 if (string.IsNullOrEmpty(App.ControlPanelModel.SelectedCategory) == false)
                     folder = System.IO.Path.Combine(SimulationData.DataFolder, App.ControlPanelModel.SelectedCategory);

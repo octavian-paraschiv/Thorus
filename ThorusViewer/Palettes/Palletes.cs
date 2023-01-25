@@ -60,6 +60,21 @@ namespace ThorusViewer.Pallettes
         }
     }
 
+    public class N_DD_Palette : WeatherDataPalette
+    {
+        public N_DD_Palette()
+            : base("N_DD")
+        {
+            _lineWidth = 1;
+            _lineSpacing = 1f;
+            _minMax = new Range<float>(0, 100f);
+            _acceptsContourLines = true;
+            this.Description = "FALLEN SNOW";
+            this.Unit = "cm";
+            this.ShowContours = false;
+        }
+    }
+
     public class R_00_Palette : WeatherDataPalette
     {
         public R_00_Palette()
@@ -71,6 +86,20 @@ namespace ThorusViewer.Pallettes
             _acceptsContourLines = true;
             this.Description = "SOIL ACCUMULATED RAIN";
             this.Unit = "cm";
+            this.ShowContours = false;
+        }
+    }
+    public class R_DD_Palette : WeatherDataPalette
+    {
+        public R_DD_Palette()
+            : base("R_DD")
+        {
+            _lineWidth = 1;
+            _lineSpacing = 0.5f;
+            _minMax = new Range<float>(0, 100f);
+            _acceptsContourLines = true;
+            this.Description = "FALLEN RAIN";
+            this.Unit = "mm";
             this.ShowContours = false;
         }
     }
@@ -476,6 +505,7 @@ namespace ThorusViewer.Pallettes
         }
     }
 
+
     public class D_BP_Palette : WeatherDataPalette
     {
         public D_BP_Palette()
@@ -573,4 +603,21 @@ namespace ThorusViewer.Pallettes
         }
     }
     #endregion
+
+    public class E_LR_Palette : WeatherDataPalette
+    {
+        public E_LR_Palette()
+            : base("D")
+        {
+            _minMax = new Range<float>(-10, 10);
+
+            _lineWidth = 1;
+            _lineSpacing = .1f;
+
+            this.Description = "Environmental Lapse Rate";
+            this.Unit = "";
+            this.ShowContours = false;
+            this.ShowHeatmap = true;
+        }
+    }
 }

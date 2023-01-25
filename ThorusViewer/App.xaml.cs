@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using ThorusCommon.Engine;
 using System.IO;
 using System.Diagnostics;
+using ThorusViewer.WinForms;
 
 namespace ThorusViewer
 {
@@ -35,8 +36,15 @@ namespace ThorusViewer
         {
             get
             {
-                return System.Windows.Application.Current.FindResource("controlPanelModel")
-                    as ControlPanelModel;
+                try
+                {
+                    return System.Windows.Application.Current.FindResource("controlPanelModel")
+                        as ControlPanelModel;
+                }
+                catch 
+                { 
+                    return null;
+                }
             }
         }
 	}

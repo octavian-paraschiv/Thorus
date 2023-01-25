@@ -4,3 +4,4 @@ packages
 /GribImporter/obj/Debug/*.CopyComplete
 *.CopyComplete
 *.baml
+/ThorusCommon.IO/*.user

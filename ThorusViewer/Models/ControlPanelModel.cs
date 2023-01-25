@@ -181,20 +181,16 @@ namespace ThorusViewer.Models
             var meanTe = new DataType("T_TE", "Mean air temperature", false, true);
             DataTypes.Add(meanTe);
 
-            var rain = new DataType("R_00", "Soil Accumulated Rain");
-            DataTypes.Add(rain);
+            DataTypes.Add(new DataType("N_DD", "Daily Snow"));
+            DataTypes.Add(new DataType("R_DD", "Daily Rain"));
 
-            var snow = new DataType("N_00", "Snow cover");
-            DataTypes.Add(snow);
-            var blizzard = new DataType("B_00", "Blizzard conditions severity");
-            DataTypes.Add(blizzard);
+            DataTypes.Add(new DataType("R_00", "Soil Accumulated Rain"));
+            DataTypes.Add(new DataType("N_00", "Total Snow Cover"));
+
+            DataTypes.Add(new DataType("B_00", "Blizzard conditions severity"));
 
 
-            var c00 = new DataType("C_00", "Total precipitation volume");
-            //c00.Comments = "\r\nLEGEND: Snow => Blue (Magenta when heavy); Rain => Green (Red when heavy);    " +
-              //  "Sleet => Gray; Freezing rain => Yellow";
-            DataTypes.Add(c00);
-
+            DataTypes.Add(new DataType("C_00", "Precip Rate & Type"));
             DataTypes.Add(new DataType("L_00", "Lifted Index (Thunderstorm odds)"));
 
             #endregion
@@ -255,6 +251,10 @@ namespace ThorusViewer.Models
             DataTypes.Add(new DataType("F_00", "Fronts"));
 
             DataTypes.Add(new DataType("F_SI", "Fog"));
+
+            DataTypes.Add(new DataType("E_LR", "Environmental Lapse Rate"));
+
+
             #endregion
 
             SelectedViewport = euView;

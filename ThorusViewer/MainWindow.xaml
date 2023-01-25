@@ -20,11 +20,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0">
+        <Menu Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -39,10 +40,12 @@
             <MenuItem x:Name="mnuLoadDataSet" Header="LOAD DATASET" Grid.Column="0"  Click="mnuLoadDataSet_Click"/>
             <MenuItem x:Name="mnuSaveAsImage" Header="SAVE IMAGE" Grid.Column="1" Click="mnuSaveAsImage_Click"  />
             <MenuItem x:Name="mnuAutoSave"  Header="AUTO-SAVE IMAGE" Grid.Column="2" Click="mnuAutoSave_Click" IsCheckable="True"  />
-            <MenuItem x:Name="mnuSubmatrix"  Header="GENERATE SUBMATRICES" Grid.Column="3" Click="mnuSubmatrix_Click" />
-            <MenuItem x:Name="mnuSimulation" Header="SIMULATION" Grid.Column="5"  Click="mnuSimulation_Click"  />
-            <MenuItem x:Name="mnuGlobalSettings" Header="GLOBAL SETTINGS" Grid.Column="6"  Click="mnuGlobalSettings_Click" />
+            <MenuItem x:Name="mnuSubmatrix"  Header="GENERATE SUBREGION DATA" Grid.Column="3" Click="mnuSubmatrix_Click" Visibility="Visible" />
+            <MenuItem x:Name="mnuPublish"  Header="PUBLISH SUBREGION DATA" Grid.Column="4" Click="mnuPublish_Click" Visibility="Visible" />
+            <MenuItem x:Name="mnuSimulation" Header="SIMULATION" Grid.Column="6"  Click="mnuSimulation_Click"  />
+            <MenuItem x:Name="mnuGlobalSettings" Header="GLOBAL SETTINGS" Grid.Column="7"  Click="mnuGlobalSettings_Click" />
         </Menu>        
+        
         <views:ControlPanelView Grid.Row="1" x:Name="controlPanel" Margin="0,10,0,0" />
         <Label Grid.Row="3" Margin="0" Background="Black" />
         <views:MapView x:Name="mapView" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

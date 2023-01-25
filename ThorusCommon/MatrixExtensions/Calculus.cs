@@ -85,7 +85,7 @@ namespace ThorusCommon.MatrixExtensions
         }
 
         /// <summary>
-        /// Calculates the gradient of a scalar 2D-field
+        /// Calculates the gradient of a scalar 2D-field and returns it as a 2D-vector field
         /// </summary>
         /// <param name="V">The scalar 2D-field</param>
         /// <returns>The gradient of the scalar field, as a 2D-vector in (x, y) directions.
@@ -103,7 +103,10 @@ namespace ThorusCommon.MatrixExtensions
             return new DenseMatrix[] { DX(V), DY(V) };
         }
 
-        public static DenseMatrix Gradient2(this DenseMatrix V)
+        /// <summary>
+        /// Calculates the gradient of a scalar 2D-field and returns it as a scalar 2d-field
+        /// </summary>
+        public static DenseMatrix GradientAsScalar(this DenseMatrix V)
         {
             DenseMatrix[] grad = V.Gradient();
             return DenseMatrix.Create(V.RowCount, V.ColumnCount, (r, c) =>
@@ -167,7 +170,6 @@ namespace ThorusCommon.MatrixExtensions
         public static DenseMatrix[] ToWindComponents(this DenseMatrix V, float rot = SimConstants.AngleBetweenWindAndIsobars)
         {
             var G = V.Gradient();
-            //return Calculus.Rotate(G, rot);
 
             var x = G[Direction.X];
             var y = G[Direction.Y];
@@ -178,18 +180,18 @@ namespace ThorusCommon.MatrixExtensions
             return new DenseMatrix[]
             {
                 DenseMatrix.Create(rc, cc, (r, c) => 
-                    {
-                        float lat = EarthModel.MaxLat - r;
-                        var p = rot * Math.Sign(lat);
-                        return x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p);
-                    }),
+                {
+                    float lat = EarthModel.MaxLat - r;
+                    var p = rot * Math.Sign(lat);
+                    return x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p);
+                }),
 
-                DenseMatrix.Create(rc, cc, (r, c) => 
-                    {
-                        float lat = EarthModel.MaxLat - r;
-                        var p = rot * Math.Sign(lat);
-                        return x[r, c] * (float)Math.Sin(p) + y[r, c] * (float)Math.Cos(p);
-                    })
+            DenseMatrix.Create(rc, cc, (r, c) => 
+                {
+                    float lat = EarthModel.MaxLat - r;
+                    var p = rot * Math.Sign(lat);
+                    return x[r, c] * (float)Math.Sin(p) + y[r, c] * (float)Math.Cos(p);
+                })
             };
         }
 

@@ -24,17 +24,13 @@ namespace ThorusCommon.Thermodynamics
                 });
         }
 
-        public static float EnvironmentalLapseRate(AirMassType amt, float t, float mr)
+        public static float EnvironmentalLapseRate(AirMassType amt, float precip)
         {
-            var tk = t + AbsoluteConstants.WaterFreezePoint;
+            if (precip > 50f)
+                precip = 50f;
 
-            float qd =  AbsoluteConstants.Rsd * tk * tk + 
-                        AbsoluteConstants.Hv * mr * tk;
-
-            float qn =  AbsoluteConstants.Cpd * AbsoluteConstants.Rsd * tk * tk + 
-                        AbsoluteConstants.Hv * AbsoluteConstants.Hv * mr * AbsoluteConstants.eps;
-
-            float elr = 1000 * AbsoluteConstants.g * qd / qn;
+            float elr = SimulationParameters.Instance.HumidLapseRate +
+                (SimulationParameters.Instance.DryLapseRate - SimulationParameters.Instance.HumidLapseRate) * (50f - precip) / 50f;
 
             switch (amt)
             {
@@ -69,6 +65,7 @@ namespace ThorusCommon.Thermodynamics
             return elr;
         }
 
+        /*
         public static float MixingRatio(float p, float t, float h)
         {
             float a = 6.116441f;
@@ -93,7 +90,7 @@ namespace ThorusCommon.Thermodynamics
 
             return r;
         }
-
+        */
         public static float DewPoint(float p, float t, float h)
         {
             float a = 6.116441f;

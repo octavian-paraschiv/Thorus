@@ -31,12 +31,12 @@ namespace ThorusCommon.Data
         public DenseMatrix TW = MatrixFactory.Init();
         public DenseMatrix TL = MatrixFactory.Init();
         public DenseMatrix TS = MatrixFactory.Init();
-        public DenseMatrix SNOW = MatrixFactory.Init();
         public DenseMatrix BLIZZARD = MatrixFactory.Init();
         public DenseMatrix DEF_ALBEDO = MatrixFactory.Init();
         public DenseMatrix ALBEDO = MatrixFactory.Init();
 
         public DenseMatrix Precip = MatrixFactory.Init();
+
         public DenseMatrix LIDX = MatrixFactory.Init();
         public DenseMatrix TLow = MatrixFactory.Init();
         public DenseMatrix THigh = MatrixFactory.Init();
@@ -44,7 +44,14 @@ namespace ThorusCommon.Data
         public DenseMatrix TNormLow = MatrixFactory.Init();
         public DenseMatrix TNormHigh = MatrixFactory.Init();
 
+        // Accumulated precip
         public DenseMatrix RAIN = MatrixFactory.Init();
+        public DenseMatrix SNOW = MatrixFactory.Init();
+
+        // Delta precip (accumulation per snapshot)
+        public DenseMatrix D_RAIN = MatrixFactory.Init();
+        public DenseMatrix D_SNOW = MatrixFactory.Init();
+
         public DenseMatrix FOG = MatrixFactory.Init();
 
         public DenseMatrix DaysSinceLastSnowFall = MatrixFactory.Init();
@@ -127,6 +134,9 @@ namespace ThorusCommon.Data
 
                     TNormLow = MatrixFactory.Init(defaultValue);
                     TNormHigh = MatrixFactory.Init(defaultValue);
+
+                    D_SNOW = MatrixFactory.Init(defaultValue);
+                    D_RAIN = MatrixFactory.Init(defaultValue);
                 }
             }
             else
@@ -138,6 +148,9 @@ namespace ThorusCommon.Data
 
                 SNOW = FileSupport.Load(Earth.UTC.Title, "N_00_MAP");
                 RAIN = FileSupport.Load(Earth.UTC.Title, "R_00_MAP");
+
+                D_SNOW = FileSupport.Load(Earth.UTC.Title, "N_DD_MAP");
+                D_RAIN = FileSupport.Load(Earth.UTC.Title, "R_DD_MAP");
 
                 BLIZZARD = FileSupport.Load(Earth.UTC.Title, "B_00_MAP");
                 ALBEDO = FileSupport.Load(Earth.UTC.Title, "A_00_MAP");
@@ -170,7 +183,7 @@ namespace ThorusCommon.Data
                 throw new FileNotFoundException();
 
             var wlMask = FileSupport.LoadMatrixFromFile(filePath);
-            var he = Height.EQ(8);
+            var he = Height;//.EQ(8);
 
             WL.Assign((r, c) =>
             {
@@ -180,7 +193,7 @@ namespace ThorusCommon.Data
                 if (sgn == 1)
                   return 1;
 
-                if (he[r, c] >= 50f)
+                if (he[r, c] >= 10f)
                     return 0;
 
                 return 1;
@@ -215,6 +228,9 @@ namespace ThorusCommon.Data
             SNOW.ADD(sfc.SNOW);
             RAIN.ADD(sfc.RAIN);
 
+            D_SNOW.ADD(sfc.D_SNOW);
+            D_RAIN.ADD(sfc.D_RAIN);
+
             BLIZZARD.ADD(sfc.BLIZZARD);
             ALBEDO.ADD(sfc.ALBEDO);
 
@@ -238,6 +254,9 @@ namespace ThorusCommon.Data
 
             SNOW.MIN(sfc.SNOW);
             RAIN.MIN(sfc.RAIN);
+
+            D_SNOW.MIN(sfc.D_SNOW);
+            D_RAIN.MIN(sfc.D_RAIN);
 
             BLIZZARD.MIN(sfc.BLIZZARD);
             ALBEDO.MIN(sfc.ALBEDO);
@@ -264,6 +283,9 @@ namespace ThorusCommon.Data
 
             SNOW.MAX(sfc.SNOW);
             RAIN.MAX(sfc.RAIN);
+
+            D_SNOW.MAX(sfc.D_SNOW);
+            D_RAIN.MAX(sfc.D_RAIN);
 
             BLIZZARD.MAX(sfc.BLIZZARD);
             ALBEDO.MAX(sfc.ALBEDO);
@@ -307,7 +329,10 @@ namespace ThorusCommon.Data
             FileSupport.Save(THigh - TNormHigh, title, "T_DH_MAP");
             FileSupport.Save(0.5f * (TLow - TNormLow + THigh - TNormHigh).EQ(), title, "T_DA_MAP");
 
-            FileSupport.Save((1000 * WL - MatrixFactory.Init(500)), title, "E_00_MAP");
+            FileSupport.Save(Earth.ATM.ELR, title, "E_LR_MAP");
+
+            FileSupport.Save(D_SNOW, title, "N_DD_MAP");
+            FileSupport.Save(D_RAIN, title, "R_DD_MAP");
         }
 
         public void SaveStats(string title, string category)
@@ -337,6 +362,9 @@ namespace ThorusCommon.Data
             FileSupport.SaveAsStats((THigh - TNormHigh), title, "T_DH_MAP", category);
 
             FileSupport.SaveAsStats(0.5f * (TLow - TNormLow + THigh - TNormHigh), title, "T_DA_MAP", category);
+
+            FileSupport.SaveAsStats(D_SNOW, title, "N_DD_MAP", category);
+            FileSupport.SaveAsStats(D_RAIN, title, "R_DD_MAP", category);
         }
 
         #endregion
@@ -366,9 +394,7 @@ namespace ThorusCommon.Data
 
                 var height = Height[r, c];
 
-                var mr = Earth.ATM.MR[r, c];
-                
-                var vt = te + (1000f * mr / 6f);
+                var vt = te;// + (1000f * mr / 6f);
 
                 var f = eqFronts[r, c];
 
@@ -416,14 +442,14 @@ namespace ThorusCommon.Data
 
         public void CalculateTotalPrecipitation()
         {
-            var GP = Earth.ATM.MidLevel.P.Gradient2().Rescale(new float[] { 0, 100 });
-            var GT = Earth.ATM.MidLevel.T.Gradient2().Rescale(new float[] { 0, 100 });
+            var GP = Earth.ATM.MidLevel.P.GradientAsScalar().Rescale(new float[] { 0, 100 });
+            var GT = Earth.ATM.MidLevel.T.GradientAsScalar().Rescale(new float[] { 0, 100 });
             var TS = Earth.SFC.TS;
             var TE = Earth.SFC.TE;
 
             DenseMatrix WIND = MatrixFactory.Init();
             if (Earth.ATM.SeaLevel.P != null)
-                WIND = Earth.ATM.SeaLevel.P.Gradient2();
+                WIND = Earth.ATM.SeaLevel.P.GradientAsScalar();
 
             var HMid = Earth.ATM.MidLevel.H;
             var HSea = Earth.ATM.SeaLevel.H;
@@ -513,6 +539,8 @@ namespace ThorusCommon.Data
 
                 const float precipClThreshold = 10f;
 
+                float deltaSnow = 0, deltaRain = 0;
+
                 if (te >= -10f || cl <= precipClThreshold)
                 {
                     if (te >= 0)
@@ -548,7 +576,7 @@ namespace ThorusCommon.Data
                 float actualPrecipRate = (cl - precipClThreshold);
                 if (actualPrecipRate > 0)
                 {
-                    var unitPrecipFall = actualPrecipRate * Earth.SnapshotDivFactor;
+                    var snapshotPrecipFall = actualPrecipRate * Earth.SnapshotDivFactor;
 
                     PrecipTypeComputer<float>.Compute(
                         
@@ -561,7 +589,8 @@ namespace ThorusCommon.Data
                         // Computed precip type: snow
                         () =>
                         {
-                            totalSnow += 0.3f * unitPrecipFall;
+                            deltaSnow = 0.3f * snapshotPrecipFall;
+                            totalSnow += deltaSnow;
                             SolidPrecip[r, c] = 1;
                             DaysSinceLastSnowFall[r, c] = 0;
                             return 0;
@@ -570,7 +599,8 @@ namespace ThorusCommon.Data
                         // Computed precip type: rain
                         () =>
                         {
-                            totalRain += unitPrecipFall;
+                            deltaRain = snapshotPrecipFall;
+                            totalRain += deltaRain;
                             DaysSinceLastRainFall[r, c] = 0;
                             return 0;
                         },
@@ -578,8 +608,12 @@ namespace ThorusCommon.Data
                         // Computed precip type: freezing rain
                         () =>
                         {
-                            totalSnow += 0.1f * unitPrecipFall;
-                            totalRain += 0.9f * unitPrecipFall;
+                            deltaSnow = 0.1f * snapshotPrecipFall;
+                            deltaRain = 0.9f * snapshotPrecipFall;
+
+                            totalSnow += deltaSnow;
+                            totalRain += deltaRain;
+
                             SolidPrecip[r, c] = 1;
                             DaysSinceLastSnowFall[r, c] = 0;
                             return 0;
@@ -588,8 +622,12 @@ namespace ThorusCommon.Data
                         // Computed precip type: sleet
                         () =>
                         {
-                            totalSnow += 0.2f * unitPrecipFall;
-                            totalRain += 0.8f * unitPrecipFall;
+                            deltaSnow = 0.2f * snapshotPrecipFall;
+                            deltaRain = 0.8f * snapshotPrecipFall;
+
+                            totalSnow += deltaSnow;
+                            totalRain += deltaRain;
+
                             SolidPrecip[r, c] = 1;
                             DaysSinceLastSnowFall[r, c] = 0;
                             return 0;
@@ -599,7 +637,7 @@ namespace ThorusCommon.Data
 
                 if (totalSnow < 0 || 
                     // Snow does not accumulate on a water surface if water is not frozen
-                    (wl != 0 && ts > 0))
+                    (wl != 0 && ts > -5))
                     totalSnow = 0;
 
                 if (totalRain < 0 ||
@@ -609,6 +647,9 @@ namespace ThorusCommon.Data
 
                 RAIN[r, c] = totalRain;
                 SNOW[r, c] = totalSnow;
+
+                D_RAIN[r, c] = deltaRain;
+                D_SNOW[r, c] = deltaSnow;
             };
 
             Earth.SFC.BLIZZARD.Assign((r, c) =>
@@ -628,25 +669,23 @@ namespace ThorusCommon.Data
                 var wl = WL[r, c];
                 var defAlbedo = DEF_ALBEDO[r, c];
 
-                //if (wl == 0)
+                if (wl == 0)
                 {
                     var snowAlbedo = 0f;
                     var rainAlbedo = 0f;
 
                     if (SNOW[r, c] > 3f)
-                        snowAlbedo = SNOW[r, c] + 20f * Math.Max(0, 5 - DaysSinceLastSnowFall[r, c]);
+                        snowAlbedo = SNOW[r, c] + 15f * Math.Max(0, 5 - DaysSinceLastSnowFall[r, c]);
 
                     if (RAIN[r, c] >= 10f)
-                        rainAlbedo = 0.5f * RAIN[r, c] + 10f * Math.Max(0, 3 - DaysSinceLastRainFall[r, c]);
+                        rainAlbedo = 0.5f * RAIN[r, c] + 5f * Math.Max(0, 3 - DaysSinceLastRainFall[r, c]);
 
                     var total = Math.Min(100f, defAlbedo + snowAlbedo + rainAlbedo);
 
-                    return total;
-
-                    //return Math.Max(total, defAlbedo);
+                    return Math.Max(total, defAlbedo);
                 }
 
-                //return defAlbedo;
+                return defAlbedo;
             });
         }
         
@@ -656,6 +695,7 @@ namespace ThorusCommon.Data
 
             TE.Assign((r, c) =>
             {
+                
                 float wl = WL[r, c];
                 float lr = Earth.ATM.ELR[r, c];
 
@@ -932,7 +972,7 @@ namespace ThorusCommon.Data
         {
             // Based on FSI formula: fsi = 4ts - 2(t850 + tds) + w850
 
-            var W850 = Earth.ATM.MidLevel.P.Gradient2();
+            var W850 = Earth.ATM.MidLevel.P.GradientAsScalar();
             var DIV = (Earth.ATM.MidLevel.P.Divergence()).EQ(4);
 
             FOG.Assign((r, c) =>

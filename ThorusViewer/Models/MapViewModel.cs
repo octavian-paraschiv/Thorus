@@ -361,19 +361,18 @@ namespace ThorusViewer.Models
                 {
                     for (int c = 0; c < colCount; c++)
                     {
-                        float x = c + App.ControlPanelModel.SelectedViewport.MinLon;
-                        float y = App.ControlPanelModel.SelectedViewport.MaxLat - r;
+                        float x = step * c + App.ControlPanelModel.SelectedViewport.MinLon;
+                        float y = App.ControlPanelModel.SelectedViewport.MaxLat - step * r;
 
-                        float dx = dataX[r, c];
-                        float dy = -dataY[r, c];
+                        float dx = step * dataX[r, c];
+                        float dy = step * -dataY[r, c];
                         
                         int mod = (int)Math.Sqrt(dx*dx + dy*dy);
 
                         LineSeries line = new LineSeries();
                         line.Points.Add(new DataPoint(x, y));
                         line.Points.Add(new DataPoint(x + dx, y + dy));
-                        line.StrokeThickness = 1;
-                        
+                        line.StrokeThickness = 1;                        
 
                         if (mod < 2)
                         {

@@ -30,7 +30,7 @@ namespace ThorusViewer
             }
         }
 
-        public List<string> GetElements(string tagType, string param, string lookupText)
+        public List<string> GetElements(string tagType, string param, string lookupText, string optional = null)
         {
             List<string> elements = new List<string>();
 
@@ -40,7 +40,7 @@ namespace ThorusViewer
 
                 while (true)
                 {
-                    string elem = GetNextElement(tagType, param, lookupText);
+                    string elem = GetNextElement(tagType, param, lookupText, optional);
                     if (string.IsNullOrEmpty(elem))
                         break;
 
@@ -51,7 +51,7 @@ namespace ThorusViewer
             return elements;
         }
 
-        private string GetNextElement(string tagType, string param, string lookupText)
+        private string GetNextElement(string tagType, string param, string lookupText, string optional = null)
         {
             if (_parser != null)
             {

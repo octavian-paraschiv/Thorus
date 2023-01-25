@@ -59,6 +59,9 @@ AllowUNCPath=False
 [Tasks]
 
 [Files]
+Source: "{#BINDIR}\Template.db3"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BINDIR}\sqlite3.x64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BINDIR}\sqlite3.x86.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\ThorusViewer.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\Grib.Api.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\GribImporter.dll"; DestDir: "{app}"; Flags: ignoreversion

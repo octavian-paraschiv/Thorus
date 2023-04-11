@@ -1,7 +1,8 @@
-bin
-packages
 *.cache
-/GribImporter/obj/Debug/*.CopyComplete
 *.CopyComplete
 *.baml
-/ThorusCommon.IO/*.user
+/**/*.user
+.vs/
+**/obj/
+**/bin/
+**/packages/

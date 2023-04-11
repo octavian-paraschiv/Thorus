@@ -24,10 +24,13 @@ namespace ThorusViewer.WinForms
         private ManualResetEvent _downloadEmails = new ManualResetEvent(false);
         private ManualResetEvent _abort = new ManualResetEvent(false);
 
-        private HttpClient _httpClient = new HttpClient
+        private HttpClient CreateNewClient()
         {
-            Timeout = TimeSpan.FromMinutes(60),
-        };
+            return new HttpClient
+            {
+                Timeout = TimeSpan.FromMinutes(60)
+            };
+        }
 
         public DataFetcherDlg()
         {
@@ -38,45 +41,8 @@ namespace ThorusViewer.WinForms
 
             this.Shown += (s1, e1) =>
             {
-                PopulateSstDates();
                 ValidateInitialConditionFiles();
             };
-        }
-
-
-        private void PopulateSstDates()
-        {
-            DateTime dtEnd = DateTime.Today;
-            DateTime dtStart = DateTime.Parse("2000-01-01");
-            object sel = -1;
-
-            List<DateTime> ldt = new List<DateTime>();
-
-            bool skip = true;
-
-            for (DateTime dt = dtEnd; dt >= dtStart; dt = dt.AddDays(-1))
-            {
-                if (dt.DayOfWeek != DayOfWeek.Sunday)
-                    continue;
-
-                if (skip)
-                {
-                    skip = false;
-                    continue;
-                }
-
-                ldt.Add(dt);
-            }
-
-            cmbSstDate.DataSource = ldt;
-            cmbSstDate.SelectedIndex = 0;
-            cmbSstDate.Format += CmbSstDate_Format;
-        }
-
-        private void CmbSstDate_Format(object sender, ListControlConvertEventArgs e)
-        {
-            var dt = (DateTime)e.ListItem;
-            e.Value = dt.ToString("yyyy-MM-dd");
         }
 
         private void btnFetchSstData_Click(object sender, EventArgs e)
@@ -86,10 +52,7 @@ namespace ThorusViewer.WinForms
             if (res != DialogResult.Yes)
                 return;
 
-            DateTime selDate = (DateTime)cmbSstDate.SelectedItem;
-
-
-
+            DateTime selDate = NetCdfImporter.ImportDateTime("SST.NC");
             Log($"Initial condition download started for date: {selDate:yyyy-MM-dd}");
 
             Task.Factory.StartNew(async () =>
@@ -97,7 +60,7 @@ namespace ThorusViewer.WinForms
                 try
                 {
                     DeleteClientSideData();
-                    await FetchSstFile(selDate).ConfigureAwait(false);
+                    // await FetchSstFile(selDate).ConfigureAwait(false);
                     await FetchGribFile().ConfigureAwait(false);
                 }
                 catch (TaskCanceledException)
@@ -107,6 +70,13 @@ namespace ThorusViewer.WinForms
                 catch (Exception ex)
                 {
                     Log(ex.Message);
+                }
+            }).ContinueWith(_ =>
+            {
+                if (ValidateFiles())
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
             });
         }
@@ -135,6 +105,7 @@ namespace ThorusViewer.WinForms
                 ValidateInitialConditionFiles();
         }
 
+        /*
         private async Task FetchSstFile(DateTime selDate)
         {
             try
@@ -142,52 +113,37 @@ namespace ThorusViewer.WinForms
                 if (_abort.WaitOne(0))
                     return;
 
-                string vid = txtVID.Text;
-                string did = txtDID.Text;
-                string tid = txtTID.Text;
-
-                string vid_did_tid = $"DB_tid={tid}&DB_did={did}&DB_vid={vid}";
-
-                Log($"Using: {vid_did_tid}");
-
                 string sstRequestUrlFmt = ConfigurationManager.AppSettings["noaaSstGetUrl"];
                 if (string.IsNullOrEmpty(sstRequestUrlFmt) == false)
                 {
                     sstRequestUrlFmt = sstRequestUrlFmt
                         .Replace("##YEAR##", selDate.Year.ToString())
-                        .Replace("##MONTH##", selDate.ToString("MMM"))
-                        .Replace("##DAY##", selDate.Day.ToString())
-                        .Replace("##VID_PID_TID##", vid_did_tid);
+                        .Replace("##MONTH##", selDate.Month.ToString("d2"))
+                        .Replace("##DAY##", selDate.Day.ToString("d2"));
 
                     Log($"Requesting SST data from: {sstRequestUrlFmt}");
 
                     if (_abort.WaitOne(0))
                         return;
 
-                    string response = await _httpClient.GetStringAsync(sstRequestUrlFmt).ConfigureAwait(false);
+                    byte[] data = null;
 
-                    using (HtmlLookup lookup = new HtmlLookup(response))
+                    using (HttpClient cl = CreateNewClient())
                     {
-                        List<string> elements = lookup.GetElements("a", "href", ".nc");
-                        if (elements?.Count > 0)
-                        {
-                            string file = Path.Combine(SimulationData.WorkFolder, "SST.nc");
+                        data = await cl.GetByteArrayAsync(sstRequestUrlFmt).ConfigureAwait(false);
+                    }
 
-                            if (File.Exists(file))
-                                File.Delete(file);
+                    if (_abort.WaitOne(0))
+                        return;
 
-                            Log($"Downloading effective SST data from: {elements[0]}");
+                    if (data?.Length > 0)
+                    {
+                        string file = Path.Combine(SimulationData.WorkFolder, "SST.nc");
 
-                            if (_abort.WaitOne(0))
-                                return;
+                        if (File.Exists(file))
+                            File.Delete(file);
 
-                            byte[] data = await _httpClient.GetByteArrayAsync(elements[0]).ConfigureAwait(false);
-
-                            if (_abort.WaitOne(0))
-                                return;
-
-                            File.WriteAllBytes(file, data);
-                        }
+                        File.WriteAllBytes(file, data);
                     }
                 }
             }
@@ -196,6 +152,7 @@ namespace ThorusViewer.WinForms
                 Log(ex.Message);
             }
         }
+        */
 
         private async Task FetchGribFile()
         {
@@ -209,19 +166,30 @@ namespace ThorusViewer.WinForms
                     DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
                     string url = ConfigurationManager.AppSettings["noaaAwsGetUrl"];
                     url = url.Replace("##DATETIME_SST##", $"{dtSst:yyyyMMdd}");
-
-                    string file = Path.Combine(SimulationData.WorkFolder, "input.grib");
                     Log($"Downloading GRIB data from: {url}");
 
                     if (_abort.WaitOne(0))
                         return;
 
-                    byte[] data = await _httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
+                    byte[] data = null;
+
+                    using (HttpClient cl = CreateNewClient())
+                    {
+                        data = await cl.GetByteArrayAsync(url).ConfigureAwait(false);
+                    }
 
                     if (_abort.WaitOne(0))
                         return;
 
-                    File.WriteAllBytes(file, data);
+                    if (data?.Length > 0)
+                    {
+                        string file = Path.Combine(SimulationData.WorkFolder, "input.grib");
+
+                        if (File.Exists(file))
+                            File.Delete(file);
+
+                        File.WriteAllBytes(file, data);
+                    }
                 }
             }
             catch(Exception ex)
@@ -250,6 +218,9 @@ namespace ThorusViewer.WinForms
             try
             {
                 _tmrCheckFiles.Stop();
+
+                DateTime selDate = NetCdfImporter.ImportDateTime("SST.NC");
+                label1.Text = $"SST date: {selDate:yyyy-MM-dd}";
 
                 allFilesPresent = ValidateFiles();
 
@@ -340,7 +311,6 @@ namespace ThorusViewer.WinForms
         private void btnAbort_Click(object sender, EventArgs e)
         {
             _abort.Set();
-            _httpClient.CancelPendingRequests();
         }
     }
 }

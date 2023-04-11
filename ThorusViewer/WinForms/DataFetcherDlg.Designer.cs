@@ -30,8 +30,6 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cmbSstDate = new System.Windows.Forms.ComboBox();
             this.btnFetchSstData = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
@@ -41,12 +39,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAbort = new System.Windows.Forms.Button();
             this.btnDone = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtVID = new System.Windows.Forms.TextBox();
-            this.txtDID = new System.Windows.Forms.TextBox();
-            this.txtTID = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).BeginInit();
@@ -56,30 +49,22 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 11;
+            this.tableLayoutPanel1.ColumnCount = 5;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 133F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.txtSimProcOut, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.cmbSstDate, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnFetchSstData, 9, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 10, 4);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 6, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtVID, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtDID, 5, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtTID, 7, 0);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 4, 4);
+            this.tableLayoutPanel1.Controls.Add(this.btnFetchSstData, 4, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -89,48 +74,27 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(663, 497);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(776, 210);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // txtSimProcOut
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.txtSimProcOut, 11);
+            this.tableLayoutPanel1.SetColumnSpan(this.txtSimProcOut, 5);
             this.txtSimProcOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSimProcOut.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSimProcOut.Location = new System.Drawing.Point(3, 98);
+            this.txtSimProcOut.Location = new System.Drawing.Point(3, 69);
             this.txtSimProcOut.Multiline = true;
             this.txtSimProcOut.Name = "txtSimProcOut";
             this.txtSimProcOut.ReadOnly = true;
             this.txtSimProcOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSimProcOut.Size = new System.Drawing.Size(657, 332);
+            this.txtSimProcOut.Size = new System.Drawing.Size(770, 74);
             this.txtSimProcOut.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(165, 29);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Fetch weather conditions at date:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cmbSstDate
-            // 
-            this.cmbSstDate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmbSstDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSstDate.FormattingEnabled = true;
-            this.cmbSstDate.Location = new System.Drawing.Point(174, 3);
-            this.cmbSstDate.Name = "cmbSstDate";
-            this.cmbSstDate.Size = new System.Drawing.Size(127, 21);
-            this.cmbSstDate.TabIndex = 1;
             // 
             // btnFetchSstData
             // 
             this.btnFetchSstData.AutoSize = true;
             this.btnFetchSstData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnFetchSstData.Location = new System.Drawing.Point(616, 3);
+            this.btnFetchSstData.Location = new System.Drawing.Point(692, 3);
             this.btnFetchSstData.Name = "btnFetchSstData";
             this.btnFetchSstData.Size = new System.Drawing.Size(39, 23);
             this.btnFetchSstData.TabIndex = 2;
@@ -143,7 +107,7 @@
             this.tableLayoutPanel6.AutoSize = true;
             this.tableLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel6.ColumnCount = 4;
-            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel6, 10);
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel6, 4);
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -153,8 +117,9 @@
             this.tableLayoutPanel6.Controls.Add(this.pbGrib, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.pbSST, 1, 1);
             this.tableLayoutPanel6.Controls.Add(this.label11, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.label1, 3, 1);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 32);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 6;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -163,7 +128,7 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(652, 52);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(683, 52);
             this.tableLayoutPanel6.TabIndex = 3;
             // 
             // label7
@@ -217,9 +182,9 @@
             this.flowLayoutPanel1.Controls.Add(this.btnAbort);
             this.flowLayoutPanel1.Controls.Add(this.btnDone);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(661, 436);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(692, 149);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1, 58);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(81, 58);
             this.flowLayoutPanel1.TabIndex = 6;
             // 
             // btnAbort
@@ -245,65 +210,16 @@
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // label1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(307, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 29);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "VID:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(407, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 29);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "DID:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(508, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(28, 29);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "TID:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // txtVID
-            // 
-            this.txtVID.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtVID.Location = new System.Drawing.Point(341, 3);
-            this.txtVID.Name = "txtVID";
-            this.txtVID.Size = new System.Drawing.Size(60, 20);
-            this.txtVID.TabIndex = 10;
-            this.txtVID.Text = "1296";
-            // 
-            // txtDID
-            // 
-            this.txtDID.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDID.Location = new System.Drawing.Point(442, 3);
-            this.txtDID.Name = "txtDID";
-            this.txtDID.Size = new System.Drawing.Size(60, 20);
-            this.txtDID.TabIndex = 11;
-            this.txtDID.Text = "62";
-            // 
-            // txtTID
-            // 
-            this.txtTID.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtTID.Location = new System.Drawing.Point(542, 3);
-            this.txtTID.Name = "txtTID";
-            this.txtTID.Size = new System.Drawing.Size(60, 20);
-            this.txtTID.TabIndex = 12;
-            this.txtTID.Text = "101060";
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(68, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(612, 26);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "label1";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // DataFetcherDlg
             // 
@@ -311,14 +227,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnAbort;
-            this.ClientSize = new System.Drawing.Size(663, 497);
+            this.ClientSize = new System.Drawing.Size(776, 210);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DataFetcherDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Download initial conditions files";
+            this.Text = "Download initial conditions files (SST file must be present)";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
@@ -333,8 +249,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cmbSstDate;
         private System.Windows.Forms.Button btnFetchSstData;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Label label7;
@@ -345,11 +259,6 @@
         private System.Windows.Forms.Button btnDone;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btnAbort;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtVID;
-        private System.Windows.Forms.TextBox txtDID;
-        private System.Windows.Forms.TextBox txtTID;
+        private System.Windows.Forms.Label label1;
     }
 }

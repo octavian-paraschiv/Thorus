@@ -24,7 +24,6 @@ namespace ThorusSimulation
             // -------------------------
             // Parse command line args
 
-
             bool runStats = false;
             int statRangeLen = 1;
 
@@ -104,7 +103,7 @@ namespace ThorusSimulation
                 {
                     // First Grib, then NetCdf. Otherwise it crashes and I don't know why...
                     new GribImporter("input.grib").ImportFiles();
-                    new NetCdfImporter(true).ImportFiles();
+                    new NetCdfImporter().ImportFiles();
                 }
 
                 string dataDir = SimulationData.DataFolder;

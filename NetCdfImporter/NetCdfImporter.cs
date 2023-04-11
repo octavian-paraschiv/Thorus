@@ -17,45 +17,17 @@ namespace ThorusCommon.Data
 {
     public class NetCdfImporter : FileImporter
     {
-        protected string TemperatureNcFile = "TMP_PRES.nc";
-        protected string GeopotentialNcFile = "HGT_PRES.nc";
-        protected string HumidityNcFile = "SPFH_PRES.nc";
-        protected string SoilTempNcFile = "TMP_BGRND.nc";
-        protected string SnowCoverNcFile = "WEASD_SFC.nc";
-
         protected string SeaTempNcFile = "SST.nc";
-
-        private bool _sstOnly = false;
         
-        public NetCdfImporter(bool sstOnly = false)
+        public NetCdfImporter()
         {
-            _sstOnly = sstOnly;
-
             // ----------------------------------------------
             // Surface files - NC
             CorrectFilePath(ref SeaTempNcFile);
-
-            if (_sstOnly)
-                return;
-
-            CorrectFilePath(ref SoilTempNcFile);
-            CorrectFilePath(ref SnowCoverNcFile);
-
-            // ----------------------------------------------
-            // Atmosphere NC files
-            CorrectFilePath(ref TemperatureNcFile);
-            CorrectFilePath(ref GeopotentialNcFile);
-            CorrectFilePath(ref HumidityNcFile);
         }
 
         protected override void ImportSurface()
         {
-            ImportNcFile<float>(SeaTempNcFile,
-                          "sst", 1, 0,
-                          SeaTempFile,
-                          (d) => (d / 100),
-                          false);
-
             DateTime dt = ImportDateTime(SeaTempNcFile);
             SimDateTime sdt = new SimDateTime(dt);
 
@@ -63,18 +35,11 @@ namespace ThorusCommon.Data
             CorrectFilePath(ref timeSeedFile);
             File.WriteAllText(timeSeedFile, sdt.Title);
 
-            if (_sstOnly)
-                return;
+            ImportSstFile<float>(SeaTempNcFile,
+                          "sst", 1, 0,
+                          SeaTempFile,
+                          true);
 
-            ImportNcFile<float>(SoilTempNcFile, 
-                "Temperature_depth_below_surface_layer", 1, 0, 
-                SoilTempFile,
-                (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
-
-            ImportNcFile<float>(SnowCoverNcFile,
-                "Water_equivalent_of_accumulated_snow_depth", 1, 0,
-                SnowCoverFile,
-                (d) => (d));
         }
 
         public static DateTime ImportDateTime(string inputNcFile)
@@ -113,88 +78,8 @@ namespace ThorusCommon.Data
             return dt;
         }
 
-        protected override void ImportLevel(int idx)
-        {
-            if (_sstOnly)
-                return;
-
-            // T, P, H must be read and built in this order
-            // Calculation of P depends on T;
-            // Calculation of H depends on both T and P.
-
-            DenseMatrix t = ImportNcFile<float>(TemperatureNcFile,
-                "Temperature", TempFiles.Length, idx,
-                TempFiles[idx],
-                (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
-
-            if (t != null)
-            {
-                DenseMatrix z = ImportNcFile<float>(GeopotentialNcFile,
-                    "Geopotential_height", GeopotentialFiles.Length, idx,
-                    null,
-                    (d) => (d));
-
-                if (z != null)
-                {
-                    DenseMatrix p = DenseMatrix.Create(z.RowCount, z.ColumnCount, (r, c) =>
-                    {
-                        float dz = z[r, c] - SimConstants.LevelHeights[idx];
-                        float rt = AbsoluteConstants.Rsd * (t[r, c] + AbsoluteConstants.WaterFreezePoint);
-                        
-                        float levelPressure = 0;
-                        switch (idx)
-                        {
-                            case LevelType.SeaLevel:
-                                // Caution: use 1000 and not LevelPressure.SeaLevelPressure
-                                // because we imported 1000 hPa geopotential which is not
-                                // quite the same as sea level geopotential.
-                                // works with sea leve
-                                levelPressure = 1000;
-                                break;
-                            case LevelType.MidLevel:
-                                levelPressure = LevelPressure.MidLevelPressure;
-                                break;
-                            case LevelType.TopLevel:
-                                levelPressure = LevelPressure.TopLevelPressure;
-                                break;
-                        }
-                        
-                        return levelPressure * (float)Math.Exp(AbsoluteConstants.g * dz / rt);
-                    });
-
-                    if (p != null)
-                    {
-                        FileSupport.SaveMatrixToFile(p, PressureFiles[idx], false);
-
-                        DenseMatrix q = ImportNcFile<float>(HumidityNcFile,
-                            "Specific_humidity", GeopotentialFiles.Length, idx,
-                            null,
-                            (d) => (d));
-
-                        if (q != null)
-                        {
-                            DenseMatrix h = DenseMatrix.Create(q.RowCount, q.ColumnCount, (r, c) =>
-                            {
-                                float temp = t[r, c];
-                                float qair = q[r, c];
-                                float press = p[r, c];
-
-                                float es = 6.112f * (float)Math.Exp((17.67f * temp) / (temp + 243.5f));
-                                float e = qair * press / (0.378f * qair + 0.622f);
-                                float rh = e / es;
-                                return 100 * Math.Min(1, Math.Max(0, rh));
-
-                            });
-
-                            FileSupport.SaveMatrixToFile(h, HumidityFiles[idx], false);
-                        }
-                    }
-                }
-            }
-        }
-
-        private DenseMatrix ImportNcFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount, 
-            int netCdfLevelIdx, string dataFile, Func<T, float> conversionFunc, bool flipUpDown = true)
+        private DenseMatrix ImportSstFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount, 
+            int netCdfLevelIdx, string dataFile, bool flipUpDown = true)
         {
             DenseMatrix mat = null;
 
@@ -203,8 +88,26 @@ namespace ThorusCommon.Data
                 if (File.Exists(dataFile))
                     File.Delete(dataFile);
 
-                T[] data = GetData<T>(netCdfFile, netCdfVariable, netCdfLevelCount, netCdfLevelIdx);
-                mat = DataToMatrix(data, (d) => conversionFunc(d), flipUpDown);
+                const int rows = 712;
+                const int cols = 1440;
+
+                float[] data = GetData(netCdfFile, netCdfVariable, netCdfLevelCount, netCdfLevelIdx, rows, cols);
+                DenseMatrix bigMat = DataToMatrix(rows, cols, data, flipUpDown);
+
+                // bigMat has size 712 x 1440 so we need to transform it to 179 * 360
+                float last = 0;
+                mat = MatrixFactory.New((r, c) =>
+                {
+                    try 
+                    {
+                        last = bigMat.SubMatrix(4 * r, 4, 4 * c, 4).RowSums().Sum() / 16;
+                    }
+                    catch
+                    {
+                        last = bigMat.SubMatrix(4 * (r - 1), 4, 4 * c, 4).RowSums().Sum() / 16;
+                    }
+                    return last;
+                });
 
                 if (string.IsNullOrEmpty(dataFile) == false)
                 {
@@ -216,7 +119,7 @@ namespace ThorusCommon.Data
         }
 
 
-        private T[] GetData<T>(string path, string variable, int levelCount, int levelIdx)
+        private float[] GetData(string path, string variable, int levelCount, int levelIdx, int rows, int cols)
         {
             int ncid = 0, varid = 0;
 
@@ -229,27 +132,13 @@ namespace ThorusCommon.Data
                     NetCDF.nc_open(path, NetCDF.CreateMode.NC_NOWRITE, out ncid);
                     NetCDF.nc_inq_varid(ncid, variable, out varid);
 
-                    if (typeof(T) == typeof(float))
-                    {
-                        float[] data = new float[levelCount * EH * EW];
-                        float[] levelData = new float[EH * EW];
+                    float[] data = new float[levelCount * rows * cols];
+                    float[] levelData = new float[rows * cols];
 
-                        NetCDF.nc_get_var_float(ncid, varid, data);
+                    NetCDF.nc_get_var_float(ncid, varid, data);
 
-                        Array.Copy(data, levelIdx * EH * EW, levelData, 0, EH * EW);
-                        return levelData as T[];
-                    }
-
-                    if (typeof(T) == typeof(short))
-                    {
-                        short[] data = new short[levelCount * EH * EW];
-                        short[] levelData = new short[EH * EW];
-
-                        NetCDF.nc_get_var_short(ncid, varid, data);
-
-                        Array.Copy(data, levelIdx * EH * EW, levelData, 0, EH * EW);
-                        return levelData as T[];
-                    }
+                    Array.Copy(data, levelIdx * rows * cols, levelData, 0, rows * cols);
+                    return levelData;
                 }
                 catch { }
                 finally
@@ -261,22 +150,31 @@ namespace ThorusCommon.Data
             return null;
         }
 
-        public DenseMatrix DataToMatrix<T>(T[] data, Func<T, float> conversionFunc, bool flipUpDown = true)
+        public DenseMatrix DataToMatrix(int rows, int cols, float[] data, bool flipUpDown = true)
         {
-            DenseMatrix mat = MatrixFactory.New((r, c) =>
+            float last = 0;
+            DenseMatrix mat = DenseMatrix.Create(rows, cols, (r, c) => 
             {
-                int sc = (180 + c) % EW;
+                int sc = c % cols;
+                int dataIdx = r * cols + sc;
+                float val = (float)Math.Round(data[dataIdx], 1);
 
-                int dataIdx = r * EW + sc;
+                if (Math.Abs(val) < 0.05f || Math.Abs(val) > 1000)
+                    val = last;
+                else
+                    last = val;
 
-                float dataElement = conversionFunc(data[dataIdx]);
-                return dataElement;
+                return val;
             });
 
             if (flipUpDown)
                 return mat.FlipUpDown();
 
-            return mat;
+            return mat.EQ(8);
+        }
+
+        protected override void ImportLevel(int idx)
+        {
         }
     }
 }

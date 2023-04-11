@@ -169,13 +169,6 @@ namespace ThorusViewer
                         
                         var timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
 
-                        cl.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", credentialsHash);
-
-                        var seed = cl.GetStringAsync($"{baseUri}/token/seed").Result;
-
-                        // After getting the token seed we have a window of 5 min in which we should 
-                        // be sending the current chunk (and getting the OK back), before the token expires
-
                         var content = new StringContent(body);
                         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
 
@@ -186,11 +179,10 @@ namespace ThorusViewer
                             $"{timestamp}\n" +
                             $"{requestResource}";
 
-                        var calcSignature = GetHMACSHA1Hash(stringToSign, seed);
+                        var calcSignature = GetHMACSHA1Hash(stringToSign, credentialsHash);
 
-                        cl.DefaultRequestHeaders.TryAddWithoutValidation("X-Signature", calcSignature);
                         cl.DefaultRequestHeaders.TryAddWithoutValidation("X-Date", timestamp);
-                        cl.DefaultRequestHeaders.TryAddWithoutValidation("X-Request-Id", seed);
+                        cl.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", calcSignature);
 
                         var x = cl.PostAsync($"{baseUri}{requestResource}", content).Result;
 
@@ -214,6 +206,9 @@ namespace ThorusViewer
                         _pf.DisplayProgress((i + 1), totalParts, "Publishing subregion data: ");
                     }
                 }
+                
+                _pf.DisplayProgress(0, 0, "");
+
                 System.Windows.MessageBox.Show("Upload done");
             }
             catch (Exception ex)

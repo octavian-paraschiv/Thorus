@@ -25,12 +25,12 @@ artifacts:
   name: thorus-setup
 
 deploy:
-    provider: FTP
+ provider: FTP
     protocol: ftp
-    host: 185.247.61.111
+    host: 188.213.133.67
     username: ocparo_ftpops
     password: 
-        secure: q5T1rZCQBkgSA0/G7P2vXQ==
+        secure: Vu0FvCIJ5sKkVuiZoWBhUA==
     folder: content/Meteo/current/
     application: thorus-setup
   

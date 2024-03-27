@@ -1,19 +1,14 @@
 version: 1.0.{build}
 skip_tags: true
-image: Visual Studio 2017
+image: Visual Studio 2019
 
-environment:
-    git_access_token:
-        secure: ON4vmgHe1F5fEi4l35Nj+Ks2UmJ4v8fvh2wF9ixw50sHjcVLrHVZY5OwrAdJmSCd
-    
 before_build:
 - git checkout master
 - ps: .\prep_build.ps1 "$env:APPVEYOR_BUILD_VERSION"
-- nuget restore ".\Thorus.sln"
-- dir .\packages
+- type ".\ProTONE Suite\src\Framework\OPMediaBase\OPMedia.Core\Version.cs"
 
 build_script:
-- msbuild /p:Configuration=Release /t:Rebuild ".\Thorus.sln" /v:minimal 
+- dotnet build ".\Thorus.sln"
   
 after_build:
 - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
@@ -33,11 +28,3 @@ deploy:
         secure: Vu0FvCIJ5sKkVuiZoWBhUA==
     folder: content/Meteo/current/
     application: thorus-setup
-  
-on_success:
-    - git config --global credential.helper store
-    - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:git_access_token):x-oauth-basic@github.com`n"
-    - git config --global user.email "octavian.paraschiv@gmail.com"
-    - git config --global user.name "octavian-paraschiv"
-    - git commit -a -m "build_%APPVEYOR_BUILD_VERSION%
-    - git push --all --progress origin

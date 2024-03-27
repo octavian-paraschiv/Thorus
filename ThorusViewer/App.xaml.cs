@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using ThorusViewer.Models;
-using System.Windows.Forms;
-using ThorusCommon.Engine;
-using System.IO;
-using System.Diagnostics;
-using ThorusViewer.WinForms;
 
 namespace ThorusViewer
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
     public partial class App : System.Windows.Application
-	{
+    {
         public const string AppName = "Weather Studio";
 
         public App()
@@ -41,11 +32,11 @@ namespace ThorusViewer
                     return System.Windows.Application.Current.FindResource("controlPanelModel")
                         as ControlPanelModel;
                 }
-                catch 
-                { 
+                catch
+                {
                     return null;
                 }
             }
         }
-	}
+    }
 }

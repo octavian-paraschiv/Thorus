@@ -5,7 +5,7 @@ image: Visual Studio 2019
 before_build:
 - git checkout master
 - ps: .\prep_build.ps1 "$env:APPVEYOR_BUILD_VERSION"
-- type ".\ProTONE Suite\src\Framework\OPMediaBase\OPMedia.Core\Version.cs"
+- type ".\ThorusCommon.IO\Properties\Version.cs"
 
 build_script:
 - dotnet build ".\Thorus.sln"

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.Data;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using ThorusCommon.Engine;
 using ThorusCommon.MatrixExtensions;
 
@@ -93,20 +89,18 @@ namespace ThorusCommon.Thermodynamics
         */
         public static float DewPoint(float p, float t, float h)
         {
-            float a = 6.116441f;
             float m = 7.591386f;
             float tn = 240.7263f;
 
             if (t < 0)
             {
-                a = 6.114742f;
                 m = 9.778707f;
                 tn = 273.1466f;
             }
-            
+
 
             // water vapour saturation pressure
-            float pw =  (float)Math.Pow(10, (m * t) / (t + tn)) * h / 100;
+            float pw = (float)Math.Pow(10, (m * t) / (t + tn)) * h / 100;
 
             float td = tn / (m / (float)Math.Log10(pw) - 1);
 

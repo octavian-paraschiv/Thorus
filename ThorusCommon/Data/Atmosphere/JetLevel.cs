@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using ThorusCommon.Engine;
-using ThorusCommon.Thermodynamics;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
-using MathNet.Numerics.LinearAlgebra.Single;
+using ThorusCommon.Thermodynamics;
 
 namespace ThorusCommon.Data
 {
@@ -55,8 +52,6 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(this_BP, Earth.UTC.Title, "D_BP");
             FileSupport.Save(this_FP, Earth.UTC.Title, "D_FP");
-
-            DenseMatrix[] extDev = null;
 
             var pattern = SimulationParameters.Instance.JetStreamPattern;
 
@@ -119,7 +114,7 @@ namespace ThorusCommon.Data
                         case SimulationParameters.JetStreamPatterns.VariableJet_WithReversal:
                             {
                                 var fSingle = SingleJet_WithReversal(Earth.UTC.DayOfYear, latRad);
-                                var fDual =   DualJet_WithReversal(Earth.UTC.DayOfYear, latRad);
+                                var fDual = DualJet_WithReversal(Earth.UTC.DayOfYear, latRad);
 
                                 var fVar = GetVariability(daysElapsed);
                                 f = (1 - fVar) * fSingle + fVar * fDual;

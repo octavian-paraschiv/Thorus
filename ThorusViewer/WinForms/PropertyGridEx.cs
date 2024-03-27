@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using ThorusCommon.Data;
-using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace ThorusViewer.WinForms
 {
@@ -68,7 +63,7 @@ namespace ThorusViewer.WinForms
                         dra.Validate(e.ChangedItem.Value, e.ChangedItem.PropertyDescriptor.Name);
                         isValid = true;
                     }
-                    catch (ValidationException ve)
+                    catch (ValidationException)
                     {
                         var msg = $"Value '{e.ChangedItem.Value}' is not a valid value for field '{e.ChangedItem.PropertyDescriptor.Name}'";
                         MessageBox.Show(ParentForm, msg, "Caution", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -103,7 +98,7 @@ namespace ThorusViewer.WinForms
             {
                 try
                 {
-                base.OnPropertyValueChanged(e);
+                    base.OnPropertyValueChanged(e);
                 }
                 catch (ValidationException ve)
                 {

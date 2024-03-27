@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Single;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
+using System.IO;
+using ThorusCommon.Data;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
-using ThorusCommon.Data;
-using System.IO;
 using static ThorusCommon.SimulationParameters;
 
 namespace ThorusCommon.Engine
@@ -20,7 +16,7 @@ namespace ThorusCommon.Engine
         public DenseMatrix P = MatrixFactory.Init();
         public DenseMatrix H = MatrixFactory.Init();
         public DenseMatrix T = MatrixFactory.Init();
-                
+
         protected int _levelType = -1;
 
         protected DenseMatrix[] _accumulatedFieldDevs = MatrixFactory.Init2D();
@@ -29,7 +25,7 @@ namespace ThorusCommon.Engine
 
         protected float _fNonAdvect = 0.9f;
         protected float _fProAdvect = 0.1f;
-        
+
         protected float _fScaleWindX = 0.25f;
         protected float _fScaleWindY = 0.25f;
 
@@ -50,7 +46,7 @@ namespace ThorusCommon.Engine
 
             if (loadFromStateFiles)
             {
-                P = FileSupport.Load(Earth.UTC.Title, string.Format("P_{0:d2}_MAP", _levelType)); 
+                P = FileSupport.Load(Earth.UTC.Title, string.Format("P_{0:d2}_MAP", _levelType));
                 T = FileSupport.Load(Earth.UTC.Title, string.Format("T_{0:d2}_MAP", _levelType));
                 H = FileSupport.Load(Earth.UTC.Title, string.Format("H_{0:d2}_MAP", _levelType));
             }
@@ -94,7 +90,7 @@ namespace ThorusCommon.Engine
         #region Statistic-related
         public virtual void Add(AtmosphericLevel atmLevel)
         {
-            P.ADD(atmLevel.P); 
+            P.ADD(atmLevel.P);
             T.ADD(atmLevel.T);
             H.ADD(atmLevel.H);
         }
@@ -171,8 +167,8 @@ namespace ThorusCommon.Engine
                     break;
 
                 case AdvectionModels.Fine:
-                    mul = (1 / (Earth.SnapshotDivFactor * AbsoluteConstants.HoursPerDay));
-                    count = Earth.SnapshotLength;
+                    mul = 0.1f;
+                    count = 10;
                     break;
             }
 

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ThorusCommon.IO;
-
-namespace ThorusCommon.IO
+﻿namespace ThorusCommon.IO
 {
-    public static class PrecipTypeComputer<T>
+    public static class PrecipTypeComputer
     {
         public delegate T PrecipTypeHandler<T>();
 

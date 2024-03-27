@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ThorusViewer.Palettes;
-using Microsoft.Win32;
-using ThorusViewer.Models;
-using OxyPlot;
 using ThorusCommon.Engine;
+using ThorusViewer.Models;
 
 namespace ThorusViewer.Views
 {
@@ -75,10 +62,10 @@ namespace ThorusViewer.Views
             string ext = System.IO.Path.GetExtension(imageFile).Trim('.').ToUpperInvariant();
 
             Size imgSize = new Size(XSize, (int)(3f * (float)XSize / 4f));
-            
+
             if (ext == "PNG")
             {
-                plotView.SaveBitmap(imageFile, (int)imgSize.Width, (int)imgSize.Height, OxyColors.Transparent);
+                plotView.SaveBitmap(imageFile, (int)imgSize.Width, (int)imgSize.Height);
                 return;
             }
 
@@ -86,7 +73,7 @@ namespace ThorusViewer.Views
 
             // PlotView can only save as PNG. 
             // We need to do a conversion PNG->JPG
-            plotView.SaveBitmap(pngFile, (int)imgSize.Width, (int)imgSize.Height, OxyColors.Transparent);
+            plotView.SaveBitmap(pngFile, (int)imgSize.Width, (int)imgSize.Height);
 
             if (File.Exists(pngFile))
             {

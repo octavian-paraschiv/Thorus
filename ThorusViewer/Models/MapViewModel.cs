@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Series;
-using ThorusCommon.IO;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.MatrixExtensions;
-using System.Windows.Media;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using OxyPlot.Annotations;
-using ThorusViewer.Palettes;
-using ThorusCommon.Engine;
 using ThorusCommon;
-using ThorusCommon.Thermodynamics;
+using ThorusCommon.Engine;
+using ThorusCommon.IO;
+using ThorusCommon.MatrixExtensions;
+using ThorusViewer.Palettes;
 using ThorusViewer.Pallettes;
-using ThorusCommon.Data;
-using Microsoft.Win32;
 using ThorusViewer.Series;
 
 namespace ThorusViewer.Models
@@ -54,7 +48,7 @@ namespace ThorusViewer.Models
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch(e.PropertyName)
+            switch (e.PropertyName)
             {
                 //case "SelectedViewport":
                 //    {
@@ -89,7 +83,7 @@ namespace ThorusViewer.Models
                             if (string.IsNullOrEmpty(App.ControlPanelModel.SelectedCategory) == false)
                                 folder = Path.Combine(SimulationData.DataFolder, App.ControlPanelModel.SelectedCategory);
 
-                            string fieldDataFileName = string.Format("{0}_MAP_{1}.thd", 
+                            string fieldDataFileName = string.Format("{0}_MAP_{1}.thd",
                                 App.ControlPanelModel.SelectedDataType.Name,
                                 snapshot.Title);
 
@@ -103,7 +97,7 @@ namespace ThorusViewer.Models
                     }
                     break;
             }
-            
+
         }
 
         private void ReloadModel(string fieldDataFile, bool isWindMap)
@@ -113,7 +107,7 @@ namespace ThorusViewer.Models
                 DoReloadModel(fieldDataFile, isWindMap);
                 RefitMap();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string s = ex.Message;
             }
@@ -126,7 +120,7 @@ namespace ThorusViewer.Models
             const float AspectRatioThreshold = 2.5f;
 
             float MaxWidth = (float)App.Current.MainWindow.ActualWidth - 15f;
-            float MaxHeight = (float)App.Current.MainWindow.ActualHeight - 180f; 
+            float MaxHeight = (float)App.Current.MainWindow.ActualHeight - 180f;
 
 
             if (v.AspectRatio > AspectRatioThreshold)
@@ -220,7 +214,7 @@ namespace ThorusViewer.Models
                 float sSnow = 300;
                 float sSleet = 600;
                 float sFreezingRain = 900;
-                
+
                 data2 = C00.Transpose().ToArray();
 
                 m = DenseMatrix.Create(C00.RowCount, C00.ColumnCount, (r, c) =>
@@ -241,7 +235,7 @@ namespace ThorusViewer.Models
                         float actualPrecipRate = (cl - precipClThreshold);
                         if (actualPrecipRate >= 0)
                         {
-                            return PrecipTypeComputer<float>.Compute(
+                            return PrecipTypeComputer.Compute(
 
                                 // Actual temperatures
                                 te, ts, t01,
@@ -366,13 +360,13 @@ namespace ThorusViewer.Models
 
                         float dx = step * dataX[r, c];
                         float dy = step * -dataY[r, c];
-                        
-                        int mod = (int)Math.Sqrt(dx*dx + dy*dy);
+
+                        int mod = (int)Math.Sqrt(dx * dx + dy * dy);
 
                         LineSeries line = new LineSeries();
                         line.Points.Add(new DataPoint(x, y));
                         line.Points.Add(new DataPoint(x + dx, y + dy));
-                        line.StrokeThickness = 1;                        
+                        line.StrokeThickness = 1;
 
                         if (mod < 2)
                         {
@@ -444,9 +438,9 @@ namespace ThorusViewer.Models
                         ColumnCoordinates = cols.ToArray().ToDoubleArray(),
                         RowCoordinates = rows.ToArray().ToDoubleArray(),
                         ContourLevels = levels.ToArray().ToDoubleArray(),
-                        
+
                         ContourColors = lineColors.ToArray(), // Same # elements as the levels' array
-                        
+
                         Data = (data2 == null) ? data.ToDoubleArray() : data2.ToDoubleArray(),
 
                         LabelBackground = OxyColors.Transparent,
@@ -455,7 +449,7 @@ namespace ThorusViewer.Models
                         FontSize = 15,
                         FontWeight = 500,
 
-                        
+
                     };
 
 
@@ -463,12 +457,10 @@ namespace ThorusViewer.Models
                 }
             }
 
-MapFeatures:
-
             // Always do this last.
             AddMapFeatures(model, wdp, pal, isWindMap);
 
-            
+
         }
 
         #region Map Features (coastlines, country borders etc)
@@ -537,7 +529,7 @@ MapFeatures:
                 FilterMinValue = App.ControlPanelModel.SelectedViewport.MinLat,
                 FilterMaxValue = App.ControlPanelModel.SelectedViewport.MaxLat,
                 AxisTitleDistance = 10,
-                
+
                 //MajorGridlineStyle = LineStyle.Solid,
                 //MajorStep = 0.5,
             });
@@ -608,7 +600,7 @@ MapFeatures:
                 model.Annotations.Add(_roCounties);
             }
 
-            
+
         }
         #endregion
     }
@@ -620,7 +612,7 @@ MapFeatures:
             return Array.ConvertAll(input, x => (double)x);
         }
 
-        public static double[,] ToDoubleArray(this float [,] input)
+        public static double[,] ToDoubleArray(this float[,] input)
         {
             double[,] output = new double[input.GetLength(0), input.GetLength(1)];
             for (int r = 0; r < input.GetLength(0); r++)

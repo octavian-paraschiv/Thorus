@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ThorusViewer.Palettes;
-using ThorusCommon.Data;
 using ThorusCommon.IO;
+using ThorusViewer.Palettes;
 
 namespace ThorusViewer.Views
 {
@@ -151,7 +139,7 @@ namespace ThorusViewer.Views
         public OxyPlot.OxyColor Color { get; private set; }
         public LineColorMode ColorMode { get; private set; }
 
-        public LineColor(OxyPlot.OxyColor color) : 
+        public LineColor(OxyPlot.OxyColor color) :
             this(color, LineColorMode.FixedColor)
         {
         }
@@ -195,5 +183,7 @@ namespace ThorusViewer.Views
 
             return ColorMode.ToString();
         }
+
+        public override int GetHashCode() => Color.GetHashCode();
     }
 }

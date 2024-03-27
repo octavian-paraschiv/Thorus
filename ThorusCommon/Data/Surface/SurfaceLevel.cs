@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
 using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
@@ -191,7 +188,7 @@ namespace ThorusCommon.Data
 
                 sgn = Math.Sign(wlMask[r, c]);
                 if (sgn == 1)
-                  return 1;
+                    return 1;
 
                 if (he[r, c] >= 10f)
                     return 0;
@@ -379,7 +376,7 @@ namespace ThorusCommon.Data
         }
 
         bool _initialLIDXCalculation = true;
-        
+
         public void CalculateInstabilityIndex(DenseMatrix eqFronts)
         {
             if (_initialLIDXCalculation)
@@ -411,7 +408,7 @@ namespace ThorusCommon.Data
                 else
                 {
                     // Surface is below mid level boundary
-                    
+
                     // Between surface and mid level boundary => environmental lapse rate
                     var dhToMid = height - SimConstants.LevelHeights[LevelType.MidLevel];
                     var liftedToMid_t = vt + elr * dhToMid / 1000f;
@@ -420,7 +417,7 @@ namespace ThorusCommon.Data
                     var dhMidToTop = SimConstants.LevelHeights[LevelType.MidLevel] - SimConstants.LevelHeights[LevelType.TopLevel];
                     lifted_t = liftedToMid_t + SimulationParameters.Instance.DryLapseRate * dhMidToTop / 1000f;
                 }
-                                
+
                 var actual_t = Earth.ATM.TopLevel.T[r, c];
 
                 var dT = (actual_t - lifted_t);
@@ -479,7 +476,7 @@ namespace ThorusCommon.Data
                     h = 0.5f * (hTop + hMid);
                 else
                     h = 0.5f * (hSea + hMid);
-                
+
                 var lidx = LIDX[r, c];
                 var gp = GP[r, c];
                 var gt = GT[r, c];
@@ -488,7 +485,7 @@ namespace ThorusCommon.Data
                 // Baric gradient precipitation
                 var pRate = 0.5f * Math.Abs(gp);
 
-                  // Frontal precipitation
+                // Frontal precipitation
                 var f = eqFronts[r, c];
                 var dx = (f > 0) ? 0.75f : 1.5f;
                 var fRate = dx * 20 * Math.Abs(f);
@@ -524,133 +521,133 @@ namespace ThorusCommon.Data
             DenseMatrix SolidPrecip = MatrixFactory.Init();
 
             for (int r = 0; r < SolidPrecip.RowCount; r++)
-            for (int c = 0; c < SolidPrecip.ColumnCount; c++)
-            {
-                var wl = WL[r, c];
-                var ts = TS[r, c];
-                var te = TE[r, c];
-                var cl = Precip[r, c];
-                var t01 = Earth.ATM.MidLevel.T[r, c];
-
-                var totalRain = RAIN[r, c];
-                var totalSnow = SNOW[r, c];
-
-                var fogMeltFactor = Math.Min(1, 1 - FOG[r, c] / 100);
-
-                const float precipClThreshold = 10f;
-
-                float deltaSnow = 0, deltaRain = 0;
-
-                if (te >= -10f || cl <= precipClThreshold)
+                for (int c = 0; c < SolidPrecip.ColumnCount; c++)
                 {
-                    if (te >= 0)
+                    var wl = WL[r, c];
+                    var ts = TS[r, c];
+                    var te = TE[r, c];
+                    var cl = Precip[r, c];
+                    var t01 = Earth.ATM.MidLevel.T[r, c];
+
+                    var totalRain = RAIN[r, c];
+                    var totalSnow = SNOW[r, c];
+
+                    var fogMeltFactor = Math.Min(1, 1 - FOG[r, c] / 100);
+
+                    const float precipClThreshold = 10f;
+
+                    float deltaSnow = 0, deltaRain = 0;
+
+                    if (te >= -10f || cl <= precipClThreshold)
                     {
-                        // Accumulated soil moisture evaporation
-                        totalRain -= 0.5f * te * Earth.SnapshotLength;
-                        if (totalRain < 0)
-                            totalRain = 0;
-
-                        // Old snow cover is melting and transforming into water
-                        // OBS: Snow melts faster when we have fog 
-                        var meltedSnow = Math.Min(totalSnow, 0.2f * (1 + fogMeltFactor) * te * Earth.SnapshotLength);
-                        totalSnow -= meltedSnow;
-                        if (totalSnow < 0)
-                            totalSnow = 0;
-
-                        // Consider melted snow as rain because it contributes to the total soil moisture
-                        totalRain += meltedSnow;
-                    }
-                    else
-                    {
-                        // Old snow cover is slowly compacting due to daytime melt / night time freeze
-                        totalSnow -= 0.025f * (1 + fogMeltFactor) * Earth.SnapshotLength;
-
-                        if (totalSnow < 0)
-                            totalSnow = 0;
-                    }
-                }
-
-                DaysSinceLastRainFall[r, c] = (DaysSinceLastRainFall[r, c] + Earth.SnapshotDivFactor);
-                DaysSinceLastSnowFall[r, c] = (DaysSinceLastSnowFall[r, c] + Earth.SnapshotDivFactor);
-
-                float actualPrecipRate = (cl - precipClThreshold);
-                if (actualPrecipRate > 0)
-                {
-                    var snapshotPrecipFall = actualPrecipRate * Earth.SnapshotDivFactor;
-
-                    PrecipTypeComputer<float>.Compute(
-                        
-                        // Actual temperatures
-                        te, ts, t01,
-
-                        // Boundary temperatures as read from simulation parameters
-                        SimulationParameters.Instance,
-
-                        // Computed precip type: snow
-                        () =>
+                        if (te >= 0)
                         {
-                            deltaSnow = 0.3f * snapshotPrecipFall;
-                            totalSnow += deltaSnow;
-                            SolidPrecip[r, c] = 1;
-                            DaysSinceLastSnowFall[r, c] = 0;
-                            return 0;
-                        },
+                            // Accumulated soil moisture evaporation
+                            totalRain -= 0.5f * te * Earth.SnapshotLength;
+                            if (totalRain < 0)
+                                totalRain = 0;
 
-                        // Computed precip type: rain
-                        () =>
-                        {
-                            deltaRain = snapshotPrecipFall;
-                            totalRain += deltaRain;
-                            DaysSinceLastRainFall[r, c] = 0;
-                            return 0;
-                        },
+                            // Old snow cover is melting and transforming into water
+                            // OBS: Snow melts faster when we have fog 
+                            var meltedSnow = Math.Min(totalSnow, 0.2f * (1 + fogMeltFactor) * te * Earth.SnapshotLength);
+                            totalSnow -= meltedSnow;
+                            if (totalSnow < 0)
+                                totalSnow = 0;
 
-                        // Computed precip type: freezing rain
-                        () =>
-                        {
-                            deltaSnow = 0.1f * snapshotPrecipFall;
-                            deltaRain = 0.9f * snapshotPrecipFall;
-
-                            totalSnow += deltaSnow;
-                            totalRain += deltaRain;
-
-                            SolidPrecip[r, c] = 1;
-                            DaysSinceLastSnowFall[r, c] = 0;
-                            return 0;
-                        },
-
-                        // Computed precip type: sleet
-                        () =>
-                        {
-                            deltaSnow = 0.2f * snapshotPrecipFall;
-                            deltaRain = 0.8f * snapshotPrecipFall;
-
-                            totalSnow += deltaSnow;
-                            totalRain += deltaRain;
-
-                            SolidPrecip[r, c] = 1;
-                            DaysSinceLastSnowFall[r, c] = 0;
-                            return 0;
+                            // Consider melted snow as rain because it contributes to the total soil moisture
+                            totalRain += meltedSnow;
                         }
-                    );
-                }
+                        else
+                        {
+                            // Old snow cover is slowly compacting due to daytime melt / night time freeze
+                            totalSnow -= 0.025f * (1 + fogMeltFactor) * Earth.SnapshotLength;
 
-                if (totalSnow < 0 || 
-                    // Snow does not accumulate on a water surface if water is not frozen
-                    (wl != 0 && ts > -5))
-                    totalSnow = 0;
+                            if (totalSnow < 0)
+                                totalSnow = 0;
+                        }
+                    }
 
-                if (totalRain < 0 ||
-                    // Rain water does not accumulate on a water surface
-                    wl != 0)
-                    totalRain = 0;
+                    DaysSinceLastRainFall[r, c] = (DaysSinceLastRainFall[r, c] + Earth.SnapshotDivFactor);
+                    DaysSinceLastSnowFall[r, c] = (DaysSinceLastSnowFall[r, c] + Earth.SnapshotDivFactor);
 
-                RAIN[r, c] = totalRain;
-                SNOW[r, c] = totalSnow;
+                    float actualPrecipRate = (cl - precipClThreshold);
+                    if (actualPrecipRate > 0)
+                    {
+                        var snapshotPrecipFall = actualPrecipRate * Earth.SnapshotDivFactor;
 
-                D_RAIN[r, c] = deltaRain;
-                D_SNOW[r, c] = deltaSnow;
-            };
+                        PrecipTypeComputer.Compute(
+
+                            // Actual temperatures
+                            te, ts, t01,
+
+                            // Boundary temperatures as read from simulation parameters
+                            SimulationParameters.Instance,
+
+                            // Computed precip type: snow
+                            () =>
+                            {
+                                deltaSnow = 0.3f * snapshotPrecipFall;
+                                totalSnow += deltaSnow;
+                                SolidPrecip[r, c] = 1;
+                                DaysSinceLastSnowFall[r, c] = 0;
+                                return 0;
+                            },
+
+                            // Computed precip type: rain
+                            () =>
+                            {
+                                deltaRain = snapshotPrecipFall;
+                                totalRain += deltaRain;
+                                DaysSinceLastRainFall[r, c] = 0;
+                                return 0;
+                            },
+
+                            // Computed precip type: freezing rain
+                            () =>
+                            {
+                                deltaSnow = 0.1f * snapshotPrecipFall;
+                                deltaRain = 0.9f * snapshotPrecipFall;
+
+                                totalSnow += deltaSnow;
+                                totalRain += deltaRain;
+
+                                SolidPrecip[r, c] = 1;
+                                DaysSinceLastSnowFall[r, c] = 0;
+                                return 0;
+                            },
+
+                            // Computed precip type: sleet
+                            () =>
+                            {
+                                deltaSnow = 0.2f * snapshotPrecipFall;
+                                deltaRain = 0.8f * snapshotPrecipFall;
+
+                                totalSnow += deltaSnow;
+                                totalRain += deltaRain;
+
+                                SolidPrecip[r, c] = 1;
+                                DaysSinceLastSnowFall[r, c] = 0;
+                                return 0;
+                            }
+                        );
+                    }
+
+                    if (totalSnow < 0 ||
+                        // Snow does not accumulate on a water surface if water is not frozen
+                        (wl != 0 && ts > -5))
+                        totalSnow = 0;
+
+                    if (totalRain < 0 ||
+                        // Rain water does not accumulate on a water surface
+                        wl != 0)
+                        totalRain = 0;
+
+                    RAIN[r, c] = totalRain;
+                    SNOW[r, c] = totalSnow;
+
+                    D_RAIN[r, c] = deltaRain;
+                    D_SNOW[r, c] = deltaSnow;
+                };
 
             Earth.SFC.BLIZZARD.Assign((r, c) =>
             {
@@ -688,14 +685,14 @@ namespace ThorusCommon.Data
                 return defAlbedo;
             });
         }
-        
+
         public void CalculateMeanAirTempAtSurface()
         {
             var refTemp = References.GetRefTemp(Earth);
 
             TE.Assign((r, c) =>
             {
-                
+
                 float wl = WL[r, c];
                 float lr = Earth.ATM.ELR[r, c];
 
@@ -703,13 +700,13 @@ namespace ThorusCommon.Data
                 float tRef = refTemp[r, c];
 
                 float height = Earth.SFC.Height[r, c];
-                    
+
                 float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
 
                 var te1 = (0.5f * (tMid + tRef) - lr * dh / 1000);
 
-                var te =  
-                    SimulationParameters.Instance.AirTempContribution * te1 + 
+                var te =
+                    SimulationParameters.Instance.AirTempContribution * te1 +
                     SimulationParameters.Instance.SurfaceTempContribution * TS[r, c];
 
                 return te;
@@ -732,7 +729,7 @@ namespace ThorusCommon.Data
                     extremeTempSurfaceFactor = (dt > 0) ? 0.5f : 1f;
                 else if (old_ts >= 30)
                     extremeTempSurfaceFactor = (dt > 0) ? 1f : 0.5f;
-                    
+
                 if (dt > 0)
                 {
                     if (wl == 0)

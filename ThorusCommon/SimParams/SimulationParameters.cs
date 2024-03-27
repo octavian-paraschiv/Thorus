@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using System.Reflection;
-using System.IO;
 using System.ComponentModel.DataAnnotations;
-using ThorusCommon.IO;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using ThorusCommon.Engine;
+using ThorusCommon.IO;
 
 namespace ThorusCommon
 {
@@ -62,13 +61,13 @@ namespace ThorusCommon
             this.JetStreamPeriod = 7f;
             this.JetStreamPeaks = 7f;
 
-            this.FrontsContribution=0.55f;
+            this.FrontsContribution = 0.55f;
 
-            this.AirTempContribution=0.8f;
+            this.AirTempContribution = 0.8f;
 
 
-            this.WaterTempChangeFactor=0.05f;
-            this.SoilTempChangeFactor=0.182f;
+            this.WaterTempChangeFactor = 0.05f;
+            this.SoilTempChangeFactor = 0.182f;
 
             this.ContinentalPolarAirMassTemp = -5;
             this.TropicalContinentalAirMassTemp = 18;
@@ -76,7 +75,7 @@ namespace ThorusCommon
             this._DefaultRefTemp = 25;
             this.SolarWarmupDailyQuantum = DefSolarWarmupDailyQuantum;
 
-            
+
             this.MaxTeForSolidPrecip = -2.5f;
             this.MinTeForLiquidPrecip = 2.5f;
             this.MaxTsForFreezing = -0.1f;
@@ -115,7 +114,7 @@ namespace ThorusCommon
         {
             string s = this.ToString();
             return FromString(s);
-            
+
         }
 
         public void LoadFromString(string str)
@@ -202,7 +201,7 @@ namespace ThorusCommon
         }
 
         #endregion
-        
+
         #region Atmosphere / Advection
 
         [Category("Atmosphere model / Cyclogenesys")]
@@ -382,7 +381,7 @@ namespace ThorusCommon
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the 'wave speed' of the jet stream oscillation.")]
-        public float JetStreamWaveSpeed 
+        public float JetStreamWaveSpeed
         {
             get
             {

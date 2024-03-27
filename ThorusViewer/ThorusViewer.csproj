@@ -1,130 +1,72 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <PlatformTarget>x64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{A2A19837-E1BD-4703-B452-C071DFE1B5E6}</ProjectGuid>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RootNamespace>ThorusViewer</RootNamespace>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>WinExe</OutputType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>WeatherStudio.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+      <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+      <ApplicationIcon>WeatherStudio.ico</ApplicationIcon>
+      <OutputPath>..\bin\</OutputPath>
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HTMLparserLibDotNet20">
-      <HintPath>..\packages\HTMLparserLibDotNet20.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MathNet.Numerics.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="OxyPlot">
-      <HintPath>..\packages\OxyPlot.dll</HintPath>
-    </Reference>
-    <Reference Include="OxyPlot.Wpf">
-      <HintPath>..\packages\OxyPlot.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\packages\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
+    <Compile Update="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="HtmlLookup.cs" />
-    <Compile Include="Resources.Designer.cs">
+    <Compile Update="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Series\CloudMapSeries.cs" />
-    <Compile Include="WebClientEx.cs">
+    <Compile Update="WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\DataFetcherDlg.cs">
+    <Compile Update="WinForms\DataFetcherDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\DataFetcherDlg.Designer.cs">
+    <Compile Update="WinForms\DataFetcherDlg.Designer.cs">
       <DependentUpon>DataFetcherDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\ProgressForm.cs">
+    <Compile Update="WinForms\ProgressForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\ProgressForm.Designer.cs">
+    <Compile Update="WinForms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\PropertyGridEx.cs">
+    <Compile Update="WinForms\PropertyGridEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\SimControlPanel.cs">
+    <Compile Update="WinForms\SimControlPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\SimControlPanel.Designer.cs">
+    <Compile Update="WinForms\SimControlPanel.Designer.cs">
       <DependentUpon>SimControlPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\ParametersForm.cs">
+    <Compile Update="WinForms\ParametersForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\ParametersForm.Designer.cs">
+    <Compile Update="WinForms\ParametersForm.Designer.cs">
       <DependentUpon>ParametersForm.cs</DependentUpon>
     </Compile>
     <Page Include="Views\CategorySelectorView.xaml">
@@ -161,48 +103,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Models\ControlPanelModel.cs" />
-    <Compile Include="Models\MapViewModel.cs" />
-    <Compile Include="Palettes\Palletes.cs" />
-    <Compile Include="Palettes\WeatherDataPaletteFactory.cs" />
-    <Compile Include="Views\CategorySelectorView.xaml.cs">
+    <Compile Update="Views\CategorySelectorView.xaml.cs">
       <DependentUpon>CategorySelectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ControlPanelView.xaml.cs">
+    <Compile Update="Views\ControlPanelView.xaml.cs">
       <DependentUpon>ControlPanelView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataTypeSelectorView.xaml.cs">
+    <Compile Update="Views\DataTypeSelectorView.xaml.cs">
       <DependentUpon>DataTypeSelectorView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\PaletteParametersView.xaml.cs">
+    <Compile Update="Views\PaletteParametersView.xaml.cs">
       <DependentUpon>PaletteParametersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SnaphotNavigatorView.xaml.cs">
+    <Compile Update="Views\SnaphotNavigatorView.xaml.cs">
       <DependentUpon>SnaphotNavigatorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MapView.xaml.cs">
+    <Compile Update="Views\MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewportSelectorView.xaml.cs">
+    <Compile Update="Views\ViewportSelectorView.xaml.cs">
       <DependentUpon>ViewportSelectorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Update="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Coastline.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ContourRO.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <None Include="Palettes\FOG.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -265,41 +199,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GribImporter\GribImporter.csproj">
-      <Project>{f9d65a21-83d4-408a-a175-7b4868ee4ee0}</Project>
-      <Name>GribImporter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj">
-      <Project>{c50ad334-4773-4554-8c81-fcac2168c325}</Project>
-      <Name>NetCdfImporter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj">
-      <Project>{0f186cf5-5b63-440b-a5be-98e597f0b076}</Project>
-      <Name>ThorusCommon.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj">
-      <Project>{33317F8C-B42E-4F21-AE91-E160D6E25CFE}</Project>
-      <Name>ThorusCommon</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\GribImporter\GribImporter.csproj" />
+    <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj" />
+    <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj" />
+    <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="WeatherStudio.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\DataFetcherDlg.resx">
+    <EmbeddedResource Update="WinForms\DataFetcherDlg.resx">
       <DependentUpon>DataFetcherDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\ParametersForm.resx">
+    <EmbeddedResource Update="WinForms\ParametersForm.resx">
       <DependentUpon>ParametersForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\ProgressForm.resx">
+    <EmbeddedResource Update="WinForms\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\SimControlPanel.resx">
+    <EmbeddedResource Update="WinForms\SimControlPanel.resx">
       <DependentUpon>SimControlPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -308,25 +226,12 @@
     <EmbeddedResource Include="OK.png" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <Compile Remove="EmailClient.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

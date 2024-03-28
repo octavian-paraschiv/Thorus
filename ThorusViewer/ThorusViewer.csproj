@@ -14,23 +14,16 @@
       <EnableDefaultPageItems>false</EnableDefaultPageItems>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
+      <Reference Include="System.Windows.Forms" />
+      <Reference Include="System.Net.Http" />
+      <Reference Include="System.ComponentModel.DataAnnotations" />
+      <Reference Include="System.configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
@@ -44,30 +37,20 @@
     <Compile Update="WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="WinForms\DataFetcherDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="WinForms\DataFetcherDlg.cs" />
     <Compile Update="WinForms\DataFetcherDlg.Designer.cs">
       <DependentUpon>DataFetcherDlg.cs</DependentUpon>
     </Compile>
-    <Compile Update="WinForms\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="WinForms\ProgressForm.cs" />
     <Compile Update="WinForms\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Update="WinForms\PropertyGridEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="WinForms\SimControlPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="WinForms\PropertyGridEx.cs" />
+    <Compile Update="WinForms\SimControlPanel.cs" />
     <Compile Update="WinForms\SimControlPanel.Designer.cs">
       <DependentUpon>SimControlPanel.cs</DependentUpon>
     </Compile>
-    <Compile Update="WinForms\ParametersForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="WinForms\ParametersForm.cs" />
     <Compile Update="WinForms\ParametersForm.Designer.cs">
       <DependentUpon>ParametersForm.cs</DependentUpon>
     </Compile>
@@ -226,7 +209,5 @@
   <ItemGroup>
     <EmbeddedResource Include="Error.png" />
     <EmbeddedResource Include="OK.png" />
-  </ItemGroup>
- 
- 
+  </ItemGroup> 
 </Project>

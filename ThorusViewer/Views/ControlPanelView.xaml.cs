@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ThorusCommon.Engine;
 using ThorusViewer.Palettes;
 using ThorusViewer.Pallettes;
@@ -73,11 +63,8 @@ namespace ThorusViewer.Views
                     default:
                         break;
                 }
-
-                this.sliderPrecipOffset.IsEnabled = wdp.ShowHeatmap;
-                this.sliderPrecipOffset.Visibility = wdp.ShowHeatmap ? Visibility.Visible : Visibility.Hidden;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string s = ex.Message;
             }

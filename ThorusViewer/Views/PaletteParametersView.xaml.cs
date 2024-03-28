@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using ThorusCommon.IO;
 using ThorusViewer.Palettes;
 
 namespace ThorusViewer.Views
@@ -73,18 +72,9 @@ namespace ThorusViewer.Views
                 chkShowContours.IsEnabled = wdp.AcceptsContourLines;
                 chkShowContours.IsChecked = wdp.ShowContours;
 
-                var offsetSize = 0.5f * wdp.MinMax.Delta;
-
-                nudMinValue.Minimum = wdp.MinMax.Min - offsetSize;
-                nudMinValue.Maximum = wdp.MinMax.Min + offsetSize;
-                nudMinValue.Value = wdp.MinMax.Min;
-
-                nudMaxValue.Minimum = wdp.MinMax.Max - offsetSize;
-                nudMaxValue.Maximum = wdp.MinMax.Max + offsetSize;
-                nudMaxValue.Value = wdp.MinMax.Max;
-
                 if (cmbLineWidth.Items.Contains(wdp.LineWidth) == false)
                     cmbLineWidth.Items.Add(wdp.LineWidth);
+
                 cmbLineWidth.SelectedValue = wdp.LineWidth;
 
                 if (cmbLevelSpacing.Items.Contains(wdp.LineSpacing) == false)
@@ -113,12 +103,6 @@ namespace ThorusViewer.Views
                     wdp.ShowContours = showContours;
                     wdp.LineWidth = (float)cmbLineWidth.SelectedValue;
                     wdp.LineSpacing = (float)cmbLevelSpacing.SelectedValue;
-
-                    Range<float> range = new Range<float>(nudMinValue.Value.GetValueOrDefault(), nudMaxValue.Value.GetValueOrDefault());
-
-                    wdp.MinMax.Min = range.Min;
-                    wdp.MinMax.Max = range.Max;
-
                     wdp.LineColor = (LineColor)cmbLineColor.SelectedItem;
                 }
 

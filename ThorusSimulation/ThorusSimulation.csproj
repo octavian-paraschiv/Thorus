@@ -10,16 +10,10 @@
         <OutputPath>..\bin\</OutputPath>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-  </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\GribImporter\GribImporter.csproj" />
         <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj" />
         <ProjectReference Include="..\ThorusCommon.IO\ThorusCommon.IO.csproj" />
         <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />
-    </ItemGroup>
- 
+    </ItemGroup> 
 </Project>

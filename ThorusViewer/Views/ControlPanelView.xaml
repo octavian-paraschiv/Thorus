@@ -25,9 +25,6 @@
         <views:DataTypeSelectorView Grid.Row="2" Grid.Column="2" x:Name="dataTypeSelector" Margin="0" />
         <views:SnaphotNavigatorView Grid.Row="2" Grid.Column="4" x:Name="snapshotSelector" Margin="0" />
         <views:PaletteParametersView Grid.Row="2"  Grid.Column="6" x:Name="paletteParamsSelector" Margin="0" />
-        <Slider Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="3" Height="29" HorizontalAlignment="Stretch" Name="sliderPrecipOffset" VerticalAlignment="Stretch" 
-                Maximum="50" Minimum="-50" TickFrequency="5" LargeChange="5" SmallChange="1" TickPlacement="Both" HorizontalContentAlignment="Stretch" 
-                IsMoveToPointEnabled="True" IsSnapToTickEnabled="True" IsSelectionRangeEnabled="True" IsManipulationEnabled="False" 
-                VerticalContentAlignment="Stretch" ValueChanged="OnOffsetChanged" />
+        
     </Grid>
 </UserControl>

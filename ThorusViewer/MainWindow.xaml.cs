@@ -1,41 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using Newtonsoft.Json;
+using System;
+using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
-using System.Windows.Documents;
-using Microsoft.Win32;
-using ThorusViewer.Palettes;
-using ThorusCommon.Engine;
 using System.Windows.Forms;
-using System.Windows.Interop;
-using ThorusViewer.Models;
+using ThorusCommon;
+using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon;
-using Application = System.Windows.Forms.Application;
 using ThorusCommon.SQLite;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text;
-using System.Security.Cryptography;
-using System.Configuration;
-using System.IO.Compression;
 using ThorusViewer.WinForms;
 
 namespace ThorusViewer
 {
-	/// <summary>
-	/// Interaction logic for Window1.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
+    /// <summary>
+    /// Interaction logic for Window1.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
         ProgressForm _pf = new ProgressForm();
 
         public MainWindow()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
 
             App.ControlPanelModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ControlPanelModel_PropertyChanged);
 
@@ -55,7 +49,38 @@ namespace ThorusViewer
 
         void Window1_Loaded(object sender, RoutedEventArgs e)
         {
-            SelectWorkingFolder();
+            SelectWorkingFolder(false);
+            SelectDataFolder();
+        }
+
+        void SelectWorkingFolder(bool reselect)
+        {
+        begin:
+            if (reselect || string.IsNullOrEmpty(SimulationData.WorkFolder))
+            {
+                FolderBrowserDialog dlg = new FolderBrowserDialog();
+                dlg.SelectedPath = SimulationData.WorkFolder;
+
+                dlg.Description = string.IsNullOrEmpty(SimulationData.WorkFolder) ?
+                    $"Please select the global working folder (where the simulation engine will write its files)" :
+                    $"Please select the global working folder (current value: {SimulationData.WorkFolder ?? ""})\r\n" +
+                    $"Click Cancel or hit Escape to leave it as-is.";
+
+                dlg.ShowNewFolderButton = true;
+
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    SimulationData.WorkFolder = dlg.SelectedPath;
+            }
+
+            if (string.IsNullOrEmpty(SimulationData.WorkFolder))
+            {
+                if (System.Windows.MessageBox.Show("The application cannot continue without a working folder.\r\n" +
+                    "Do you want to try again? If you choose NO, the application will exit.",
+                    Constants.Product, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    goto begin;
+
+                Process.GetCurrentProcess().Kill();
+            }
         }
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -74,15 +99,16 @@ namespace ThorusViewer
 
         private void mnuLoadDataSet_Click(object sender, RoutedEventArgs e)
         {
-            SelectWorkingFolder();
+            SelectDataFolder();
         }
 
-        public void SelectWorkingFolder()
+        public void SelectDataFolder()
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.Description = "Please select the dataset root path:";
             dlg.SelectedPath = SimulationData.DataFolder;
-            
+            dlg.Description = $"Please select the dataset root path (current value: {SimulationData.DataFolder ?? ""})\r\n" +
+                $"Click Cancel or hit Escape to leave it as-is.";
+
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 App.ControlPanelModel.SelectedCategory = "";
@@ -134,7 +160,7 @@ namespace ThorusViewer
                 int uploadChunkSize = (int)Math.Ceiling((double)base64.Length / desiredChunkCount);
 
                 // May be different than 512 but it should be of same order of magnitude
-                totalParts = (int)Math.Ceiling((double)base64.Length / (double)uploadChunkSize); 
+                totalParts = (int)Math.Ceiling((double)base64.Length / (double)uploadChunkSize);
 
                 int retries = 0;
 
@@ -166,7 +192,7 @@ namespace ThorusViewer
                     using (HttpClient cl = new HttpClient())
                     {
                         cl.Timeout = TimeSpan.FromMinutes(10);
-                        
+
                         var timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
 
                         var content = new StringContent(body);
@@ -206,7 +232,7 @@ namespace ThorusViewer
                         _pf.DisplayProgress((i + 1), totalParts, "Publishing subregion data: ");
                     }
                 }
-                
+
                 _pf.DisplayProgress(0, 0, "");
 
                 System.Windows.MessageBox.Show("Upload done");
@@ -377,13 +403,7 @@ namespace ThorusViewer
 
         private void mnuGlobalSettings_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.SelectedPath = SimulationData.WorkFolder;
-            dlg.Description = "Please select the global working folder.\r\nNote: The simulation engine will write the data here.";
-            dlg.ShowNewFolderButton = true;
-
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                SimulationData.WorkFolder = dlg.SelectedPath;
+            SelectWorkingFolder(true);
         }
 
 
@@ -397,7 +417,7 @@ namespace ThorusViewer
                 _simDlg.FormClosed += new FormClosedEventHandler(_simDlg_FormClosed);
                 _simDlg.Show();
             }
-            
+
             _simDlg.BringToFront();
         }
 
@@ -405,7 +425,7 @@ namespace ThorusViewer
         {
             _simDlg = null;
         }
-        
+
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_simDlg != null || _pf.Visible)
@@ -434,7 +454,7 @@ namespace ThorusViewer
             if (snapshot != null)
                 return string.Format("{0} [Data path: {1}], Snapshot: {2}",
                     App.AppName, SimulationData.DataFolder, snapshot);
-            
+
             return string.Format("{0} [Data path: {1}], No snapshot currently loaded.",
                 App.AppName, SimulationData.DataFolder);
         }

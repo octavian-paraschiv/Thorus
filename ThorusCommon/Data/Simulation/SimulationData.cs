@@ -1,38 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using ThorusCommon.IO;
+using ThorusCommon.IO.Settings;
 
 namespace ThorusCommon.Engine
 {
     public static class SimulationData
     {
-        const string DefaultWorkFolder = "C:\\OpmWeather";
         static string _workFolder = Environment.CurrentDirectory;
         static string _dataFolder = "";
+        static DictionaryFile _settingsFile;
 
         public static string WorkFolder
         {
             get { return _workFolder; }
-            set 
-            { 
+            set
+            {
                 // Only ThorusControlPanel calls this.
                 _workFolder = value;
-                Environment.SetEnvironmentVariable("OpmWeather", _workFolder, EnvironmentVariableTarget.Machine);
+                _settingsFile["WorkFolder"] = value;
+                _settingsFile.SaveFile();
             }
         }
 
         public static string DataFolder
         {
-            get 
+            get
             {
-                if (string.IsNullOrEmpty(_dataFolder))
-                    _dataFolder = Path.Combine(_workFolder, "data");
+                if (_workFolder?.Length > 0)
+                {
+                    if (string.IsNullOrEmpty(_dataFolder))
+                        _dataFolder = Path.Combine(_workFolder, "data");
 
-                return _dataFolder; 
+                    return _dataFolder;
+                }
+
+                return null;
             }
         }
 
@@ -88,7 +94,7 @@ namespace ThorusCommon.Engine
         public static List<string> GetDataFiles(string category, string filter = "*_MAP_????-??-??_??.thd")
         {
             string folder = DataFolder;
-            
+
             if (category != null)
                 folder = Path.Combine(DataFolder, category);
 
@@ -99,32 +105,31 @@ namespace ThorusCommon.Engine
         }
 
         public static event EventHandler SnapshotListChanged = null;
-        
+
         static SimulationData()
         {
             Init();
 
-            // Init work folder
-            string wf = DefaultWorkFolder;
+            string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            string winRoot = Path.GetPathRoot(winDir);
+            string programDataDir = Path.Combine(winRoot, "ProgramData");
+            string applicationDataDir = $"{programDataDir}/{Constants.Company}/{Constants.Product}";
+
+            if (!Directory.Exists(applicationDataDir))
+                Directory.CreateDirectory(applicationDataDir);
+
+            _settingsFile = new DictionaryFile($"{applicationDataDir}/Settings.json");
 
             try
             {
-                try
-                {
-                    wf = Environment.GetEnvironmentVariable("OpmWeather", EnvironmentVariableTarget.Machine);
-                    _workFolder = wf;
-                }
-                catch
-                {
-                    _workFolder = DefaultWorkFolder;
-                }
+                _workFolder = _settingsFile["WorkFolder"];
 
-                if (Directory.Exists(_workFolder) == false)
+                if (_workFolder?.Length > 0 && Directory.Exists(_workFolder) == false)
                     Directory.CreateDirectory(_workFolder);
             }
             catch
             {
-                _workFolder = "c:\\";
+                _workFolder = winRoot;
             }
         }
 
@@ -146,6 +151,11 @@ namespace ThorusCommon.Engine
             }
         }
 
+        public static void SaveSettings()
+        {
+            _settingsFile.SaveFile();
+        }
+
         public static void LookupDataFiles(string category)
         {
             lock (_availableSnapshotsLock)
@@ -158,7 +168,7 @@ namespace ThorusCommon.Engine
                     foreach (string file in files)
                     {
                         string fileName = Path.GetFileNameWithoutExtension(file);
-                        
+
                         SimDateTime sdt = SimDateTime.FromFileName(fileName);
                         string dataType = fileName.Substring(0, 4).ToUpperInvariant();
 

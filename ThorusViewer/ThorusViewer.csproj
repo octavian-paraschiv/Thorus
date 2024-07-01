@@ -1,0 +1,217 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>WinExe</OutputType>
+      <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+      <ApplicationIcon>WeatherStudio.ico</ApplicationIcon>
+      <OutputPath>..\bin\</OutputPath>
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+      <StartupObject>ThorusViewer.App</StartupObject>
+      <UseWPF>true</UseWPF>
+      <EnableDefaultPageItems>false</EnableDefaultPageItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OPMFileUploader" Version="1.1.4" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+      <Reference Include="System.Windows.Forms" />
+      <Reference Include="System.Net.Http" />
+      <Reference Include="System.ComponentModel.DataAnnotations" />
+      <Reference Include="System.configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="WebClientEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="WinForms\DataFetcherDlg.cs" />
+    <Compile Update="WinForms\DataFetcherDlg.Designer.cs">
+      <DependentUpon>DataFetcherDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Update="WinForms\ProgressForm.cs" />
+    <Compile Update="WinForms\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Update="WinForms\PropertyGridEx.cs" />
+    <Compile Update="WinForms\SimControlPanel.cs" />
+    <Compile Update="WinForms\SimControlPanel.Designer.cs">
+      <DependentUpon>SimControlPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Update="WinForms\ParametersForm.cs" />
+    <Compile Update="WinForms\ParametersForm.Designer.cs">
+      <DependentUpon>ParametersForm.cs</DependentUpon>
+    </Compile>
+    <Page Include="Views\CategorySelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ControlPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataTypeSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PaletteParametersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SnaphotNavigatorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ViewportSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Update="Views\CategorySelectorView.xaml.cs">
+      <DependentUpon>CategorySelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ControlPanelView.xaml.cs">
+      <DependentUpon>ControlPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTypeSelectorView.xaml.cs">
+      <DependentUpon>DataTypeSelectorView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\PaletteParametersView.xaml.cs">
+      <DependentUpon>PaletteParametersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SnaphotNavigatorView.xaml.cs">
+      <DependentUpon>SnaphotNavigatorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MapView.xaml.cs">
+      <DependentUpon>MapView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ViewportSelectorView.xaml.cs">
+      <DependentUpon>ViewportSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Coastline.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ContourRO.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\FOG.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\B.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\A.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\R.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\D.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\M.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\N.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\L.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\H.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\W.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\Z.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\T.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="RO4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\C.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\F.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Resource Include="Reload.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Include="GridData.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\E.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Palettes\P.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MapContourL2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GribImporter\GribImporter.csproj" />
+    <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj" />
+    <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="WeatherStudio.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="WinForms\DataFetcherDlg.resx">
+      <DependentUpon>DataFetcherDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="WinForms\ParametersForm.resx">
+      <DependentUpon>ParametersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="WinForms\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="WinForms\SimControlPanel.resx">
+      <DependentUpon>SimControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Error.png" />
+    <EmbeddedResource Include="OK.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Template.db3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup> 
+</Project>

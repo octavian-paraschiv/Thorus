@@ -1,0 +1,10 @@
+﻿<Application x:Class="ThorusViewer.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:model="clr-namespace:ThorusViewer.Models"
+    Startup="App_Startup" Exit="App_Exit" >
+        
+    <Application.Resources>
+        <model:ControlPanelModel x:Key="controlPanelModel" />
+    </Application.Resources>
+</Application>

@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="ThorusViewer.Views.PaletteParametersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Show Contours:" Margin="0,0,10,0" />
+        <Label Grid.Row="0" Grid.Column="1" Content="Level spacing:" Margin="0,0,10,0" />
+        <Label Grid.Row="0" Grid.Column="2" Content="Line width:" Margin="0,0,10,0"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="Line color:" Margin="0,0,10,0"/>
+
+        <CheckBox Grid.Row="1" Grid.Column="0" x:Name="chkShowContours" Margin="0,0,10,0" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                  Checked="OnParamsChanged" Unchecked="OnParamsChanged" />
+        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cmbLevelSpacing" Margin="0,0,10,0" SelectionChanged="OnParamsChanged" />
+        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="cmbLineWidth" Margin="0,0,10,0" SelectionChanged="OnParamsChanged" />
+
+        <ComboBox Grid.Row="1" Grid.Column="3" x:Name="cmbLineColor" Margin="0,0,10,0" SelectionChanged="OnParamsChanged" />
+    </Grid>
+</UserControl>

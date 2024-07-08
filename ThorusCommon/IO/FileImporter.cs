@@ -95,8 +95,6 @@ namespace ThorusCommon.IO
         {
             try
             {
-                Init();
-
                 ImportSurface();
                 ImportLevel(0); // low level    
                 ImportLevel(1); // mid level
@@ -106,14 +104,7 @@ namespace ThorusCommon.IO
             {
                 Console.WriteLine(ex.ToString());
             }
-            finally
-            {
-                Cleanup();
-            }
         }
-
-        protected abstract void Init();
-        protected abstract void Cleanup();
 
         protected abstract void ImportSurface();
         protected abstract void ImportLevel(int idx);

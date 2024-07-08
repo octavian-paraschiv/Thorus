@@ -23,15 +23,6 @@ namespace ThorusCommon.Data
         {
         }
 
-        protected override void Init()
-        {
-        }
-
-        protected override void Cleanup()
-        {
-        }
-
-
         protected override void ImportSurface()
         {
             DateTime dt = ImportDateTime(SeaTempNcFile);

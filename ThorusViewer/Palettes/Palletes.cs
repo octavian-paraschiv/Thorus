@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
-using ThorusViewer.Palettes;
-using ThorusCommon.Data;
-using OxyPlot;
-using ThorusCommon;
-using ThorusCommon.MatrixExtensions;
+﻿using ThorusCommon;
 using ThorusCommon.IO;
+using ThorusCommon.MatrixExtensions;
+using ThorusViewer.Palettes;
 
 namespace ThorusViewer.Pallettes
 {

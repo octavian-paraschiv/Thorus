@@ -15,21 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThorusViewer", "ThorusViewe
 		{EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573} = {EA3F3A7E-D59F-4448-9AFA-17F9DD4FD573}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F7B08F4-A52A-48F4-A0FB-927B4887BAAA}"
-	ProjectSection(SolutionItems) = preProject
-		Docs\Variabile_With_reversal_calculator.xlsx = Docs\Variabile_With_reversal_calculator.xlsx
-		Docs\xyzJet_SeasonalVariable.xlsx = Docs\xyzJet_SeasonalVariable.xlsx
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GribImporter", "GribImporter\GribImporter.csproj", "{F9D65A21-83D4-408A-A175-7B4868EE4EE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCdfImporter", "NetCdfImporter\NetCdfImporter.csproj", "{C50AD334-4773-4554-8C81-FCAC2168C325}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build", "_build", "{930EA72D-7406-4E33-922D-162EB273F03F}"
-	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
-		prep_build.ps1 = prep_build.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_install", "_install", "{EC5F55A0-42AD-4443-88AD-4065177020F4}"
 	ProjectSection(SolutionItems) = preProject

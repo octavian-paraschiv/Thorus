@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThorusCommon.Data;
 using ThorusCommon.Engine;
 
@@ -14,24 +10,24 @@ namespace ThorusCommon.IO
         protected string TemperatureFileLow = "T00.thd";
         protected string TemperatureFileMid = "T01.thd";
         protected string TemperatureFileTop = "T02.thd";
-                  
+
         protected string GeopotentialFileLow = "Z00.thd";
         protected string GeopotentialFileMid = "Z01.thd";
         protected string GeopotentialFileTop = "Z02.thd";
-                  
+
         protected string PressureFileLow = "P00.thd";
         protected string PressureFileMid = "P01.thd";
         protected string PressureFileTop = "P02.thd";
-                  
+
         protected string HumidityFileLow = "H00.thd";
         protected string HumidityFileMid = "H01.thd";
         protected string HumidityFileTop = "H02.thd";
-                  
+
         protected string SeaTempFile = "SST.thd";
         protected string SoilTempFile = "SOIL.thd";
-                  
+
         protected string SnowCoverFile = "SNOW.thd";
-                  
+
         protected int EW = SurfaceLevel.GridColumnCount;
         protected int EH = SurfaceLevel.GridRowCount;
 
@@ -97,11 +93,27 @@ namespace ThorusCommon.IO
 
         public void ImportFiles()
         {
-            ImportSurface();
-            ImportLevel(0); // low level    
-            ImportLevel(1); // mid level
-            ImportLevel(2); // top level
+            try
+            {
+                Init();
+
+                ImportSurface();
+                ImportLevel(0); // low level    
+                ImportLevel(1); // mid level
+                ImportLevel(2); // top level
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                Cleanup();
+            }
         }
+
+        protected abstract void Init();
+        protected abstract void Cleanup();
 
         protected abstract void ImportSurface();
         protected abstract void ImportLevel(int idx);

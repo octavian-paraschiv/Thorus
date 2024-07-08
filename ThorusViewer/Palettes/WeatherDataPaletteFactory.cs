@@ -1,15 +1,11 @@
-﻿using System;
+﻿using OxyPlot;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.IO;
-using System.Windows.Media;
-using System.Collections.ObjectModel;
-using ThorusCommon.Data;
-using OxyPlot;
-using ThorusViewer.Views;
 using ThorusCommon.IO;
+using ThorusViewer.Models;
 
 namespace ThorusViewer.Palettes
 {
@@ -17,7 +13,7 @@ namespace ThorusViewer.Palettes
     {
         public static OxyColor ColorFromString(string str)
         {
-            string[] fields = str.Split(new char[]{ ' ' , ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] fields = str.Split(new char[] { ' ', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             if (fields.Length < 3)
                 return OxyColors.Transparent;
 
@@ -69,7 +65,8 @@ namespace ThorusViewer.Palettes
         protected float _lineWidth = 3;
         public float LineWidth
         {
-            get { return _lineWidth; } set { _lineWidth = value; }
+            get { return _lineWidth; }
+            set { _lineWidth = value; }
         }
 
         protected Range<float> _minMax = new Range<float>(-60, 60);
@@ -144,7 +141,7 @@ namespace ThorusViewer.Palettes
 
     public static class WeatherDataPaletteFactory
     {
-        static Dictionary<string, WeatherDataPalette> _palettes = 
+        static Dictionary<string, WeatherDataPalette> _palettes =
             new Dictionary<string, WeatherDataPalette>();
 
         static WeatherDataPalette _default = null;
@@ -160,10 +157,10 @@ namespace ThorusViewer.Palettes
         static WeatherDataPaletteFactory()
         {
             var paletteTypes = (from type in Assembly.GetAssembly(typeof(WeatherDataPaletteFactory)).GetTypes()
-                               where type.IsSubclassOf(typeof(WeatherDataPalette))
-                               select type).ToList();
+                                where type.IsSubclassOf(typeof(WeatherDataPalette))
+                                select type).ToList();
 
-            foreach(Type paletteType in paletteTypes)
+            foreach (Type paletteType in paletteTypes)
             {
                 try
                 {
@@ -194,6 +191,8 @@ namespace ThorusViewer.Palettes
             string fileTitle = Path.GetFileNameWithoutExtension(dataFile);
             if (fileTitle.Length > 4)
                 dataType = fileTitle.Substring(0, 4);
+            else
+                dataType = fileTitle;
 
             return GetPaletteForDataType(dataType);
         }

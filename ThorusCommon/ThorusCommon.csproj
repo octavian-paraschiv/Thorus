@@ -10,20 +10,20 @@
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ADJ_LR.thd">
+    <None Include="Data\ADJ_LR.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="albedo.thd">
+    <None Include="Data\albedo.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="elevationMap.thd">
+    <None Include="Data\elevationMap.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="LandWaterMask.thd">
+    <None Include="Data\LandWaterMask.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="SimParams.thd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Data\SimParams.thd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

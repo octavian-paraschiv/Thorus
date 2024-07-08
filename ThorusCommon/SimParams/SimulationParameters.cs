@@ -32,7 +32,7 @@ namespace ThorusCommon
         {
             DataFilePath = Path.Combine(SimulationData.WorkFolder, DataFileName);
             if (File.Exists(DataFilePath) == false)
-                File.Copy(DataFileName, DataFilePath);
+                File.Copy($"Data/{DataFileName}", DataFilePath);
 
             Init();
             LoadFromFile();

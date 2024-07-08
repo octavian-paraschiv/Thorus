@@ -1,12 +1,11 @@
 ﻿using Grib.Api;
 using MathNet.Numerics.LinearAlgebra.Single;
+using NGrib;
+using NGrib.Grib2.CodeTables;
+using NGrib.Grib2.Templates.ProductDefinitions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
@@ -22,13 +21,18 @@ namespace ThorusCommon.Data
 
         bool time = false;
 
+        Grib2Reader _reader = null;
         GribMessage[] _messages = null;
 
         public GribImporter(string inputFile)
         {
             _inputFile = inputFile;
-            CorrectFilePath(ref _inputFile);            
-
+            CorrectFilePath(ref _inputFile);
+        }
+        protected override void Init()
+        {
+            _reader = new Grib2Reader(_inputFile);
+            /*
             bool ok = false;
             while (!ok)
             {
@@ -44,7 +48,12 @@ namespace ThorusCommon.Data
             }
 
             using (var gf = new Grib.Api.GribFile(_inputFile))
-                _messages = gf.ToArray();
+                _messages = gf.ToArray();*/
+        }
+
+        protected override void Cleanup()
+        {
+            _reader?.Dispose();
         }
 
         protected override void ImportSurface()
@@ -62,7 +71,7 @@ namespace ThorusCommon.Data
         {
             // T, P, H must be read and built in this order
             // Calculation of P depends on T;
-            DenseMatrix t = ImportLevelData(TempFiles[idx], 
+            DenseMatrix t = ImportLevelData(TempFiles[idx],
                 "Temperature", idx,
                 (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
 
@@ -107,8 +116,7 @@ namespace ThorusCommon.Data
                 }
             }
         }
-
-        private DenseMatrix ImportLevelData(string dataFile, string paramName, int levelIdx, Func<float, float> conversionFunc)
+        private DenseMatrix ImportLevelData_v1(string dataFile, string paramName, int levelIdx, Func<float, float> conversionFunc)
         {
             if (string.IsNullOrEmpty(dataFile) == false)
             {
@@ -156,5 +164,79 @@ namespace ThorusCommon.Data
             return mat;
         }
 
+        private DenseMatrix ImportLevelData(string dataFile, string paramName, int levelIdx, Func<float, float> conversionFunc)
+            => ImportLevelData_v2(dataFile, paramName, levelIdx, conversionFunc);
+
+        private DenseMatrix ImportLevelData_v2(string dataFile, string paramName, int levelIdx, Func<float, float> conversionFunc)
+        {
+            DenseMatrix mat = MatrixFactory.Init();
+
+            try
+            {
+                if (string.IsNullOrEmpty(dataFile) == false)
+                {
+                    if (File.Exists(dataFile))
+                        File.Delete(dataFile);
+                }
+
+                if (!time)
+                {
+                    DateTime dt = _reader.ReadMessages()
+                        .Where(msg => (msg?.IdentificationSection?.ReferenceTime).HasValue)
+                        .Select(msg => msg.IdentificationSection.ReferenceTime)
+                        .FirstOrDefault();
+
+                    SimDateTime sdt = new SimDateTime(dt);
+
+                    string timeSeedFile = "timeSeed.thd";
+                    CorrectFilePath(ref timeSeedFile);
+                    File.WriteAllText(timeSeedFile, sdt.Title);
+
+                    time = true;
+                }
+
+                int level = (levelIdx < 0) ? 0 : _levels[levelIdx];
+
+                var datasets = _reader.ReadAllDataSets().Where(d =>
+                    d.Parameter?.Name == paramName &&
+                    (levelIdx < 0 || (d.ProductDefinitionSection?.ProductDefinition as ProductDefinition0000)?.FirstFixedSurfaceType == FixedSurfaceType.IsobaricSurface &&
+                    (d.ProductDefinitionSection?.ProductDefinition as ProductDefinition0000)?.FirstFixedSurfaceValue == level));
+
+                if (datasets?.Count() > 0)
+                {
+                    var dsValues = _reader.ReadDataSetValues(datasets.First());
+
+                    var nodes = dsValues.Where(dsv =>
+                        dsv.Key.Latitude >= EarthModel.MinLat && dsv.Key.Latitude <= EarthModel.MaxLat &&
+                        dsv.Key.Longitude >= EarthModel.MinLon && dsv.Key.Longitude <= EarthModel.MaxLon &&
+                        dsv.Key.Latitude == Math.Truncate(dsv.Key.Latitude) &&
+                        dsv.Key.Longitude == Math.Truncate(dsv.Key.Longitude));
+
+                    foreach (var node in nodes)
+                    {
+                        try
+                        {
+                            int r = EarthModel.MaxLat - (int)node.Key.Latitude;
+                            int c = ((int)node.Key.Longitude - EarthModel.MinLon) % 360;
+                            mat[r, c] = conversionFunc(node.Value ?? 0);
+                        }
+                        catch (Exception ex)
+                        {
+                            _ = ex;
+                            //Console.WriteLine(ex.ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            if (string.IsNullOrEmpty(dataFile) == false)
+                FileSupport.SaveMatrixToFile(mat, dataFile, false);
+
+            return mat;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using OxyPlot;
 using OxyPlot.WindowsForms;
 using System.IO;
 using System.Windows.Forms;
@@ -14,6 +15,10 @@ namespace OPMedia.UI.Controls
         public MapViewCtl()
         {
             InitializeComponent();
+
+            plotView.Controller = new PlotController();
+            plotView.Controller.UnbindAll();
+            plotView.Controller.BindMouseDown(OxyMouseButton.Left, PlotCommands.Track);
 
             try
             {

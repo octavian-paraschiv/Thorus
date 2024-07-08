@@ -30,16 +30,16 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
-            this.btnFetchSstData = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
             this.pbGrib = new System.Windows.Forms.PictureBox();
             this.pbSST = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAbort = new System.Windows.Forms.Button();
             this.btnDone = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnFetchSstData = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).BeginInit();
@@ -89,18 +89,6 @@
             this.txtSimProcOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtSimProcOut.Size = new System.Drawing.Size(770, 74);
             this.txtSimProcOut.TabIndex = 4;
-            // 
-            // btnFetchSstData
-            // 
-            this.btnFetchSstData.AutoSize = true;
-            this.btnFetchSstData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnFetchSstData.Location = new System.Drawing.Point(692, 3);
-            this.btnFetchSstData.Name = "btnFetchSstData";
-            this.btnFetchSstData.Size = new System.Drawing.Size(39, 23);
-            this.btnFetchSstData.TabIndex = 2;
-            this.btnFetchSstData.Text = "Start";
-            this.btnFetchSstData.UseVisualStyleBackColor = true;
-            this.btnFetchSstData.Click += new System.EventHandler(this.OnFetchSstData);
             // 
             // tableLayoutPanel6
             // 
@@ -175,6 +163,17 @@
             this.label11.Text = "SST";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(68, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(612, 26);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "label1";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoSize = true;
@@ -210,16 +209,17 @@
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // btnFetchSstData
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(68, 26);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(612, 26);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "label1";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFetchSstData.AutoSize = true;
+            this.btnFetchSstData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnFetchSstData.Location = new System.Drawing.Point(692, 3);
+            this.btnFetchSstData.Name = "btnFetchSstData";
+            this.btnFetchSstData.Size = new System.Drawing.Size(39, 23);
+            this.btnFetchSstData.TabIndex = 2;
+            this.btnFetchSstData.Text = "Start";
+            this.btnFetchSstData.UseVisualStyleBackColor = true;
+            this.btnFetchSstData.Click += new System.EventHandler(this.OnFetchSstData);
             // 
             // DataFetcherDlg
             // 
@@ -233,6 +233,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DataFetcherDlg";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Download initial conditions files (SST file must be present)";
             this.tableLayoutPanel1.ResumeLayout(false);

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace ThorusViewer.Forms
 {
@@ -25,8 +17,8 @@ namespace ThorusViewer.Forms
             this.TopMost = true;
         }
 
-        private delegate void DisplayProgressDG(int current, int total, string desc);
-        public void DisplayProgress(int current, int total, string desc)
+        private delegate void DisplayProgressDG(IWin32Window owner, int current, int total, string desc);
+        public void DisplayProgress(IWin32Window owner, int current, int total, string desc)
         {
             if (this.InvokeRequired)
             {
@@ -38,7 +30,7 @@ namespace ThorusViewer.Forms
             {
                 if (total < 0)
                 {
-                    this.Show();
+                    this.Show(owner);
                     this.lblDesc.Text = desc;
                     pbProgress.Style = ProgressBarStyle.Marquee;
                 }
@@ -48,7 +40,7 @@ namespace ThorusViewer.Forms
                 }
                 else
                 {
-                    this.Show();
+                    this.Show(owner);
                     pbProgress.Style = ProgressBarStyle.Continuous;
                     var percent = (100 * current / total);
                     this.lblDesc.Text = $"{desc}: {current} of {total} steps ... {percent}% done";

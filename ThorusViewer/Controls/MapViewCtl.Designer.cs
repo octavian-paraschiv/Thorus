@@ -35,7 +35,6 @@ namespace OPMedia.UI.Controls
             // 
             // plotView
             // 
-            this.plotView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotView.Location = new System.Drawing.Point(104, 43);
             this.plotView.Name = "plotView";

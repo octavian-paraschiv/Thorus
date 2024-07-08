@@ -131,7 +131,7 @@ namespace ThorusViewer.Forms
 
             try
             {
-                _pf.DisplayProgress(0, -1, "Preparing to publish...");
+                _pf.DisplayProgress(this, 0, -1, "Preparing to publish...");
 
                 string baseUri = ConfigurationManager.AppSettings["apiBaseUri"].TrimEnd('/');
                 string[] credentials = ConfigurationManager.AppSettings["apiCredentials"].Split(':');
@@ -144,11 +144,11 @@ namespace ThorusViewer.Forms
                     password: credentials[1]);
 
                 uploader.FileUploadProgress += (x) =>
-                    Invoke(new MethodInvoker(() => _pf.DisplayProgress((int)x, 100, "Publishing subregion data: ")));
+                    Invoke(new MethodInvoker(() => _pf.DisplayProgress(this, (int)x, 100, "Publishing subregion data: ")));
 
                 uploader.Run().ContinueWith(t =>
                 {
-                    _pf.DisplayProgress(0, 0, "");
+                    _pf.DisplayProgress(this, 0, 0, "");
 
                     if (t?.Result?.Length > 0)
                         MessageBox.Show($"Upload failed. Details: {t.Result}",
@@ -161,7 +161,7 @@ namespace ThorusViewer.Forms
             }
             catch (Exception ex)
             {
-                _pf.DisplayProgress(0, 0, "");
+                _pf.DisplayProgress(this, 0, 0, "");
                 MessageBox.Show($"Upload failed. Details: {ex.Message}",
                     Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -171,7 +171,7 @@ namespace ThorusViewer.Forms
         {
             try
             {
-                _pf.DisplayProgress(0, -1, "Preparing to generate subregion data...");
+                _pf.DisplayProgress(this, 0, -1, "Preparing to generate subregion data...");
 
                 string exportDbPath = Path.Combine(Directory.GetParent(SimulationData.DataFolder).FullName, "Snapshot.db3");
 
@@ -298,16 +298,16 @@ namespace ThorusViewer.Forms
                                 exportDb.AddMatrix(region.Id, timestamp, aType, angle);
                             }
 
-                            _pf.DisplayProgress(step++, count, "Generating subregion data...");
+                            _pf.DisplayProgress(this, step++, count, "Generating subregion data...");
                         }
                     }
                 }
 
-                _pf.DisplayProgress(0, -1, "Saving subregion data...");
+                _pf.DisplayProgress(this, 0, -1, "Saving subregion data...");
 
                 exportDb.SaveAndClose();
 
-                _pf.DisplayProgress(0, 0, "");
+                _pf.DisplayProgress(this, 0, 0, "");
 
                 MessageBox.Show("Done.");
             }
@@ -317,7 +317,7 @@ namespace ThorusViewer.Forms
             }
             finally
             {
-                _pf.DisplayProgress(0, 0, "");
+                _pf.DisplayProgress(this, 0, 0, "");
             }
         }
 
@@ -341,7 +341,7 @@ namespace ThorusViewer.Forms
             {
                 _simDlg = new SimControlPanel();
                 _simDlg.FormClosed += (ss, ee) => _simDlg = null;
-                _simDlg.Show();
+                _simDlg.Show(this);
             }
 
             _simDlg.BringToFront();

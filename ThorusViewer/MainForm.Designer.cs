@@ -39,6 +39,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mapView = new OPMedia.UI.Controls.MapViewCtl();
             this.controlPanelCtl1 = new OPMedia.UI.Controls.ControlPanelCtl();
+            this.label1 = new System.Windows.Forms.Label();
             this.msMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +47,7 @@
             // msMain
             // 
             this.msMain.AutoSize = false;
+            this.msMain.BackColor = System.Drawing.SystemColors.ControlLight;
             this.msMain.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmLoadDataset,
@@ -79,6 +81,7 @@
             // 
             // tsmAutoSaveImage
             // 
+            this.tsmAutoSaveImage.CheckOnClick = true;
             this.tsmAutoSaveImage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsmAutoSaveImage.Name = "tsmAutoSaveImage";
             this.tsmAutoSaveImage.Size = new System.Drawing.Size(109, 23);
@@ -123,15 +126,17 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.mapView, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.mapView, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.controlPanelCtl1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 27);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1064, 500);
             this.tableLayoutPanel1.TabIndex = 2;
@@ -139,14 +144,14 @@
             // mapView
             // 
             this.mapView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mapView.BackColor = System.Drawing.Color.White;
             this.mapView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mapView.Location = new System.Drawing.Point(2, 110);
-            this.mapView.Margin = new System.Windows.Forms.Padding(2);
+            this.mapView.Location = new System.Drawing.Point(0, 107);
+            this.mapView.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.mapView.MinimumSize = new System.Drawing.Size(350, 42);
             this.mapView.Name = "mapView";
-            this.mapView.Size = new System.Drawing.Size(1060, 388);
+            this.mapView.Size = new System.Drawing.Size(1064, 390);
             this.mapView.TabIndex = 0;
             // 
             // controlPanelCtl1
@@ -155,16 +160,26 @@
             this.controlPanelCtl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.controlPanelCtl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.controlPanelCtl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.controlPanelCtl1.Location = new System.Drawing.Point(3, 3);
-            this.controlPanelCtl1.MinimumSize = new System.Drawing.Size(1373, 102);
+            this.controlPanelCtl1.Location = new System.Drawing.Point(3, 8);
+            this.controlPanelCtl1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.controlPanelCtl1.Name = "controlPanelCtl1";
-            this.controlPanelCtl1.Size = new System.Drawing.Size(1373, 102);
+            this.controlPanelCtl1.Size = new System.Drawing.Size(1058, 85);
             this.controlPanelCtl1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 101);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(1058, 3);
+            this.label1.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1064, 527);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.msMain);
@@ -196,5 +211,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmSettings;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private OPMedia.UI.Controls.ControlPanelCtl controlPanelCtl1;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -56,7 +56,7 @@ namespace ThorusViewer
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(459, 496);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(580, 580);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // pgProperties
@@ -67,7 +67,7 @@ namespace ThorusViewer
             this.pgProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pgProperties.Location = new System.Drawing.Point(3, 3);
             this.pgProperties.Name = "pgProperties";
-            this.pgProperties.Size = new System.Drawing.Size(453, 461);
+            this.pgProperties.Size = new System.Drawing.Size(574, 545);
             this.pgProperties.TabIndex = 0;
             this.pgProperties.ToolbarVisible = false;
             this.pgProperties.Click += new System.EventHandler(this.pgProperties_Click);
@@ -90,7 +90,7 @@ namespace ThorusViewer
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(381, 470);
+            this.btnCancel.Location = new System.Drawing.Point(502, 554);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -100,7 +100,7 @@ namespace ThorusViewer
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(300, 470);
+            this.btnOK.Location = new System.Drawing.Point(421, 554);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;

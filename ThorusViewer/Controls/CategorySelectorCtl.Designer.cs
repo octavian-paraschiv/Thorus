@@ -43,9 +43,10 @@ namespace OPMedia.UI.Controls
             this.label1.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label1, 4);
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(469, 15);
+            this.label1.Size = new System.Drawing.Size(475, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select the graphics category you want to view:";
             // 

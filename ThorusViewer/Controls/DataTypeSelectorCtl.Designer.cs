@@ -49,7 +49,7 @@ namespace OPMedia.UI.Controls
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(210, 45);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(256, 45);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // cmbDataType
@@ -60,7 +60,7 @@ namespace OPMedia.UI.Controls
             this.cmbDataType.Location = new System.Drawing.Point(3, 18);
             this.cmbDataType.MinimumSize = new System.Drawing.Size(200, 0);
             this.cmbDataType.Name = "cmbDataType";
-            this.cmbDataType.Size = new System.Drawing.Size(204, 23);
+            this.cmbDataType.Size = new System.Drawing.Size(250, 23);
             this.cmbDataType.TabIndex = 2;
             this.cmbDataType.SelectedIndexChanged += new System.EventHandler(this.OnDataTypeChanged);
             // 
@@ -68,9 +68,10 @@ namespace OPMedia.UI.Controls
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(204, 15);
+            this.label1.Size = new System.Drawing.Size(256, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select a data type to display:";
             // 
@@ -82,7 +83,7 @@ namespace OPMedia.UI.Controls
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(210, 45);
             this.Name = "DataTypeSelectorCtl";
-            this.Size = new System.Drawing.Size(210, 45);
+            this.Size = new System.Drawing.Size(256, 45);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

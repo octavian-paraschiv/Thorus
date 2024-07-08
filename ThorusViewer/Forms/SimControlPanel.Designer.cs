@@ -51,14 +51,14 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.pbSST = new System.Windows.Forms.PictureBox();
+            this.pbGrib = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.btnFetchData = new System.Windows.Forms.Button();
             this.gbSimControl = new System.Windows.Forms.GroupBox();
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
             this.pbSimProgress = new System.Windows.Forms.ProgressBar();
             this.btnSimStart = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.pbGrib = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.gbSimParams.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -69,8 +69,8 @@
             this.groupBox5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbSST)).BeginInit();
-            this.gbSimControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).BeginInit();
+            this.gbSimControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -409,6 +409,38 @@
             this.pbSST.TabIndex = 10;
             this.pbSST.TabStop = false;
             // 
+            // pbGrib
+            // 
+            this.pbGrib.Location = new System.Drawing.Point(42, 29);
+            this.pbGrib.MaximumSize = new System.Drawing.Size(20, 20);
+            this.pbGrib.MinimumSize = new System.Drawing.Size(20, 20);
+            this.pbGrib.Name = "pbGrib";
+            this.pbGrib.Size = new System.Drawing.Size(20, 20);
+            this.pbGrib.TabIndex = 11;
+            this.pbGrib.TabStop = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label11.Location = new System.Drawing.Point(3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(33, 26);
+            this.label11.TabIndex = 8;
+            this.label11.Text = "SST";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label12.Location = new System.Drawing.Point(3, 26);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(33, 26);
+            this.label12.TabIndex = 9;
+            this.label12.Text = "GRIB";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // btnFetchData
             // 
             this.btnFetchData.AutoSize = true;
@@ -468,38 +500,6 @@
             this.btnSimStart.UseVisualStyleBackColor = true;
             this.btnSimStart.Click += new System.EventHandler(this.OnStartStopSimulation);
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Location = new System.Drawing.Point(3, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(33, 26);
-            this.label11.TabIndex = 8;
-            this.label11.Text = "SST";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(3, 26);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(33, 26);
-            this.label12.TabIndex = 9;
-            this.label12.Text = "GRIB";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pbGrib
-            // 
-            this.pbGrib.Location = new System.Drawing.Point(42, 29);
-            this.pbGrib.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbGrib.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbGrib.Name = "pbGrib";
-            this.pbGrib.Size = new System.Drawing.Size(20, 20);
-            this.pbGrib.TabIndex = 11;
-            this.pbGrib.TabStop = false;
-            // 
             // SimControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -508,6 +508,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SimControlPanel";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Simulation Control Panel";
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -529,9 +530,9 @@
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbSST)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).EndInit();
             this.gbSimControl.ResumeLayout(false);
             this.gbSimControl.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).EndInit();
             this.ResumeLayout(false);
 
         }

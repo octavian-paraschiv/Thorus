@@ -23,6 +23,8 @@ namespace ThorusViewer.Forms
         {
             InitializeComponent();
 
+            this.Icon = Resources.WeatherStudio;
+            this.ShowIcon = true;
 
             ControlPanelModel.Instance.PropertyChanged += ControlPanelModel_PropertyChanged;
 
@@ -111,7 +113,7 @@ namespace ThorusViewer.Forms
                 SimulationData.SetNewDataFolder(dlg.SelectedPath);
             }
 
-            // mnuSimulation.IsEnabled = SimulationData.IsDefaultDataFolder;
+            tsmLaunchSimulation.Enabled = SimulationData.IsDefaultDataFolder;
         }
 
         private void OnSaveAsImage(object sender, EventArgs e)

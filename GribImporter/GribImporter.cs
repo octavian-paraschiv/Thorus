@@ -118,9 +118,9 @@ namespace ThorusCommon.Data
 
             int level = (levelIdx < 0) ? 0 : _levels[levelIdx];
 
-            var messages = _messages.Where(m => m.Name.Contains(paramName) && m.Level == level).First();
+            var messages = _messages.Where(m => m.ParameterName.Contains(paramName) && m.Level == level).First();
 
-            var nodes = messages.GeoSpatialValues.Where(gs => gs.IsMissing == false &&
+            var nodes = messages.GridCoordinateValues.Where(gs => gs.IsMissing == false &&
                 (gs.Latitude >= EarthModel.MinLat && gs.Latitude <= EarthModel.MaxLat) &&
                 (gs.Longitude >= 180 + EarthModel.MinLon && gs.Longitude <= 180 + EarthModel.MaxLon) &&
                 (gs.Latitude == Math.Truncate(gs.Latitude)) &&

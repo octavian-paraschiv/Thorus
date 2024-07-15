@@ -58,7 +58,7 @@ AllowUNCPath=False
 [Tasks]
 
 [Files]
-Source: "vcredist_x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
+Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 Source: "{#BINDIR}\Template.db3"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\*.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -76,7 +76,7 @@ Name: "{group}\Thorus Weather Studio"; Filename: "{app}\ThorusViewer.exe"; Worki
 [Components]
 
 [Run]
-Filename: {tmp}\vcredist_x64.exe; Parameters: "/install /quiet /norestart"; StatusMsg: "Installing VC++ 2013 Redistributables..."
+Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /quiet /norestart"; StatusMsg: "Installing VC++ 2015 Redistributables..."
 
 [UninstallRun]
 

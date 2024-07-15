@@ -28,7 +28,7 @@ namespace ThorusViewer.Forms
 
             ControlPanelModel.Instance.PropertyChanged += ControlPanelModel_PropertyChanged;
 
-            this.Shown += OnFormShown;
+            this.Load += OnFormShown;
             this.SizeChanged += OnSizeChanged;
             this.Closing += OnClosing;
 
@@ -41,43 +41,7 @@ namespace ThorusViewer.Forms
             mapView.RefitMap();
         }
 
-        void OnFormShown(object sender, EventArgs e)
-        {
-            SelectWorkingFolder(false);
-            SelectDataFolder();
-        }
-
-        void SelectWorkingFolder(bool reselect)
-        {
-        begin:
-            if (reselect || string.IsNullOrEmpty(SimulationData.WorkFolder))
-            {
-                FolderBrowserDialog dlg = new FolderBrowserDialog
-                {
-                    SelectedPath = SimulationData.WorkFolder,
-
-                    Description = string.IsNullOrEmpty(SimulationData.WorkFolder) ?
-                    $"Please select the global working folder (where the simulation engine will write its files)" :
-                    $"Please select the global working folder (current value: {SimulationData.WorkFolder ?? ""})\r\n" +
-                    $"Click Cancel or hit Escape to leave it as-is.",
-
-                    ShowNewFolderButton = true
-                };
-
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    SimulationData.WorkFolder = dlg.SelectedPath;
-            }
-
-            if (string.IsNullOrEmpty(SimulationData.WorkFolder))
-            {
-                if (MessageBox.Show("The application cannot continue without a working folder.\r\n" +
-                    "Do you want to try again? If you choose NO, the application will exit.",
-                    Constants.Product, MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    goto begin;
-
-                Process.GetCurrentProcess().Kill();
-            }
-        }
+        
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -98,23 +62,7 @@ namespace ThorusViewer.Forms
             SelectDataFolder();
         }
 
-        public void SelectDataFolder()
-        {
-            FolderBrowserDialog dlg = new FolderBrowserDialog
-            {
-                SelectedPath = SimulationData.DataFolder,
-                Description = $"Please select the dataset root path (current value: {SimulationData.DataFolder ?? ""})\r\n" +
-                $"Click Cancel or hit Escape to leave it as-is."
-            };
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                ControlPanelModel.Instance.SelectedCategory = "";
-                SimulationData.SetNewDataFolder(dlg.SelectedPath);
-            }
-
-            tsmLaunchSimulation.Enabled = SimulationData.IsDefaultDataFolder;
-        }
+        
 
         private void OnSaveAsImage(object sender, EventArgs e)
         {

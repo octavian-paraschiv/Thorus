@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ThorusCommon;
 using ThorusCommon.Data;
 using ThorusCommon.Engine;
+using ThorusCommon.IO;
 using ThorusViewer.Forms;
 
 namespace ThorusViewer
@@ -64,7 +65,13 @@ namespace ThorusViewer
         {
             if (_simProcPid > 0)
             {
-                Process.GetProcessById(_simProcPid).Kill();
+                var res = MessageBox.Show("Closing this window will also terminate the simulation in progress. Do you want to proceed?",
+                    Constants.Product, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (res == DialogResult.Yes)
+                    Process.GetProcessById(_simProcPid).Kill();
+                else
+                    e.Cancel = true;
             }
         }
 
@@ -298,6 +305,11 @@ namespace ThorusViewer
             DataFetcherDlg dlg = new DataFetcherDlg();
             dlg.ShowDialog();
             ValidateInitialConditionFiles(true);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

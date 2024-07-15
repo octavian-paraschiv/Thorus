@@ -59,6 +59,7 @@
             this.txtSimProcOut = new System.Windows.Forms.TextBox();
             this.pbSimProgress = new System.Windows.Forms.ProgressBar();
             this.btnSimStart = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.gbSimParams.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -242,13 +243,15 @@
             // 
             this.tableLayoutPanel4.AutoSize = true;
             this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.Controls.Add(this.cbRunStatsOnly, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.cbRunStats, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.cmbRange, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.btnClose, 2, 2);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -265,7 +268,7 @@
             this.cbRunStatsOnly.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbRunStatsOnly.Location = new System.Drawing.Point(3, 30);
             this.cbRunStatsOnly.Name = "cbRunStatsOnly";
-            this.cbRunStatsOnly.Size = new System.Drawing.Size(484, 21);
+            this.cbRunStatsOnly.Size = new System.Drawing.Size(477, 21);
             this.cbRunStatsOnly.TabIndex = 7;
             this.cbRunStatsOnly.Text = "Run statistical analisys only (on existing simulation data)";
             this.cbRunStatsOnly.UseVisualStyleBackColor = true;
@@ -278,7 +281,7 @@
             this.cbRunStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbRunStats.Location = new System.Drawing.Point(3, 3);
             this.cbRunStats.Name = "cbRunStats";
-            this.cbRunStats.Size = new System.Drawing.Size(484, 21);
+            this.cbRunStats.Size = new System.Drawing.Size(477, 21);
             this.cbRunStats.TabIndex = 0;
             this.cbRunStats.Text = "Automatically run statistical analisys after the simulation ends";
             this.cbRunStats.UseVisualStyleBackColor = true;
@@ -313,7 +316,7 @@
             "365"});
             this.cmbRange.Location = new System.Drawing.Point(145, 57);
             this.cmbRange.Name = "cmbRange";
-            this.cmbRange.Size = new System.Drawing.Size(342, 21);
+            this.cmbRange.Size = new System.Drawing.Size(335, 21);
             this.cmbRange.TabIndex = 5;
             // 
             // cmbStepLen
@@ -500,10 +503,21 @@
             this.btnSimStart.UseVisualStyleBackColor = true;
             this.btnSimStart.Click += new System.EventHandler(this.OnStartStopSimulation);
             // 
+            // btnClose
+            // 
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClose.Location = new System.Drawing.Point(486, 57);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(1, 1);
+            this.btnClose.TabIndex = 8;
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SimControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(772, 551);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -570,5 +584,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.PictureBox pbGrib;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnClose;
     }
 }

@@ -27,7 +27,7 @@ namespace ThorusViewer.Forms
 
             ControlPanelModel.Instance.PropertyChanged += ControlPanelModel_PropertyChanged;
 
-            this.Shown += (s, e) => tsmLaunchSimulation.Enabled = SimulationData.IsDefaultDataFolder;
+            this.Shown += (s, e) => tsmiLaunchSimulation.Enabled = SimulationData.IsDefaultDataFolder;
             this.SizeChanged += OnSizeChanged;
             this.Closing += OnClosing;
 

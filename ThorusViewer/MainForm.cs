@@ -2,7 +2,6 @@
 using OPMFileUploader;
 using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +27,7 @@ namespace ThorusViewer.Forms
 
             ControlPanelModel.Instance.PropertyChanged += ControlPanelModel_PropertyChanged;
 
-            this.Load += OnFormShown;
+            this.Shown += (s, e) => tsmLaunchSimulation.Enabled = SimulationData.IsDefaultDataFolder;
             this.SizeChanged += OnSizeChanged;
             this.Closing += OnClosing;
 
@@ -59,10 +58,8 @@ namespace ThorusViewer.Forms
 
         private void OnLoadDataSet(object sender, EventArgs e)
         {
-            SelectDataFolder();
+            SimulationDataUtility.SelectDataFolder();
         }
-
-        
 
         private void OnSaveAsImage(object sender, EventArgs e)
         {
@@ -279,7 +276,7 @@ namespace ThorusViewer.Forms
 
         private void OnGlobalSettings(object sender, EventArgs e)
         {
-            SelectWorkingFolder(true);
+            SimulationDataUtility.SelectWorkingFolder(true);
         }
 
 

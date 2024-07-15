@@ -17,6 +17,8 @@ namespace ThorusCommon.Engine
         static List<SimDateTime> _availableSnapshots = new List<SimDateTime>();
         static List<string> _availableDataTypes = new List<string>();
 
+        public static event EventHandler SnapshotListChanged = null;
+
         public static string WorkFolder
         {
             get { return _workFolder; }
@@ -102,8 +104,6 @@ namespace ThorusCommon.Engine
             return null;
         }
 
-        public static event EventHandler SnapshotListChanged = null;
-
         static SimulationData()
         {
             string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
@@ -158,8 +158,7 @@ namespace ThorusCommon.Engine
 
                     _availableSnapshots.Sort();
 
-                    if (SnapshotListChanged != null)
-                        SnapshotListChanged(null, EventArgs.Empty);
+                    SnapshotListChanged?.Invoke(null, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {

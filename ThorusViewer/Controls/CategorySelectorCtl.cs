@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Forms;
 using ThorusCommon.Engine;
 using ThorusViewer.Models;
@@ -12,19 +11,9 @@ namespace OPMedia.UI.Controls
         public CategorySelectorCtl()
         {
             InitializeComponent();
-            this.Load += CategorySelectorCtl_Load;
 
-            SimulationData.SnapshotListChanged += new EventHandler(SimulationData_SnapshotListChanged);
-        }
-
-        void SimulationData_SnapshotListChanged(object sender, EventArgs e)
-        {
-            ActivateCategoryButtons();
-        }
-
-        private void CategorySelectorCtl_Load(object sender, EventArgs e)
-        {
-            ActivateCategoryButtons();
+            Load += (s, e) => ActivateCategoryButtons();
+            SimulationData.SnapshotListChanged += (s, e) => ActivateCategoryButtons();
         }
 
         private void ActivateCategoryButtons()

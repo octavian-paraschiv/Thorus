@@ -4,8 +4,9 @@ using OxyPlot.Annotations;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using System.Windows;
+using System.Windows.Forms;
 using ThorusCommon;
 using ThorusCommon.Engine;
 using ThorusCommon.IO;
@@ -30,6 +31,8 @@ namespace ThorusViewer.Models
 
         ImageAnnotation _roCounties = null;
 
+        private readonly Control _parent = null;
+
         public void LoadWeatherFieldData(string fieldFileName)
         {
             ReloadModel(fieldFileName, false);
@@ -39,11 +42,11 @@ namespace ThorusViewer.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel" /> class.
         /// </summary>
-        public MapViewModel()
+        public MapViewModel(Control parent)
         {
-            App.ControlPanelModel.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ControlPanelModel_PropertyChanged);
-            PlotModel model = new PlotModel();
-            this.Model = model;
+            _parent = parent;
+            ControlPanelModel.Instance.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ControlPanelModel_PropertyChanged);
+            this.Model = new PlotModel();
         }
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -52,13 +55,13 @@ namespace ThorusViewer.Models
             {
                 //case "SelectedViewport":
                 //    {
-                //        this.Model.Axes[0].Minimum = App.ControlPanelModel.SelectedViewport.MinLat;
-                //        this.Model.Axes[0].Maximum = App.ControlPanelModel.SelectedViewport.MaxLat;
-                //        this.Model.Axes[1].Minimum = App.ControlPanelModel.SelectedViewport.MinLon;
-                //        this.Model.Axes[1].Maximum = App.ControlPanelModel.SelectedViewport.MaxLon;
-                //        this.Model.Title = App.ControlPanelModel.SelectedViewport.Name;
+                //        this.Model.Axes[0].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLat;
+                //        this.Model.Axes[0].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLat;
+                //        this.Model.Axes[1].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLon;
+                //        this.Model.Axes[1].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLon;
+                //        this.Model.Title = ControlPanelModel.Instance.SelectedViewport.Name;
 
-                //        if (App.ControlPanelModel.SelectedViewport.Name == "Romania" &&
+                //        if (ControlPanelModel.Instance.SelectedViewport.Name == "Romania" &&
                 //            this.Model.Annotations.Contains(_roCounties) == false)
                 //            this.Model.Annotations.Add(_roCounties);
                 //        else if (this.Model.Annotations.Contains(_roCounties))
@@ -76,23 +79,23 @@ namespace ThorusViewer.Models
                 case "PaletteParams":
                 case "Offset":
                     {
-                        if (App.ControlPanelModel.SelectedSnapshot != null)
+                        if (ControlPanelModel.Instance.SelectedSnapshot != null)
                         {
-                            SimDateTime snapshot = App.ControlPanelModel.SelectedSnapshot;
+                            SimDateTime snapshot = ControlPanelModel.Instance.SelectedSnapshot;
                             string folder = SimulationData.DataFolder;
-                            if (string.IsNullOrEmpty(App.ControlPanelModel.SelectedCategory) == false)
-                                folder = Path.Combine(SimulationData.DataFolder, App.ControlPanelModel.SelectedCategory);
+                            if (string.IsNullOrEmpty(ControlPanelModel.Instance.SelectedCategory) == false)
+                                folder = Path.Combine(SimulationData.DataFolder, ControlPanelModel.Instance.SelectedCategory);
 
                             string fieldDataFileName = string.Format("{0}_MAP_{1}.thd",
-                                App.ControlPanelModel.SelectedDataType.Name,
+                                ControlPanelModel.Instance.SelectedDataType.Name,
                                 snapshot.Title);
 
                             string fieldDataFile = System.IO.Path.Combine(folder, fieldDataFileName);
 
-                            ReloadModel(fieldDataFile, App.ControlPanelModel.SelectedDataType.IsWindMap);
+                            ReloadModel(fieldDataFile, ControlPanelModel.Instance.SelectedDataType.IsWindMap);
                             this.Model.InvalidatePlot(true);
 
-                            App.ControlPanelModel.DoAutoSave();
+                            ControlPanelModel.Instance.DoAutoSave();
                         }
                     }
                     break;
@@ -107,31 +110,29 @@ namespace ThorusViewer.Models
                 DoReloadModel(fieldDataFile, isWindMap);
                 RefitMap();
             }
-            catch (Exception ex)
+            catch
             {
-                string s = ex.Message;
             }
         }
 
         public void RefitMap()
         {
-            Viewport v = App.ControlPanelModel.SelectedViewport;
+            Viewport v = ControlPanelModel.Instance.SelectedViewport;
 
             const float AspectRatioThreshold = 2.5f;
 
-            float MaxWidth = (float)App.Current.MainWindow.ActualWidth - 15f;
-            float MaxHeight = (float)App.Current.MainWindow.ActualHeight - 180f;
-
+            float MaxWidth = (float)_parent.Width;
+            float MaxHeight = (float)_parent.Height;
 
             if (v.AspectRatio > AspectRatioThreshold)
             {
-                (this.Model.PlotView as OxyPlot.Wpf.PlotView).Height = MaxWidth / v.AspectRatio;
-                (this.Model.PlotView as OxyPlot.Wpf.PlotView).Width = MaxWidth;
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Height = (int)(MaxWidth / v.AspectRatio);
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Width = (int)MaxWidth;
             }
             else
             {
-                (this.Model.PlotView as OxyPlot.Wpf.PlotView).Height = MaxHeight;
-                (this.Model.PlotView as OxyPlot.Wpf.PlotView).Width = MaxHeight * v.AspectRatio;
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Height = (int)MaxHeight;
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Width = (int)(MaxHeight * v.AspectRatio);
             }
         }
 
@@ -155,17 +156,17 @@ namespace ThorusViewer.Models
             bool precipitationMap = false;
 
             model.Title = string.Format("{0}: {1} [{2}]{3}",
-                App.ControlPanelModel.SelectedViewport.Name,
-                App.ControlPanelModel.SelectedDataType.Value,
+                ControlPanelModel.Instance.SelectedViewport.Name,
+                ControlPanelModel.Instance.SelectedDataType.Value,
                 fileTitle,
-                App.ControlPanelModel.SelectedDataType.Comments);
+                ControlPanelModel.Instance.SelectedDataType.Comments);
 
             DenseMatrix m = null;
 
-            int minLon = App.ControlPanelModel.SelectedViewport.MinLon.Round();
-            int maxLon = App.ControlPanelModel.SelectedViewport.MaxLon.Round();
-            int minLat = App.ControlPanelModel.SelectedViewport.MinLat.Round();
-            int maxLat = App.ControlPanelModel.SelectedViewport.MaxLat.Round();
+            int minLon = ControlPanelModel.Instance.SelectedViewport.MinLon.Round();
+            int maxLon = ControlPanelModel.Instance.SelectedViewport.MaxLon.Round();
+            int minLat = ControlPanelModel.Instance.SelectedViewport.MinLat.Round();
+            int maxLat = ControlPanelModel.Instance.SelectedViewport.MaxLat.Round();
 
             var fieldMatrix = FileSupport.LoadSubMatrixFromFile(fieldDataFile, minLon, maxLon, minLat, maxLat);
 
@@ -176,18 +177,6 @@ namespace ThorusViewer.Models
 
             float[,] data = null;
             float[,] data2 = null;
-
-            float actualOffset = 0;
-            if (wdp.ShowHeatmap)
-            {
-                float fOffset = (float)App.ControlPanelModel.Offset / 100;
-                float delta = wdp.MinMax.Delta;
-
-                if (wdp.GetType() == typeof(C_00_Palette))
-                    delta = 100;
-
-                actualOffset = delta * fOffset;
-            }
 
             if (wdp.GetType() == typeof(C_00_Palette))
             {
@@ -219,7 +208,7 @@ namespace ThorusViewer.Models
 
                 m = DenseMatrix.Create(C00.RowCount, C00.ColumnCount, (r, c) =>
                     {
-                        float cl = Math.Abs(C00[r, c]) + actualOffset;
+                        float cl = Math.Abs(C00[r, c]);
 
                         if (cl <= 0)
                             cl = 0;
@@ -268,8 +257,6 @@ namespace ThorusViewer.Models
             {
                 m = DenseMatrix.Create(fieldMatrix.RowCount, fieldMatrix.ColumnCount, (r, c) =>
                         fieldMatrix[r, c]);
-
-                m.ADD(actualOffset);
             }
 
             Range<float> minMax = wdp.MinMax;
@@ -302,15 +289,15 @@ namespace ThorusViewer.Models
                 {
                     switch (wdp.LineColor.ColorMode)
                     {
-                        case Views.LineColorMode.FixedColor:
+                        case LineColorMode.FixedColor:
                             lineColors.Add(wdp.LineColor.Color);
                             break;
 
-                        case Views.LineColorMode.Best_Contrast:
+                        case LineColorMode.Best_Contrast:
                             lineColors.Add(c.Complementary());
                             break;
 
-                        case Views.LineColorMode.Black_And_White:
+                        case LineColorMode.Black_And_White:
                             {
                                 System.Drawing.Color cw = System.Drawing.Color.FromArgb(c.R, c.G, c.B);
                                 float br = cw.GetBrightness();
@@ -331,8 +318,8 @@ namespace ThorusViewer.Models
             {
                 this.FileTitle += "_WINDMAP";
 
-                var D = (App.ControlPanelModel.SelectedViewport.MaxLon -
-                    App.ControlPanelModel.SelectedViewport.MinLon);
+                var D = (ControlPanelModel.Instance.SelectedViewport.MaxLon -
+                    ControlPanelModel.Instance.SelectedViewport.MinLon);
 
                 float hf = 1;
                 if (D > 200)
@@ -355,8 +342,8 @@ namespace ThorusViewer.Models
                 {
                     for (int c = 0; c < colCount; c++)
                     {
-                        float x = step * c + App.ControlPanelModel.SelectedViewport.MinLon;
-                        float y = App.ControlPanelModel.SelectedViewport.MaxLat - step * r;
+                        float x = step * c + ControlPanelModel.Instance.SelectedViewport.MinLon;
+                        float y = ControlPanelModel.Instance.SelectedViewport.MaxLat - step * r;
 
                         float dx = step * dataX[r, c];
                         float dy = step * -dataY[r, c];
@@ -407,7 +394,7 @@ namespace ThorusViewer.Models
                 {
                     if (precipitationMap)
                     {
-                        HeatMapSeriesEx cloudMapSeries = new HeatMapSeriesEx
+                        CloudMapSeries cloudMapSeries = new CloudMapSeries
                         {
                             Data = data.ToDoubleArray(),
                             X0 = cols[0],
@@ -466,9 +453,11 @@ namespace ThorusViewer.Models
         #region Map Features (coastlines, country borders etc)
         private void AddMapFeatures(PlotModel model, WeatherDataPalette wdp, OxyPalette pal, bool isWindMap)
         {
+            _ = isWindMap;
+
             LineSeries line = null;
 
-            string[] lines = File.ReadAllLines("Coastline.thd");
+            string[] lines = File.ReadAllLines("Data/Coastline.thd");
             foreach (string s in lines)
             {
                 if (s.StartsWith("#"))
@@ -479,24 +468,25 @@ namespace ThorusViewer.Models
                     if (line != null)
                         model.Series.Add(line);
 
-                    line = new LineSeries();
-                    line.CanTrackerInterpolatePoints = true;
-                    line.Color = OxyColors.Black;
-                    line.StrokeThickness = 1;
+                    line = new LineSeries
+                    {
+                        CanTrackerInterpolatePoints = true,
+                        Color = OxyColors.Black,
+                        StrokeThickness = 1
+                    };
+
                     continue;
                 }
 
-                Point pt = Point.Parse(s);
-                line.Points.Add(new DataPoint(pt.X, pt.Y));
+                line.Points.Add(s.ToDataPoint());
             }
 
             if (line != null)
                 model.Series.Add(line);
-            line = null;
 
             line = null;
 
-            lines = File.ReadAllLines("ContourRO.thd");
+            lines = File.ReadAllLines("Data/ContourRO.thd");
             foreach (string s in lines)
             {
                 if (s.StartsWith("#"))
@@ -507,15 +497,17 @@ namespace ThorusViewer.Models
                     if (line != null)
                         model.Series.Add(line);
 
-                    line = new LineSeries();
-                    line.CanTrackerInterpolatePoints = true;
-                    line.Color = OxyColors.Maroon;
-                    line.StrokeThickness = 2;
+                    line = new LineSeries
+                    {
+                        CanTrackerInterpolatePoints = true,
+                        Color = OxyColors.Maroon,
+                        StrokeThickness = 2
+                    };
+
                     continue;
                 }
 
-                Point pt = Point.Parse(s);
-                line.Points.Add(new DataPoint(pt.X, pt.Y));
+                line.Points.Add(s.ToDataPoint());
             }
 
             if (line != null)
@@ -526,9 +518,9 @@ namespace ThorusViewer.Models
             {
                 Unit = "° Latitude",
                 Position = OxyPlot.Axes.AxisPosition.Left,
-                FilterMinValue = App.ControlPanelModel.SelectedViewport.MinLat,
-                FilterMaxValue = App.ControlPanelModel.SelectedViewport.MaxLat,
-                AxisTitleDistance = 10,
+                FilterMinValue = ControlPanelModel.Instance.SelectedViewport.MinLat,
+                FilterMaxValue = ControlPanelModel.Instance.SelectedViewport.MaxLat,
+                AxisTitleDistance = 3,
 
                 //MajorGridlineStyle = LineStyle.Solid,
                 //MajorStep = 0.5,
@@ -537,19 +529,19 @@ namespace ThorusViewer.Models
             {
                 Unit = "° Longitude",
                 Position = OxyPlot.Axes.AxisPosition.Bottom,
-                FilterMinValue = App.ControlPanelModel.SelectedViewport.MinLon,
-                FilterMaxValue = App.ControlPanelModel.SelectedViewport.MaxLon,
-                AxisTitleDistance = 10,
+                FilterMinValue = ControlPanelModel.Instance.SelectedViewport.MinLon,
+                FilterMaxValue = ControlPanelModel.Instance.SelectedViewport.MaxLon,
+                AxisTitleDistance = 3,
                 AxislineStyle = LineStyle.Solid,
 
                 //MajorGridlineStyle = LineStyle.Solid,
                 //MajorStep = 0.5,
             });
 
-            model.Axes[0].Minimum = App.ControlPanelModel.SelectedViewport.MinLat;
-            model.Axes[0].Maximum = App.ControlPanelModel.SelectedViewport.MaxLat;
-            model.Axes[1].Minimum = App.ControlPanelModel.SelectedViewport.MinLon;
-            model.Axes[1].Maximum = App.ControlPanelModel.SelectedViewport.MaxLon;
+            model.Axes[0].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLat;
+            model.Axes[0].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLat;
+            model.Axes[1].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLon;
+            model.Axes[1].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLon;
 
             //if (isWindMap)
             //{
@@ -568,7 +560,7 @@ namespace ThorusViewer.Models
                     Minimum = wdp.MinMax.Min,
                     Maximum = wdp.MinMax.Max,
                     AxisDistance = 5,
-                    AxisTitleDistance = 5,
+                    AxisTitleDistance = 3,
                     AxislineThickness = 100,
                 });
             }
@@ -578,13 +570,13 @@ namespace ThorusViewer.Models
 
             //model.PlotType = PlotType.Polar;
 
-            if (App.ControlPanelModel.SelectedViewport.Name == "Romania")
+            if (ControlPanelModel.Instance.SelectedViewport.Name == "Romania")
             {
                 if (_roCounties == null)
                 {
                     _roCounties = new ImageAnnotation
                     {
-                        ImageSource = new OxyImage(File.ReadAllBytes("RO4.png")),
+                        ImageSource = new OxyImage((byte[])new ImageConverter().ConvertTo(Resources.RO4, typeof(byte[]))),
 
                         X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
                         Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
@@ -622,6 +614,19 @@ namespace ThorusViewer.Models
                 }
 
             return output;
+        }
+
+        public static DataPoint ToDataPoint(this string str)
+        {
+            try
+            {
+                string[] coords = str.Split(',');
+                return new DataPoint(double.Parse(coords[0]), double.Parse(coords[1]));
+            }
+            catch
+            {
+                return new DataPoint(0, 0);
+            }
         }
     }
 }

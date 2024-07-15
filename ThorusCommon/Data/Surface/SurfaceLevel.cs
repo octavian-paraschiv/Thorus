@@ -168,14 +168,14 @@ namespace ThorusCommon.Data
         private void InitGeographicalParams()
         {
             // ------------
-            string filePath = ".\\ElevationMap.thd";
+            string filePath = "Data/ElevationMap.thd";
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException();
 
             Height = FileSupport.LoadMatrixFromFile(filePath);
 
             // ------------
-            filePath = ".\\LandWaterMask.thd";
+            filePath = "Data/LandWaterMask.thd";
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException();
 
@@ -198,14 +198,14 @@ namespace ThorusCommon.Data
 
 
             // ------------
-            filePath = ".\\ADJ_LR.thd";
+            filePath = "Data/ADJ_LR.thd";
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException();
 
             this.ADJ_LR = FileSupport.LoadMatrixFromFile(filePath);
 
             // ------------
-            filePath = ".\\albedo.thd";
+            filePath = "Data/albedo.thd";
             if (File.Exists(filePath) == false)
                 throw new FileNotFoundException();
 

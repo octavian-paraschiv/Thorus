@@ -6,7 +6,7 @@ using OxyPlot.Series;
 
 namespace ThorusViewer.Series
 {
-    public class HeatMapSeriesEx : HeatMapSeries
+    public class CloudMapSeries : HeatMapSeries
     {
         public float[,] OData { get; set; }
         

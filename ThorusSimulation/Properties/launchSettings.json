@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ThorusSimulation": {
+      "commandName": "Project",
+      "commandLineArgs": "0 2 regen"
+    }
+  }
+}

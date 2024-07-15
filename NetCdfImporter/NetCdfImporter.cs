@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using Microsoft.Research.ScientificDataSet.NetCDF4;
+using System;
+using System.IO;
+using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
-using Microsoft.Research.ScientificDataSet.NetCDF4;
-using System.IO;
-using ThorusCommon.Thermodynamics;
-using MathNet.Numerics;
-using ThorusCommon;
-using ThorusCommon.Data;
-using ThorusCommon.Engine;
 
 namespace ThorusCommon.Data
 {
     public class NetCdfImporter : FileImporter
     {
         protected string SeaTempNcFile = "SST.nc";
-        
+
         public NetCdfImporter()
         {
             // ----------------------------------------------
             // Surface files - NC
             CorrectFilePath(ref SeaTempNcFile);
+        }
+
+        protected override void ImportLevel(int idx)
+        {
         }
 
         protected override void ImportSurface()
@@ -78,7 +75,7 @@ namespace ThorusCommon.Data
             return dt;
         }
 
-        private DenseMatrix ImportSstFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount, 
+        private DenseMatrix ImportSstFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount,
             int netCdfLevelIdx, string dataFile, bool flipUpDown = true)
         {
             DenseMatrix mat = null;
@@ -98,7 +95,7 @@ namespace ThorusCommon.Data
                 float last = 0;
                 mat = MatrixFactory.New((r, c) =>
                 {
-                    try 
+                    try
                     {
                         last = bigMat.SubMatrix(4 * r, 4, 4 * c, 4).RowSums().Sum() / 16;
                     }
@@ -153,7 +150,7 @@ namespace ThorusCommon.Data
         public DenseMatrix DataToMatrix(int rows, int cols, float[] data, bool flipUpDown = true)
         {
             float last = 0;
-            DenseMatrix mat = DenseMatrix.Create(rows, cols, (r, c) => 
+            DenseMatrix mat = DenseMatrix.Create(rows, cols, (r, c) =>
             {
                 int sc = c % cols;
                 int dataIdx = r * cols + sc;
@@ -171,10 +168,6 @@ namespace ThorusCommon.Data
                 return mat.FlipUpDown();
 
             return mat.EQ(8);
-        }
-
-        protected override void ImportLevel(int idx)
-        {
         }
     }
 }

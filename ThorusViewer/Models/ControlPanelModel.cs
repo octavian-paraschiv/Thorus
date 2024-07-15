@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using ThorusCommon.Engine;
 using ThorusCommon.Data;
+using ThorusCommon.Engine;
 
 namespace ThorusViewer.Models
 {
     public class ControlPanelModel : INotifyPropertyChanged
     {
+        public static ControlPanelModel Instance { get; } = new ControlPanelModel();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Viewport settings
         public List<Viewport> Viewports { get; private set; }
 
         private Viewport _selViewport = null;
-        public Viewport SelectedViewport 
+        public Viewport SelectedViewport
         {
             get
             {
@@ -116,21 +115,6 @@ namespace ThorusViewer.Models
         }
         #endregion
 
-        private double _offset = 0;
-        public double Offset
-        {
-            get
-            {
-                return _offset;
-            }
-
-            set
-            {
-                _offset = value;
-                FirePropertyChanged("Offset");
-            }
-        }
-
         public ControlPanelModel()
         {
             Viewports = new List<Viewport>();
@@ -143,19 +127,20 @@ namespace ThorusViewer.Models
             var euView = new Viewport("Europe", 25, EarthModel.MaxLat, -30, 65, 2);
             Viewports.Add(euView);
 
-            Viewports.Add(new Viewport("Romania", 43, 49, 20, 30, 2));
+            var roView = new Viewport("Romania", 43, 49, 20, 30, 2);
+            Viewports.Add(roView);
 
             Viewports.Add(new Viewport("Africa", -35, 40, -55, 95, 2));
-            
+
             Viewports.Add(new Viewport("N America", 0, EarthModel.MaxLat, EarthModel.MinLon, -30, 2));
             Viewports.Add(new Viewport("N Asia", 0, EarthModel.MaxLat, 65, EarthModel.MaxLon, 2));
-            
+
             Viewports.Add(new Viewport("N Atlantic", 0, EarthModel.MaxLat, -75, 20, 2));
             Viewports.Add(new Viewport("E.Europe and Russia", 25, EarthModel.MaxLat, 20, 115, 2));
 
             Viewports.Add(new Viewport("S America", -60, 15, -105, -25, 2));
             Viewports.Add(new Viewport("S Atlantic", EarthModel.MinLat, 0, -70, 30, 2));
-            
+
             Viewports.Add(new Viewport("Australia + Indonesia", -50, 10, 90, EarthModel.MaxLon, 2));
 
             DataTypes = new List<DataType>();
@@ -214,7 +199,7 @@ namespace ThorusViewer.Models
             DataTypes.Add(new DataType("H_01", "Relative humidity @ mid level (~1500m)"));
             DataTypes.Add(new DataType("P_01", "Pressure @ mid level (~1500m)"));
             DataTypes.Add(new DataType("P_01", "Windmap @ mid level (~1500m)", true));
-            
+
             #endregion
 
             #region Top level data
@@ -257,7 +242,7 @@ namespace ThorusViewer.Models
 
             #endregion
 
-            SelectedViewport = euView;
+            SelectedViewport = roView;
             SelectedDataType = meanTe;
         }
 
@@ -293,7 +278,7 @@ namespace ThorusViewer.Models
             {
                 float h = MaxLat - MinLat;
                 float w = MaxLon - MinLon;
-                
+
                 if (h == 0)
                     h = 1;
 
@@ -303,7 +288,7 @@ namespace ThorusViewer.Models
 
         public override string ToString()
         {
-            return string.Format("{0} Lat=[{1}..{2}], Lon=[{3}..{4}]", 
+            return string.Format("{0} Lat=[{1}..{2}], Lon=[{3}..{4}]",
                 Name, MinLat, MaxLat, MinLon, MaxLon);
         }
 
@@ -334,7 +319,7 @@ namespace ThorusViewer.Models
             return string.Format("{0} [{1}]", Name, Value);
         }
 
-        public DataType(string name, string value, bool isWindMap=false, bool isStatsAvailable = true)
+        public DataType(string name, string value, bool isWindMap = false, bool isStatsAvailable = true)
         {
             this.Name = name;
             this.Value = value;

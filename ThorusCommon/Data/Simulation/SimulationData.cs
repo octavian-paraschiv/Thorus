@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using ThorusCommon.IO;
 using ThorusCommon.IO.Settings;
 
@@ -13,6 +12,12 @@ namespace ThorusCommon.Engine
         static string _workFolder = Environment.CurrentDirectory;
         static string _dataFolder = "";
         static DictionaryFile _settingsFile;
+
+        static object _availableSnapshotsLock = new object();
+        static List<SimDateTime> _availableSnapshots = new List<SimDateTime>();
+        static List<string> _availableDataTypes = new List<string>();
+
+        public static event EventHandler SnapshotListChanged = null;
 
         public static string WorkFolder
         {
@@ -53,11 +58,6 @@ namespace ThorusCommon.Engine
             }
         }
 
-
-        static object _availableSnapshotsLock = new object();
-
-        static List<SimDateTime> _availableSnapshots = new List<SimDateTime>();
-        static List<string> _availableDataTypes = new List<string>();
 
         public static void SetNewDataFolder(string path)
         {
@@ -104,12 +104,8 @@ namespace ThorusCommon.Engine
             return null;
         }
 
-        public static event EventHandler SnapshotListChanged = null;
-
         static SimulationData()
         {
-            Init();
-
             string winDir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
             string winRoot = Path.GetPathRoot(winDir);
             string programDataDir = Path.Combine(winRoot, "ProgramData");
@@ -130,24 +126,6 @@ namespace ThorusCommon.Engine
             catch
             {
                 _workFolder = winRoot;
-            }
-        }
-
-        static bool _init = false;
-        public static void Init()
-        {
-            if (_init)
-                return;
-
-            try
-            {
-                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
-                _init = true;
-            }
-            catch
-            {
-                _init = false;
             }
         }
 
@@ -180,8 +158,7 @@ namespace ThorusCommon.Engine
 
                     _availableSnapshots.Sort();
 
-                    if (SnapshotListChanged != null)
-                        SnapshotListChanged(null, EventArgs.Empty);
+                    SnapshotListChanged?.Invoke(null, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {

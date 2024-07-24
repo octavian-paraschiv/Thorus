@@ -27,7 +27,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ThorusCommon.IO" Version="1.1.4" />
+    <PackageReference Include="ThorusCommon.IO" Version="1.1.6" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

@@ -260,7 +260,6 @@ namespace ThorusViewer.Models
             }
 
             Range<float> minMax = wdp.MinMax;
-            float lineSpacing = wdp.LineSpacing;
 
             m = m.MIN(minMax.Max).MAX(minMax.Min);
             data = m.Transpose().ToArray();

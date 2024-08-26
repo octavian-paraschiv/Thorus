@@ -7,14 +7,6 @@ namespace ThorusViewer.Forms
         public ProgressForm()
         {
             InitializeComponent();
-
-            pbProgress.Minimum = 0;
-            pbProgress.Maximum = 100;
-            pbProgress.Step = 1;
-
-            this.ShowInTaskbar = false;
-            this.TopLevel = true;
-            this.TopMost = true;
         }
 
         private delegate void DisplayProgressDG(IWin32Window owner, int current, int total, string desc);
@@ -30,24 +22,31 @@ namespace ThorusViewer.Forms
             {
                 if (total < 0)
                 {
-                    this.Show(owner);
+                    if (!this.Visible)
+                        this.Show(owner);
+
                     this.lblDesc.Text = desc;
                     pbProgress.Style = ProgressBarStyle.Marquee;
                 }
-                else if (total == 0)
+                else if (total == 0 && this.Visible)
                 {
                     this.Hide();
                 }
                 else
                 {
-                    this.Show(owner);
+                    if (!this.Visible)
+                        this.Show(owner);
+
                     pbProgress.Style = ProgressBarStyle.Continuous;
                     var percent = (100 * current / total);
                     this.lblDesc.Text = $"{desc}: {current} of {total} steps ... {percent}% done";
                     pbProgress.Value = percent;
                 }
             }
-            catch { }
+            catch
+            {
+                // We don't care about the error message.
+            }
             finally
             {
                 Application.DoEvents();

@@ -56,6 +56,9 @@
             this.pbProgress.Name = "pbProgress";
             this.pbProgress.Size = new System.Drawing.Size(482, 18);
             this.pbProgress.TabIndex = 0;
+            this.pbProgress.Minimum = 0;
+            this.pbProgress.Maximum = 100;
+            this.pbProgress.Step = 1;
             // 
             // lblDesc
             // 

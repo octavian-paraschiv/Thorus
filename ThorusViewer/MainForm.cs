@@ -84,7 +84,7 @@ namespace ThorusViewer.Forms
                 string[] credentials = ConfigurationManager.AppSettings["apiCredentials"].Split(':');
 
                 var uploader = new FileUploader(
-                    uploadUrl: $"{baseUri}/meteo/uploadDatabase",
+                    uploadUrl: $"{baseUri}/meteo/database",
                     authUrl: $"{baseUri}/users/authenticate",
                     uploadFilePath: exportDbPath,
                     loginId: credentials[0],
@@ -299,7 +299,7 @@ namespace ThorusViewer.Forms
             if (_simDlg != null || _pf.Visible)
             {
                 MessageBox.Show(this, "Please close all open windows before exiting the application.");
-                _simDlg.BringToFront();
+                _simDlg?.BringToFront();
                 e.Cancel = true;
             }
         }

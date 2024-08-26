@@ -15,7 +15,7 @@ namespace ThorusViewer.Palettes
         {
             string[] fields = str.Split(new char[] { ' ', ',', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             if (fields.Length < 3)
-                return OxyColors.Transparent;
+                return OxyColors.White;
 
             int i = 0;
             float r, g, b;
@@ -28,7 +28,7 @@ namespace ThorusViewer.Palettes
                 throw new Exception("ColorFromString: specify the RGB color components in range [0..1]");
 
             if ((r == g) && (g == b) && (r == 1))
-                return OxyColors.Transparent;
+                return OxyColors.White;
 
             return OxyColor.FromRgb((byte)(255 * r), (byte)(255 * g), (byte)(255 * b));
         }

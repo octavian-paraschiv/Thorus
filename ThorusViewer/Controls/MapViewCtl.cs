@@ -32,7 +32,10 @@ namespace OPMedia.UI.Controls
 
                 plotView.Model = _viewModel.Model;
             }
-            catch { }
+            catch
+            {
+                // Don't care about exception
+            }
         }
 
         public void SaveImage(bool isAutoSave)
@@ -48,7 +51,7 @@ namespace OPMedia.UI.Controls
                 string saveFolder = System.IO.Path.Combine(SimulationData.WorkFolder, imgFolder);
                 string jpgFile = string.Format("{0}.PNG", fileName);
 
-                if (Directory.Exists(saveFolder) == false)
+                if (!Directory.Exists(saveFolder))
                     Directory.CreateDirectory(saveFolder);
 
                 string imageFile = System.IO.Path.Combine(saveFolder, jpgFile);
@@ -59,7 +62,6 @@ namespace OPMedia.UI.Controls
                 SaveFileDialog dlg = new SaveFileDialog
                 {
                     AddExtension = true,
-                    DefaultExt = "PNG",
                     Title = "Save image as ...",
                     CreatePrompt = true,
                     ValidateNames = true,
@@ -87,7 +89,7 @@ namespace OPMedia.UI.Controls
                 return;
             }
 
-            string pngFile = System.IO.Path.ChangeExtension(imageFile, "png");
+            string pngFile = System.IO.Path.ChangeExtension(imageFile, ".tmp");
 
             // PlotView can only save as PNG. 
             // We need to do a conversion PNG->JPG
@@ -98,7 +100,6 @@ namespace OPMedia.UI.Controls
                 using (var img = System.Drawing.Image.FromFile(pngFile))
                 {
                     img.Save(imageFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    img.Dispose();
                 }
 
                 if (File.Exists(imageFile))

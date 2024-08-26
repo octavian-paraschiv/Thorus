@@ -9,12 +9,12 @@ namespace ThorusViewer.Forms
             InitializeComponent();
         }
 
-        private delegate void DisplayProgressDG(IWin32Window owner, int current, int total, string desc);
-        public void DisplayProgress(IWin32Window owner, int current, int total, string desc)
+        private delegate void DisplayProgressDG(Form owner, int current, int total, string desc);
+        public void DisplayProgress(Form owner, int current, int total, string desc)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new DisplayProgressDG(DisplayProgress), current, total, desc);
+                this.Invoke(new DisplayProgressDG(DisplayProgress), owner, current, total, desc);
                 return;
             }
 
@@ -23,7 +23,10 @@ namespace ThorusViewer.Forms
                 if (total < 0)
                 {
                     if (!this.Visible)
+                    {
                         this.Show(owner);
+                        this.CenterToParent();
+                    }
 
                     this.lblDesc.Text = desc;
                     pbProgress.Style = ProgressBarStyle.Marquee;
@@ -35,8 +38,10 @@ namespace ThorusViewer.Forms
                 else
                 {
                     if (!this.Visible)
+                    {
                         this.Show(owner);
-
+                        this.CenterToParent();
+                    }
                     pbProgress.Style = ProgressBarStyle.Continuous;
                     var percent = (100 * current / total);
                     this.lblDesc.Text = $"{desc}: {current} of {total} steps ... {percent}% done";

@@ -53,24 +53,6 @@ namespace ThorusViewer.Models
         {
             switch (e.PropertyName)
             {
-                //case "SelectedViewport":
-                //    {
-                //        this.Model.Axes[0].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLat;
-                //        this.Model.Axes[0].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLat;
-                //        this.Model.Axes[1].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLon;
-                //        this.Model.Axes[1].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLon;
-                //        this.Model.Title = ControlPanelModel.Instance.SelectedViewport.Name;
-
-                //        if (ControlPanelModel.Instance.SelectedViewport.Name == "Romania" &&
-                //            this.Model.Annotations.Contains(_roCounties) == false)
-                //            this.Model.Annotations.Add(_roCounties);
-                //        else if (this.Model.Annotations.Contains(_roCounties))
-                //            this.Model.Annotations.Remove(_roCounties);
-
-                //        this.Model.InvalidatePlot(true);
-                //    }
-                //    break;
-
                 case "ShowContours":
                 case "SelectedViewport":
                 case "SelectedSnapshot":
@@ -112,6 +94,7 @@ namespace ThorusViewer.Models
             }
             catch
             {
+                // Don't care
             }
         }
 

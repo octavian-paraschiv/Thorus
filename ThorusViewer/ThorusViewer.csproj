@@ -72,9 +72,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Palettes\FOG.thd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Palettes\B.thd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

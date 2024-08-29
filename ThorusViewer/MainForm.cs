@@ -98,10 +98,10 @@ namespace ThorusViewer.Forms
                     _pf.DisplayProgress(this, 0, 0, "");
 
                     if (t?.Result?.Length > 0)
-                        MessageBox.Show($"Upload failed. Details: {t.Result}",
+                        MessageBox.Show($"Failed to publish subregion data. {t.Result}",
                             Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     else
-                        MessageBox.Show("Data succesfully published.",
+                        MessageBox.Show("Subregion data succesfully published.",
                             Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }, TaskScheduler.FromCurrentSynchronizationContext());
@@ -109,7 +109,7 @@ namespace ThorusViewer.Forms
             catch (Exception ex)
             {
                 _pf.DisplayProgress(this, 0, 0, "");
-                MessageBox.Show($"Upload failed. Details: {ex.Message}",
+                MessageBox.Show($"Failed to publish subregion data. Details: {ex.Message}",
                     Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -256,15 +256,14 @@ namespace ThorusViewer.Forms
 
                 _pf.DisplayProgress(this, 0, 0, "");
 
-                MessageBox.Show("Done.");
+                MessageBox.Show("Succesfully generated subregion data.",
+                    Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
                 _pf.DisplayProgress(this, 0, 0, "");
+                MessageBox.Show($"Failed to generate subregion data. Details: {ex.Message}",
+                    Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

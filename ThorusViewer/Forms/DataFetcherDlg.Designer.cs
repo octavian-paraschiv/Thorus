@@ -196,7 +196,6 @@
             this.btnAbort.TabIndex = 6;
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = true;
-            this.btnAbort.Click += new System.EventHandler(this.OnAbort);
             // 
             // btnDone
             // 

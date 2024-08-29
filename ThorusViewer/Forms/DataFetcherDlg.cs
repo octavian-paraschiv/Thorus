@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define FETCH_SST
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -35,6 +37,8 @@ namespace ThorusViewer.Forms
             btnDone.Visible = false;
 
             this.Shown += (s1, e1) => ValidateInitialConditionFiles();
+
+            this.btnAbort.Click += (s2, e2) => _abort.Set();
         }
 
         private void OnFetchSstData(object sender, EventArgs e)
@@ -52,7 +56,11 @@ namespace ThorusViewer.Forms
                 try
                 {
                     DeleteClientSideData();
-                    // await FetchSstFile(selDate).ConfigureAwait(false);
+
+#if FETCH_SST
+                    await FetchSstFile(selDate).ConfigureAwait(false);
+#endif
+
                     await FetchGribFile().ConfigureAwait(false);
                 }
                 catch (TaskCanceledException)
@@ -85,7 +93,10 @@ namespace ThorusViewer.Forms
 
             simProc?.Kill();
 
-            // FileDelete("SST.nc");
+#if FETCH_SST
+            FileDelete("SST.nc");
+#endif
+
             FileDelete("input.grib");
 
             Log($"Client side data deleted...");
@@ -96,7 +107,7 @@ namespace ThorusViewer.Forms
                 ValidateInitialConditionFiles();
         }
 
-        /*
+#if FETCH_SST
         private async Task FetchSstFile(DateTime selDate)
         {
             try
@@ -143,7 +154,7 @@ namespace ThorusViewer.Forms
                 Log(ex.Message);
             }
         }
-        */
+#endif
 
         private async Task FetchGribFile()
         {
@@ -263,10 +274,12 @@ namespace ThorusViewer.Forms
 
         private void FileDelete(string file)
         {
-            Log($"Deleting: {file}");
-
             string path = Path.Combine(SimulationData.WorkFolder, file);
-            File.Delete(path);
+            if (File.Exists(path))
+            {
+                Log($"Deleting: {file}");
+                FileDelete(path);
+            }
         }
 
         private delegate void LogDG(string msg, params object[] args);
@@ -301,7 +314,5 @@ namespace ThorusViewer.Forms
                 txtSimProcOut.Text = ex.Message;
             }
         }
-
-        private void OnAbort(object sender, EventArgs e) => _abort.Set();
     }
 }

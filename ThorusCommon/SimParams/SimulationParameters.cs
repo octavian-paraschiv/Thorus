@@ -15,7 +15,7 @@ namespace ThorusCommon
         const string DataFileName = "SimParams.thd";
         private readonly string DataFilePath = string.Empty;
 
-        const float DefSolarWarmupDailyQuantum = (60f / 365f);
+        const float DefSolarWarmupDailyQuantum = 0.1644f;
 
         #region Singleton
         public static SimulationParameters __instance = new SimulationParameters();
@@ -207,13 +207,13 @@ namespace ThorusCommon
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate cyclones")]
         [Range(0f, 1f)]
-        [DefaultValue(0.5f)]
+        [DefaultValue(0.33f)]
         public float CyclogeneticFactor { get; set; }
 
         [Category("Atmosphere model / Cyclogenesys")]
         [Description("How prone is the atmosphere to generate anticyclones")]
         [Range(0f, 1f)]
-        [DefaultValue(0.5f)]
+        [DefaultValue(0.33f)]
         public float AntiCyclogeneticFactor { get; set; }
 
         public enum AdvectionModels
@@ -246,7 +246,7 @@ namespace ThorusCommon
 
         [Category("Temperature model / Air")]
         [Description("Reference air temp at 2000m at 25 deg north, in spring and autumn.")]
-        [DefaultValue(25.0f)]
+        [DefaultValue(22.0f)]
         [Range(20, 30)]
         public float _DefaultRefTemp { get; set; }
 
@@ -369,13 +369,13 @@ namespace ThorusCommon
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the 'period' of the jet stream oscillation (that is, the interval between two similar phases of the polar jet stream in the same geographical region)")]
-        [DefaultValue(7f)]
+        [DefaultValue(6.5f)]
         [Range(1, 20)]
         public float JetStreamPeriod { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A virtual variable that represents the number of 'peaks' of the jet stream oscillation")]
-        [DefaultValue(7f)]
+        [DefaultValue(6.5f)]
         [Range(3, 15)]
         public float JetStreamPeaks { get; set; }
 
@@ -452,13 +452,13 @@ namespace ThorusCommon
             "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n"
         )]
 
-        [DefaultValue(JetStreamPatterns.VariableJet_SeasonalReversal)]
+        [DefaultValue(JetStreamPatterns.AdaptiveJet)]
         public JetStreamPatterns JetStreamPattern { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("A variable that represents the variation period of the jet stream oscillation.\n\n" +
             "It is applicable only when Variable_WithReversal is selected")]
-        [DefaultValue(7f)]
+        [DefaultValue(6.5f)]
         [Range(-365f, 365f)]
         public float JetStreamVariabilityPeriod { get; set; }
 

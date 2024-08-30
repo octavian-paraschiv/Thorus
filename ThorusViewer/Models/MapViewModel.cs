@@ -45,8 +45,9 @@ namespace ThorusViewer.Models
         public MapViewModel(Control parent)
         {
             _parent = parent;
+
             ControlPanelModel.Instance.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ControlPanelModel_PropertyChanged);
-            this.Model = new PlotModel();
+            this.Model = new PlotModel { Background = OxyColors.White };
         }
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -143,6 +144,8 @@ namespace ThorusViewer.Models
                 ControlPanelModel.Instance.SelectedDataType.Value,
                 fileTitle,
                 ControlPanelModel.Instance.SelectedDataType.Comments);
+
+
 
             DenseMatrix m = null;
 
@@ -365,8 +368,6 @@ namespace ThorusViewer.Models
                         arrow.HeadLength = 3 * line.StrokeThickness;
 
                         model.Annotations.Add(arrow);
-
-                        //goto MapFeatures;
                     }
                 }
             }
@@ -408,7 +409,7 @@ namespace ThorusViewer.Models
                         RowCoordinates = rows.ToArray().ToDoubleArray(),
                         ContourLevels = levels.ToArray().ToDoubleArray(),
 
-                        ContourColors = lineColors.ToArray(), // Same # elements as the levels' array
+                        ContourColors = lineColors.ToArray(), // Same no. of elements as the levels' array
 
                         Data = (data2 == null) ? data.ToDoubleArray() : data2.ToDoubleArray(),
 
@@ -460,7 +461,7 @@ namespace ThorusViewer.Models
                     continue;
                 }
 
-                line.Points.Add(s.ToDataPoint());
+                line?.Points.Add(s.ToDataPoint());
             }
 
             if (line != null)
@@ -489,7 +490,7 @@ namespace ThorusViewer.Models
                     continue;
                 }
 
-                line.Points.Add(s.ToDataPoint());
+                line?.Points.Add(s.ToDataPoint());
             }
 
             if (line != null)
@@ -502,11 +503,9 @@ namespace ThorusViewer.Models
                 Position = OxyPlot.Axes.AxisPosition.Left,
                 FilterMinValue = ControlPanelModel.Instance.SelectedViewport.MinLat,
                 FilterMaxValue = ControlPanelModel.Instance.SelectedViewport.MaxLat,
-                AxisTitleDistance = 3,
-
-                //MajorGridlineStyle = LineStyle.Solid,
-                //MajorStep = 0.5,
+                AxisTitleDistance = 3
             });
+
             model.Axes.Add(new OxyPlot.Axes.LinearAxis
             {
                 Unit = "° Longitude",
@@ -514,10 +513,7 @@ namespace ThorusViewer.Models
                 FilterMinValue = ControlPanelModel.Instance.SelectedViewport.MinLon,
                 FilterMaxValue = ControlPanelModel.Instance.SelectedViewport.MaxLon,
                 AxisTitleDistance = 3,
-                AxislineStyle = LineStyle.Solid,
-
-                //MajorGridlineStyle = LineStyle.Solid,
-                //MajorStep = 0.5,
+                AxislineStyle = LineStyle.Solid
             });
 
             model.Axes[0].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLat;
@@ -525,32 +521,24 @@ namespace ThorusViewer.Models
             model.Axes[1].Minimum = ControlPanelModel.Instance.SelectedViewport.MinLon;
             model.Axes[1].Maximum = ControlPanelModel.Instance.SelectedViewport.MaxLon;
 
-            //if (isWindMap)
-            //{
-            //}
-            //else
+            model.Axes.Add(new OxyPlot.Axes.LinearColorAxis
             {
-                model.Axes.Add(new OxyPlot.Axes.LinearColorAxis
-                {
-                    Unit = wdp.Unit,
-                    Position = OxyPlot.Axes.AxisPosition.Right,
-                    Palette = pal,
-                    HighColor = OxyColors.Black,
-                    LowColor = OxyColors.Black,
-                    FilterMinValue = wdp.MinMax.Min,
-                    FilterMaxValue = wdp.MinMax.Max,
-                    Minimum = wdp.MinMax.Min,
-                    Maximum = wdp.MinMax.Max,
-                    AxisDistance = 5,
-                    AxisTitleDistance = 3,
-                    AxislineThickness = 100,
-                });
-            }
+                Unit = wdp.Unit,
+                Position = OxyPlot.Axes.AxisPosition.Right,
+                Palette = pal,
+                HighColor = OxyColors.Black,
+                LowColor = OxyColors.Black,
+                FilterMinValue = wdp.MinMax.Min,
+                FilterMaxValue = wdp.MinMax.Max,
+                Minimum = wdp.MinMax.Min,
+                Maximum = wdp.MinMax.Max,
+                AxisDistance = 5,
+                AxisTitleDistance = 3,
+                AxislineThickness = 100,
+            });
 
             model.PlotMargins = new OxyThickness(40, 0, 50, 40);
             model.TitleFontSize = 14;
-
-            //model.PlotType = PlotType.Polar;
 
             if (ControlPanelModel.Instance.SelectedViewport.Name == "Romania")
             {

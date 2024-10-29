@@ -62,7 +62,7 @@ Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 Source: "{#BINDIR}\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\*.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\*.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BINDIR}\Data\*"; DestDir: "{app}\Data\Grib.Api"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "{#BINDIR}\Data\*"; DestDir: "{app}\Data"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "{#BINDIR}\Grib.Api\*"; DestDir: "{app}\Grib.Api"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "{#BINDIR}\Images\*"; DestDir: "{app}\Images\Palettes"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "{#BINDIR}\Palettes\*"; DestDir: "{app}\Palettes"; Flags: ignoreversion createallsubdirs recursesubdirs

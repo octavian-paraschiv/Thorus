@@ -119,29 +119,29 @@ namespace ThorusViewer.Models
         {
             Viewports = new List<Viewport>();
 
-            Viewports.Add(new Viewport("Entire World", EarthModel.MinLat, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
+            Viewports.Add(new Viewport("Entire World", "EWR", EarthModel.MinLat, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
 
-            Viewports.Add(new Viewport("Northern Hemisphere", 0, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
-            Viewports.Add(new Viewport("Southern Hemisphere", EarthModel.MinLat, 0, EarthModel.MinLon, EarthModel.MaxLon));
+            Viewports.Add(new Viewport("Northern Hemisphere", "NHM", 0, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
+            Viewports.Add(new Viewport("Southern Hemisphere", "SHM", EarthModel.MinLat, 0, EarthModel.MinLon, EarthModel.MaxLon));
 
-            var euView = new Viewport("Europe", 25, EarthModel.MaxLat, -30, 65, 2);
+            var euView = new Viewport("Europe", "EU", 25, EarthModel.MaxLat, -30, 65, 2);
             Viewports.Add(euView);
 
-            var roView = new Viewport("Romania", 43, 49, 20, 30, 2);
+            var roView = new Viewport("Romania", "RO", 43, 49, 20, 30, 2);
             Viewports.Add(roView);
 
-            Viewports.Add(new Viewport("Africa", -35, 40, -55, 95, 2));
+            Viewports.Add(new Viewport("Africa", "AF", -35, 40, -55, 95, 2));
 
-            Viewports.Add(new Viewport("N America", 0, EarthModel.MaxLat, EarthModel.MinLon, -30, 2));
-            Viewports.Add(new Viewport("N Asia", 0, EarthModel.MaxLat, 65, EarthModel.MaxLon, 2));
+            Viewports.Add(new Viewport("N America", "NAM", 0, EarthModel.MaxLat, EarthModel.MinLon, -30, 2));
+            Viewports.Add(new Viewport("N Asia", "NAS", 0, EarthModel.MaxLat, 65, EarthModel.MaxLon, 2));
 
-            Viewports.Add(new Viewport("N Atlantic", 0, EarthModel.MaxLat, -75, 20, 2));
-            Viewports.Add(new Viewport("E.Europe and Russia", 25, EarthModel.MaxLat, 20, 115, 2));
+            Viewports.Add(new Viewport("N Atlantic", "NAT", 0, EarthModel.MaxLat, -75, 20, 2));
+            Viewports.Add(new Viewport("E.Europe and Russia", "EER", 25, EarthModel.MaxLat, 20, 115, 2));
 
-            Viewports.Add(new Viewport("S America", -60, 15, -105, -25, 2));
-            Viewports.Add(new Viewport("S Atlantic", EarthModel.MinLat, 0, -70, 30, 2));
+            Viewports.Add(new Viewport("S America", "SAM", -60, 15, -105, -25, 2));
+            Viewports.Add(new Viewport("S Atlantic", "SAT", EarthModel.MinLat, 0, -70, 30, 2));
 
-            Viewports.Add(new Viewport("Australia + Indonesia", -50, 10, 90, EarthModel.MaxLon, 2));
+            Viewports.Add(new Viewport("Australia + Indonesia", "AUI", -50, 10, 90, EarthModel.MaxLon, 2));
 
             DataTypes = new List<DataType>();
 
@@ -265,7 +265,9 @@ namespace ThorusViewer.Models
 
     public class Viewport
     {
+        public string Code { get; private set; }
         public string Name { get; private set; }
+
         public float MinLat { get; private set; }
         public float MaxLat { get; private set; }
         public float MinLon { get; private set; }
@@ -287,14 +289,12 @@ namespace ThorusViewer.Models
         }
 
         public override string ToString()
-        {
-            return string.Format("{0} Lat=[{1}..{2}], Lon=[{3}..{4}]",
-                Name, MinLat, MaxLat, MinLon, MaxLon);
-        }
+            => $"{Name} [{Code}] Lat=[{MinLat}..{MaxLat}], Lon=[{MinLon}..{MaxLon}]";
 
-        public Viewport(string name, float minLat, float maxLat, float minLon, float maxLon, float dataStep = 5)
+        public Viewport(string name, string code, float minLat, float maxLat, float minLon, float maxLon, float dataStep = 5)
         {
             this.Name = name;
+            this.Code = code;
             this.MinLat = minLat;
             this.MaxLat = maxLat;
             this.MinLon = minLon;

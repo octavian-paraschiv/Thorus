@@ -3,6 +3,7 @@ using OPMFileUploader;
 using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ThorusCommon;
@@ -17,6 +18,8 @@ namespace ThorusViewer.Forms
     public partial class MainForm : Form
     {
         private readonly ProgressForm _pf = new ProgressForm();
+
+        private static readonly string[] ExportRegions = new string[] { "EU", "RO" };
 
         public MainForm()
         {
@@ -40,7 +43,7 @@ namespace ThorusViewer.Forms
             mapView.RefitMap();
         }
 
-        
+
 
         void ControlPanelModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -84,7 +87,7 @@ namespace ThorusViewer.Forms
                 string[] credentials = ConfigurationManager.AppSettings["apiCredentials"].Split(':');
 
                 var uploader = new FileUploader(
-                    uploadUrl: $"{baseUri}/meteo/database",
+                    uploadUrl: $"{baseUri}/meteo/database/preview",
                     authUrl: $"{baseUri}/users/authenticate",
                     uploadFilePath: exportDbPath,
                     loginId: credentials[0],
@@ -118,6 +121,10 @@ namespace ThorusViewer.Forms
         {
             try
             {
+                Viewport[] exportRegions = ControlPanelModel.Instance.Viewports
+                    .Where(v => ExportRegions.Contains(v.Code))
+                    .ToArray();
+
                 _pf.DisplayProgress(this, 0, -1, "Preparing to generate subregion data...");
 
                 string exportDbPath = Path.Combine(Directory.GetParent(SimulationData.DataFolder).FullName, "Snapshot.db3");
@@ -125,7 +132,10 @@ namespace ThorusViewer.Forms
                 MeteoDB exportDb = null;
                 try
                 {
-                    File.Copy("Data/Template.db3", "./Template.db3");
+                    if (File.Exists(exportDbPath))
+                        File.Delete(exportDbPath);
+
+                    File.Copy("Data/Template.db3", "./Template.db3", true);
                     exportDb = MeteoDB.OpenOrCreate(exportDbPath, true);
                 }
                 finally
@@ -165,7 +175,7 @@ namespace ThorusViewer.Forms
                             case "N_DD":
                             case "P_00":
                             case "P_01":
-                                count += exportDb.Regions.Count;
+                                count += exportRegions.Length;
                                 break;
 
                             default:
@@ -173,7 +183,7 @@ namespace ThorusViewer.Forms
                         }
                     }
 
-                    foreach (var region in exportDb.Regions)
+                    foreach (var region in exportRegions)
                     {
                         foreach (string file in allFiles)
                         {
@@ -215,7 +225,7 @@ namespace ThorusViewer.Forms
                                     continue;
                             }
 
-                            exportDb.AddMatrix(region.Id, timestamp, type, output);
+                            exportDb.AddMatrix(region.Code, timestamp, type, output);
 
                             if (isWindMap)
                             {
@@ -241,8 +251,9 @@ namespace ThorusViewer.Forms
 
                                 string mType = type.Replace("P_0", "W_0");
                                 string aType = type.Replace("P_0", "W_1");
-                                exportDb.AddMatrix(region.Id, timestamp, mType, module);
-                                exportDb.AddMatrix(region.Id, timestamp, aType, angle);
+
+                                exportDb.AddMatrix(region.Code, timestamp, mType, module);
+                                exportDb.AddMatrix(region.Code, timestamp, aType, angle);
                             }
 
                             _pf.DisplayProgress(this, step++, count, "Generating subregion data...");

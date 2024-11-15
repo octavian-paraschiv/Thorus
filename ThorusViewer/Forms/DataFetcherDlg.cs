@@ -1,4 +1,4 @@
-﻿// #define FETCH_SST
+﻿#define FETCH_SST
 
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,11 @@ namespace ThorusViewer.Forms
             if (res != DialogResult.Yes)
                 return;
 
-            DateTime selDate = NetCdfImporter.ImportDateTime("SST.NC");
+            // Caclulate the date of the first Sunday that is later than today's date minus 2 weeks
+            DateTime today = DateTime.Today;
+            DateTime dateMinusTwoWeeks = today.AddDays(-14);
+            DateTime selDate = dateMinusTwoWeeks.AddDays(7 - (int)dateMinusTwoWeeks.DayOfWeek);
+
             Log($"Initial condition download started for date: {selDate:yyyy-MM-dd}");
 
             Task.Factory.StartNew(async () =>
@@ -116,7 +120,7 @@ namespace ThorusViewer.Forms
                     return;
 
                 string sstRequestUrlFmt = ConfigurationManager.AppSettings["noaaSstGetUrl"];
-                if (string.IsNullOrEmpty(sstRequestUrlFmt) == false)
+                if (sstRequestUrlFmt?.Length > 0)
                 {
                     sstRequestUrlFmt = sstRequestUrlFmt
                         .Replace("##YEAR##", selDate.Year.ToString())
@@ -149,7 +153,7 @@ namespace ThorusViewer.Forms
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log(ex.Message);
             }
@@ -256,7 +260,7 @@ namespace ThorusViewer.Forms
             return allFilesPresent;
         }
 
-        private Image ValidateFile(string file, ref bool canSimulate)
+        private static Image ValidateFile(string file, ref bool canSimulate)
         {
             bool fileExists = FileExists(file);
 
@@ -265,7 +269,7 @@ namespace ThorusViewer.Forms
             return fileExists ? Resources.OK : Resources.Error;
         }
 
-        private bool FileExists(string file)
+        private static bool FileExists(string file)
         {
             string path = Path.Combine(SimulationData.WorkFolder, file);
             FileInfo fileInfo = new FileInfo(path);

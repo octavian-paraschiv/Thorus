@@ -11,6 +11,9 @@ namespace ThorusCommon.Data
         public const int MaxLon = 179;
         public const int MinLon = -180;
 
+        public const float LatRes = 1;
+        public const float LonRes = 1;
+
         public Atmosphere ATM { get; private set; }
         public SurfaceLevel SFC { get; private set; }
 

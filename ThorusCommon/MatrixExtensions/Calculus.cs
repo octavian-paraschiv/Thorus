@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.Thermodynamics;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using ThorusCommon.Data;
+using ThorusCommon.Thermodynamics;
 
 namespace ThorusCommon.MatrixExtensions
 {
     public static class Calculus
     {
+        public const float YRes = EarthModel.LatRes;
+        public const float XRes = EarthModel.LonRes;
+
         // TODO: move to dedicated atmosheric calculus class
         public static DenseMatrix EnsureScale(this DenseMatrix V, float levelPressure)
         {
@@ -48,7 +48,7 @@ namespace ThorusCommon.MatrixExtensions
             float avg = 0;
             float sc = 1.07683943f;
             float sc2 = 1 + 2 * (sc - 1);
-            
+
             if (V != null)
                 avg = V.Mean();
 
@@ -131,11 +131,13 @@ namespace ThorusCommon.MatrixExtensions
                 for (int c = 0; c < V.ColumnCount; c++)
                 {
                     if (c > 0 && c < V.ColumnCount - 1)
-                        gx[r, c] = (V[r, c + 1] - V[r, c - 1]) / 2;
+                        gx[r, c] = (V[r, c + 1] - V[r, c - 1]) / (2 * XRes);
+
                     else if (c == 0)
-                        gx[r, c] = (V[r, 1] - V[r, 0]);
+                        gx[r, c] = (V[r, 1] - V[r, 0]) / XRes;
+
                     else if (c == V.ColumnCount - 1)
-                        gx[r, V.ColumnCount - 1] = (V[r, V.ColumnCount - 1] - V[r, V.ColumnCount - 2]);
+                        gx[r, V.ColumnCount - 1] = (V[r, V.ColumnCount - 1] - V[r, V.ColumnCount - 2]) / XRes;
                 }
             }
 
@@ -156,11 +158,13 @@ namespace ThorusCommon.MatrixExtensions
                 for (int c = 0; c < V.ColumnCount; c++)
                 {
                     if (r > 0 && r < V.RowCount - 1)
-                        gy[r, c] = (V[r + 1, c] - V[r - 1, c]) / 2;
+                        gy[r, c] = (V[r + 1, c] - V[r - 1, c]) / (2 * YRes);
+
                     else if (r == 0)
-                        gy[r, c] = (V[1, c] - V[0, c]);
+                        gy[r, c] = (V[1, c] - V[0, c]) / YRes;
+
                     else if (r == V.RowCount - 1)
-                        gy[V.RowCount - 1, c] = (V[V.RowCount - 1, c] - V[V.RowCount - 2, c]);
+                        gy[V.RowCount - 1, c] = (V[V.RowCount - 1, c] - V[V.RowCount - 2, c]) / YRes;
                 }
             }
 
@@ -179,14 +183,14 @@ namespace ThorusCommon.MatrixExtensions
 
             return new DenseMatrix[]
             {
-                DenseMatrix.Create(rc, cc, (r, c) => 
+                DenseMatrix.Create(rc, cc, (r, c) =>
                 {
                     float lat = EarthModel.MaxLat - r;
                     var p = rot * Math.Sign(lat);
                     return x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p);
                 }),
 
-            DenseMatrix.Create(rc, cc, (r, c) => 
+            DenseMatrix.Create(rc, cc, (r, c) =>
                 {
                     float lat = EarthModel.MaxLat - r;
                     var p = rot * Math.Sign(lat);
@@ -239,9 +243,7 @@ namespace ThorusCommon.MatrixExtensions
                             dm2[r2, c2] = dm[r, c];
 
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                 }
 
             for (int r2 = 0; r2 < dm2.RowCount; r2++)

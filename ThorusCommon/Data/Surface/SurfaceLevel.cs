@@ -184,16 +184,11 @@ namespace ThorusCommon.Data
 
             WL.Assign((r, c) =>
             {
-                var sgn = 0f;
+                var wl = wlMask[r, c];
+                if (wl < 1 && he[r, c] > 0)
+                    wl = 0;
 
-                sgn = Math.Sign(wlMask[r, c]);
-                if (sgn == 1)
-                    return 1;
-
-                if (he[r, c] >= 10f)
-                    return 0;
-
-                return 1;
+                return wl;
             });
 
 
@@ -330,6 +325,9 @@ namespace ThorusCommon.Data
 
             FileSupport.Save(D_SNOW, title, "N_DD_MAP");
             FileSupport.Save(D_RAIN, title, "R_DD_MAP");
+
+            FileSupport.Save(WL, title, "E_WL_MAP");
+            FileSupport.Save(Height, title, "E_00_MAP");
         }
 
         public void SaveStats(string title, string category)

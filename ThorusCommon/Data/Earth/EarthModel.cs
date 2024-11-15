@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
 using ThorusCommon.Engine;
-using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
-using ThorusCommon.IO;
 
 namespace ThorusCommon.Data
 {
     public class EarthModel
     {
-        public const int MaxLat = 89;
+        public const int MaxLat = 90;
         public const int MinLat = -89;
         public const int MaxLon = 179;
         public const int MinLon = -180;

@@ -278,7 +278,7 @@ namespace ThorusViewer.Forms
             if (File.Exists(path))
             {
                 Log($"Deleting: {file}");
-                FileDelete(path);
+                File.Delete(path);
             }
         }
 

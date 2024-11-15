@@ -85,13 +85,13 @@ namespace ThorusCommon.Data
                 if (File.Exists(dataFile))
                     File.Delete(dataFile);
 
-                const int rows = 712;
+                const int rows = 720;
                 const int cols = 1440;
 
                 float[] data = GetData(netCdfFile, netCdfVariable, netCdfLevelCount, netCdfLevelIdx, rows, cols);
                 DenseMatrix bigMat = DataToMatrix(rows, cols, data, flipUpDown);
 
-                // bigMat has size 712 x 1440 so we need to transform it to 179 * 360
+                // bigMat has size 720 x 1440 so we need to transform it to 181 * 361
                 float last = 0;
                 mat = MatrixFactory.New((r, c) =>
                 {

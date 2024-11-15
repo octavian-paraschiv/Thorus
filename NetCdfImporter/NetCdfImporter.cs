@@ -95,13 +95,15 @@ namespace ThorusCommon.Data
                 float last = 0;
                 mat = MatrixFactory.New((r, c) =>
                 {
+                    var c1 = (c + 180) % 360;
+
                     try
                     {
-                        last = bigMat.SubMatrix(4 * r, 4, 4 * c, 4).RowSums().Sum() / 16;
+                        last = bigMat.SubMatrix(4 * r, 4, 4 * c1, 4).RowSums().Sum() / 16;
                     }
                     catch
                     {
-                        last = bigMat.SubMatrix(4 * (r - 1), 4, 4 * c, 4).RowSums().Sum() / 16;
+                        last = bigMat.SubMatrix(4 * (r - 1), 4, 4 * c1, 4).RowSums().Sum() / 16;
                     }
                     return last;
                 });

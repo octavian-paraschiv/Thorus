@@ -297,8 +297,8 @@ namespace ThorusCommon.Engine
                 return p;
             });
 
-            var pNorth = rawP.RegionSubMatrix(-180, 179, 0, 89);
-            var pSouth = rawP.RegionSubMatrix(-180, 179, -89, -1);
+            var pNorth = rawP.RegionSubMatrix(EarthModel.MinLon, EarthModel.MaxLon, 0, EarthModel.MaxLat);
+            var pSouth = rawP.RegionSubMatrix(EarthModel.MinLon, EarthModel.MaxLon, EarthModel.MinLat, -1);
 
             var projPNorth = pNorth.Divide(pNorth.Mean()).Multiply(levelPressure) as DenseMatrix;
             var projPSouth = pSouth.Divide(pSouth.Mean()).Multiply(levelPressure) as DenseMatrix;

@@ -59,9 +59,9 @@ namespace ThorusCommon.Data
             this.Earth = earth;
             InitGeographicalParams();
 
-            if (loadFromStateFiles == false)
+            if (!loadFromStateFiles)
             {
-                if (defaultValue == 0)
+                if ((decimal)defaultValue == 0)
                 {
                     // ------------
                     // Soil temperature where applicable
@@ -71,10 +71,10 @@ namespace ThorusCommon.Data
                         var tl = FileSupport.LoadMatrixFromFile(filePath);
                         TL.Assign((r, c) =>
                         {
-                            if (WL[r, c] == 0)
+                            if (WL[r, c] < 1)
                                 return tl[r, c];
 
-                            return 0;
+                            return 1000;
 
                         });
                     }
@@ -87,10 +87,10 @@ namespace ThorusCommon.Data
                         var tw = FileSupport.LoadMatrixFromFile(filePath);
                         TW.Assign((r, c) =>
                         {
-                            if (WL[r, c] != 0)
+                            if (WL[r, c] > 0)
                                 return tw[r, c];
 
-                            return 0;
+                            return 1000f;
 
                         });
                     }
@@ -98,7 +98,7 @@ namespace ThorusCommon.Data
                     // Combined surface temperature
                     TS.Assign((r, c) =>
                     {
-                        if (WL[r, c] != 0)
+                        if (WL[r, c] > 0)
                             return TW[r, c];
 
                         return TL[r, c];
@@ -169,18 +169,18 @@ namespace ThorusCommon.Data
         {
             // ------------
             string filePath = "Data/ElevationMap.thd";
-            if (File.Exists(filePath) == false)
+            if (!File.Exists(filePath))
                 throw new FileNotFoundException();
 
             Height = FileSupport.LoadMatrixFromFile(filePath);
 
             // ------------
             filePath = "Data/LandWaterMask.thd";
-            if (File.Exists(filePath) == false)
+            if (!File.Exists(filePath))
                 throw new FileNotFoundException();
 
             var wlMask = FileSupport.LoadMatrixFromFile(filePath);
-            var he = Height;//.EQ(8);
+            var he = Height;
 
             WL.Assign((r, c) =>
             {
@@ -194,14 +194,14 @@ namespace ThorusCommon.Data
 
             // ------------
             filePath = "Data/ADJ_LR.thd";
-            if (File.Exists(filePath) == false)
+            if (!File.Exists(filePath))
                 throw new FileNotFoundException();
 
             this.ADJ_LR = FileSupport.LoadMatrixFromFile(filePath);
 
             // ------------
             filePath = "Data/albedo.thd";
-            if (File.Exists(filePath) == false)
+            if (!File.Exists(filePath))
                 throw new FileNotFoundException();
 
             this.ALBEDO = FileSupport.LoadMatrixFromFile(filePath);
@@ -439,20 +439,12 @@ namespace ThorusCommon.Data
         {
             var GP = Earth.ATM.MidLevel.P.GradientAsScalar().Rescale(new float[] { 0, 100 });
             var GT = Earth.ATM.MidLevel.T.GradientAsScalar().Rescale(new float[] { 0, 100 });
-            var TS = Earth.SFC.TS;
-            var TE = Earth.SFC.TE;
 
             DenseMatrix WIND = MatrixFactory.Init();
             if (Earth.ATM.SeaLevel.P != null)
                 WIND = Earth.ATM.SeaLevel.P.GradientAsScalar();
 
-            var HMid = Earth.ATM.MidLevel.H;
-            var HSea = Earth.ATM.SeaLevel.H;
-
-            if (HSea == null)
-                HSea = HMid;
-
-            var eqFronts = Earth.ATM.Fronts;//.EQ();
+            var eqFronts = Earth.ATM.Fronts;
 
             // Calculate convective precipitation (thunderstorms)
             CalculateInstabilityIndex(eqFronts);
@@ -632,12 +624,12 @@ namespace ThorusCommon.Data
 
                     if (totalSnow < 0 ||
                         // Snow does not accumulate on a water surface if water is not frozen
-                        (wl != 0 && ts > -5))
+                        (wl > 0 && ts > -5))
                         totalSnow = 0;
 
                     if (totalRain < 0 ||
                         // Rain water does not accumulate on a water surface
-                        wl != 0)
+                        wl > 0)
                         totalRain = 0;
 
                     RAIN[r, c] = totalRain;
@@ -645,7 +637,7 @@ namespace ThorusCommon.Data
 
                     D_RAIN[r, c] = deltaRain;
                     D_SNOW[r, c] = deltaSnow;
-                };
+                }
 
             Earth.SFC.BLIZZARD.Assign((r, c) =>
             {
@@ -664,7 +656,7 @@ namespace ThorusCommon.Data
                 var wl = WL[r, c];
                 var defAlbedo = DEF_ALBEDO[r, c];
 
-                if (wl == 0)
+                if (wl < 1)
                 {
                     var snowAlbedo = 0f;
                     var rainAlbedo = 0f;
@@ -690,8 +682,6 @@ namespace ThorusCommon.Data
 
             TE.Assign((r, c) =>
             {
-
-                float wl = WL[r, c];
                 float lr = Earth.ATM.ELR[r, c];
 
                 float tMid = Earth.ATM.MidLevel.T[r, c];
@@ -730,7 +720,7 @@ namespace ThorusCommon.Data
 
                 if (dt > 0)
                 {
-                    if (wl == 0)
+                    if (wl < 1)
                     {
                         // soil warms up
                         var dts = SimulationParameters.Instance.SoilTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
@@ -747,7 +737,7 @@ namespace ThorusCommon.Data
                 }
                 else if (dt < 0)
                 {
-                    if (wl == 0)
+                    if (wl < 1)
                     {
                         // soil cools down
                         var dts = SimulationParameters.Instance.SoilTempChangeFactor * extremeTempSurfaceFactor * dt * Earth.SnapshotDivFactor;
@@ -770,7 +760,7 @@ namespace ThorusCommon.Data
 
             TW.Assign((r, c) =>
             {
-                if (WL[r, c] != 0)
+                if (WL[r, c] > 0)
                     return TS[r, c];
 
                 return 0;
@@ -779,7 +769,7 @@ namespace ThorusCommon.Data
 
             TL.Assign((r, c) =>
             {
-                if (WL[r, c] == 0)
+                if (WL[r, c] < 1)
                     return TS[r, c];
 
                 return 0;
@@ -826,9 +816,6 @@ namespace ThorusCommon.Data
 
             TNormLow.Assign((r, c) =>
             {
-                // latitude
-                float lat = EarthModel.MaxLat - r;
-
                 float height = Earth.SFC.Height[r, c];
 
                 float dh = height - SimConstants.LevelHeights[LevelType.MidLevel];
@@ -889,7 +876,7 @@ namespace ThorusCommon.Data
                 float max_t = te + dl * (1 - nn) * sf * (1 - albedoFactor);
 
                 float wl = WL[r, c];
-                if (wl != 0)
+                if (wl > 0)
                 {
                     float max_t_norm = TNormHigh[r, c];
                     max_t = 0.6f * max_t + 0.4f * max_t_norm;
@@ -900,8 +887,6 @@ namespace ThorusCommon.Data
 
             TLow.Assign((r, c) =>
             {
-                // latitude
-                float lat = EarthModel.MaxLat - r;
                 // virtual temp at surface (called also equilibrium temp)
                 float te = TE[r, c];
                 // daylength at specified time of year and latitude
@@ -934,7 +919,7 @@ namespace ThorusCommon.Data
                 float min_t = te - (AbsoluteConstants.HoursPerDay - dl) * (1 - nn) * (albedoFactor);
 
                 float wl = WL[r, c];
-                if (wl != 0)
+                if (wl > 0)
                 {
                     float min_t_norm = TNormLow[r, c];
                     min_t = 0.6f * min_t + 0.4f * min_t_norm;
@@ -944,7 +929,7 @@ namespace ThorusCommon.Data
             });
         }
 
-        private float CalculateTotalCloudiness(float precip, float fog)
+        private static float CalculateTotalCloudiness(float precip, float fog)
         {
             // Precipitable clouds
             float cl = Math.Min(1, precip / 100);

@@ -10,7 +10,8 @@ namespace ThorusCommon.Data
 {
     public class NetCdfImporter : FileImporter
     {
-        protected string SeaTempNcFile = "SST.nc";
+        private static string SeaTempNcFile = "SST.nc";
+        public static readonly DateTime MinSSTDateTime = new DateTime(1800, 1, 1, 0, 0, 0, DateTimeKind.Local);
 
         public NetCdfImporter()
         {
@@ -25,7 +26,7 @@ namespace ThorusCommon.Data
 
         protected override void ImportSurface()
         {
-            DateTime dt = ImportDateTime(SeaTempNcFile);
+            DateTime dt = SstDateTime();
             SimDateTime sdt = new SimDateTime(dt);
 
             string timeSeedFile = "timeSeed.thd";
@@ -39,32 +40,29 @@ namespace ThorusCommon.Data
 
         }
 
-        public static DateTime ImportDateTime(string inputNcFile)
+        public static DateTime SstDateTime()
         {
-            DateTime dt = DateTime.Now;
-
             int ncid = 0, varid = 0;
 
-            CorrectFilePath(ref inputNcFile);
+            CorrectFilePath(ref SeaTempNcFile);
 
-            if (File.Exists(inputNcFile))
+            if (File.Exists(SeaTempNcFile))
             {
                 try
                 {
-                    NetCDF.nc_open(inputNcFile, NetCDF.CreateMode.NC_NOWRITE, out ncid);
+                    NetCDF.nc_open(SeaTempNcFile, NetCDF.CreateMode.NC_NOWRITE, out ncid);
                     NetCDF.nc_inq_varid(ncid, "time", out varid);
 
                     // Days since 1800-01-01
                     long[] daysElapsed = new long[1];
                     NetCDF.nc_get_var_long(ncid, varid, daysElapsed);
 
-                    dt = new DateTime(1800, 1, 1, 0, 0, 0);
-                    dt = dt.AddDays(daysElapsed[0]);
+                    return MinSSTDateTime.AddDays(daysElapsed[0]);
 
                 }
                 catch (Exception ex)
                 {
-                    string s = ex.Message;
+                    _ = ex.Message;
                 }
                 finally
                 {
@@ -72,7 +70,7 @@ namespace ThorusCommon.Data
                 }
             }
 
-            return dt;
+            return MinSSTDateTime;
         }
 
         private DenseMatrix ImportSstFile<T>(string netCdfFile, string netCdfVariable, int netCdfLevelCount,

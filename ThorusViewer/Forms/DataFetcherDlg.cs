@@ -1,10 +1,9 @@
-﻿#define FETCH_SST
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -18,6 +17,14 @@ namespace ThorusViewer.Forms
 {
     public partial class DataFetcherDlg : Form
     {
+        private sealed class SstItem
+        {
+            public int Idx { get; set; } = 0;
+            public DateTime Date { get; set; } = DateTime.Today;
+
+            public override string ToString() => Date.ToString("yyyy-MM-dd");
+        }
+
         private System.Windows.Forms.Timer _tmrCheckFiles = null;
         private readonly ManualResetEvent _abort = new ManualResetEvent(false);
 
@@ -33,6 +40,12 @@ namespace ThorusViewer.Forms
         {
             InitializeComponent();
 
+            int i = 0;
+            for (DateTime dt = MinSSTDateTime; dt <= MaxSSTDateTime; dt = dt.AddDays(7))
+                cmbSST.Items.Add(new SstItem { Idx = i++, Date = dt });
+
+            SelectSstDate();
+
             btnAbort.Visible = true;
             btnDone.Visible = false;
 
@@ -41,17 +54,34 @@ namespace ThorusViewer.Forms
             this.btnAbort.Click += (s2, e2) => _abort.Set();
         }
 
+        private void SelectSstDate()
+        {
+            var sstDate = MaxSSTDateTime;
+            var ncSstDate = NetCdfImporter.SstDateTime();
+            if (ncSstDate >= MinSSTDateTime)
+                sstDate = ncSstDate;
+
+            cmbSST.SelectedIndex = cmbSST.Items.OfType<SstItem>()
+                .Where(sst => sst.Date == sstDate)
+                .Select(sst => sst.Idx)
+                .FirstOrDefault();
+
+            cmbSST.Enabled = true;
+        }
+
         private void OnFetchSstData(object sender, EventArgs e)
         {
             var res = MessageBox.Show(this, "This will delete any existing initial condition files. Are you sure you want to proceed ?",
                 "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (res != DialogResult.Yes)
                 return;
 
-            // Caclulate the date of the first Sunday that is later than today's date minus 2 weeks
-            DateTime today = DateTime.Today;
-            DateTime dateMinusTwoWeeks = today.AddDays(-14);
-            DateTime selDate = dateMinusTwoWeeks.AddDays(7 - (int)dateMinusTwoWeeks.DayOfWeek);
+            DateTime selDate = MaxSSTDateTime;
+            if (cmbSST.SelectedItem is SstItem sst)
+                selDate = sst.Date;
+
+            cmbSST.Enabled = false;
 
             Log($"Initial condition download started for date: {selDate:yyyy-MM-dd}");
 
@@ -60,11 +90,7 @@ namespace ThorusViewer.Forms
                 try
                 {
                     DeleteClientSideData();
-
-#if FETCH_SST
                     await FetchSstFile(selDate).ConfigureAwait(false);
-#endif
-
                     await FetchGribFile().ConfigureAwait(false);
                 }
                 catch (TaskCanceledException)
@@ -75,6 +101,7 @@ namespace ThorusViewer.Forms
                 {
                     Log(ex.Message);
                 }
+
             }).ContinueWith(_ =>
             {
                 if (ValidateFiles())
@@ -97,10 +124,7 @@ namespace ThorusViewer.Forms
 
             simProc?.Kill();
 
-#if FETCH_SST
             FileDelete("SST.nc");
-#endif
-
             FileDelete("input.grib");
 
             Log($"Client side data deleted...");
@@ -111,7 +135,6 @@ namespace ThorusViewer.Forms
                 ValidateInitialConditionFiles();
         }
 
-#if FETCH_SST
         private async Task FetchSstFile(DateTime selDate)
         {
             try
@@ -158,7 +181,6 @@ namespace ThorusViewer.Forms
                 Log(ex.Message);
             }
         }
-#endif
 
         private async Task FetchGribFile()
         {
@@ -169,7 +191,7 @@ namespace ThorusViewer.Forms
 
                 if (FileExists("SST.NC"))
                 {
-                    DateTime dtSst = NetCdfImporter.ImportDateTime("SST.NC");
+                    DateTime dtSst = NetCdfImporter.SstDateTime();
                     string url = ConfigurationManager.AppSettings["noaaAwsGetUrl"];
                     url = url.Replace("##DATETIME_SST##", $"{dtSst:yyyyMMdd}");
                     Log($"Downloading GRIB data from: {url}");
@@ -228,8 +250,6 @@ namespace ThorusViewer.Forms
             {
                 _tmrCheckFiles.Stop();
 
-                DateTime selDate = NetCdfImporter.ImportDateTime("SST.NC");
-                label1.Text = $"SST date: {selDate:yyyy-MM-dd}";
 
                 allFilesPresent = ValidateFiles();
 
@@ -255,8 +275,10 @@ namespace ThorusViewer.Forms
         {
             bool allFilesPresent = true;
 
+            SelectSstDate();
+
             pbSST.Image = ValidateFile("SST.nc", ref allFilesPresent);
-            pbGrib.Image = ValidateFile("input.grib", ref allFilesPresent);
+            pbGRIB.Image = ValidateFile("input.grib", ref allFilesPresent);
             return allFilesPresent;
         }
 
@@ -316,6 +338,31 @@ namespace ThorusViewer.Forms
             catch (Exception ex)
             {
                 txtSimProcOut.Text = ex.Message;
+            }
+        }
+
+        private static DateTime MaxSSTDateTime
+        {
+            get
+            {
+                DateTime today = DateTime.Today;
+                DateTime dtStart = today.AddDays(-14);
+                return dtStart.AddDays(7 - (int)dtStart.DayOfWeek);
+            }
+        }
+
+        private static DateTime MinSSTDateTime
+        {
+            get
+            {
+                string minUiSstDate = ConfigurationManager.AppSettings["minUiSstDate"];
+                var dtStart = new DateTime(2020, 09, 20, 0, 0, 0, DateTimeKind.Local);
+
+                if (DateTime.TryParseExact(minUiSstDate,
+                    "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime dt))
+                    dtStart = dt;
+
+                return dtStart.AddDays(7 - (int)dtStart.DayOfWeek);
             }
         }
     }

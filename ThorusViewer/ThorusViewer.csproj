@@ -13,8 +13,8 @@
       <EnableDefaultPageItems>false</EnableDefaultPageItems>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OPMFileUploader" Version="2.0.1" />
-    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="OPMFileUploader" Version="2.0.4" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.2" />
     <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="2.2.0" />
   </ItemGroup>

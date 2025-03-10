@@ -109,7 +109,7 @@ namespace ThorusViewer.Forms
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
-            });
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void DeleteClientSideData()

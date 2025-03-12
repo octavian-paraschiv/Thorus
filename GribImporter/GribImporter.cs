@@ -111,7 +111,9 @@ namespace ThorusCommon.Data
                 if (m.DataSets?.FirstOrDefault()?.ProductDefinitionSection?.ProductDefinition is ProductDefinition0001 def &&
                     def.Parameter.HasValue && def.Parameter.Value.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return (level == 0 || def.FirstFixedSurfaceType == NGrib.Grib2.CodeTables.FixedSurfaceType.IsobaricSurface);
+                    return (level == 0 ||
+                        (def.FirstFixedSurfaceType == NGrib.Grib2.CodeTables.FixedSurfaceType.IsobaricSurface &&
+                        def.FirstFixedSurfaceValue == level * 100));
                 }
 
                 return false;

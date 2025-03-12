@@ -124,19 +124,9 @@ namespace ThorusCommon.Data
             var nodes = unfiltered.Where(gs =>
                 (gs.Key.Latitude >= EarthModel.MinLat && gs.Key.Latitude <= EarthModel.MaxLat) &&
                 (gs.Key.Longitude >= EarthModel.MinLon && gs.Key.Longitude <= EarthModel.MaxLon) &&
-                (gs.Key.Latitude == Math.Truncate(gs.Key.Latitude)) &&
-                gs.Key.Longitude == Math.Truncate(gs.Key.Longitude))
+                (gs.Key.Latitude == (int)gs.Key.Latitude) &&
+                gs.Key.Longitude == (int)gs.Key.Longitude)
                 .ToArray();
-            /*
-            var messages = _messages.Where(m => m.ParameterName.Contains(paramName) && m.Level == level).First();
-
-            var nodes = messages.GridCoordinateValues.Where(gs => gs.IsMissing == false &&
-                (gs.Latitude >= EarthModel.MinLat && gs.Latitude <= EarthModel.MaxLat) &&
-                (gs.Longitude >= 180 + EarthModel.MinLon && gs.Longitude <= 180 + EarthModel.MaxLon) &&
-                (gs.Latitude == Math.Truncate(gs.Latitude)) &&
-                gs.Longitude == Math.Truncate(gs.Longitude))
-                .ToArray();
-            */
 
             if (!time)
             {
@@ -165,7 +155,6 @@ namespace ThorusCommon.Data
                 {
                     _ = ex.Message;
                 }
-
             }
 
             if (string.IsNullOrEmpty(dataFile) == false)
@@ -175,6 +164,5 @@ namespace ThorusCommon.Data
 
             return mat;
         }
-
     }
 }

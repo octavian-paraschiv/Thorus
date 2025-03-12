@@ -5,7 +5,7 @@ using ThorusCommon.Engine;
 
 namespace ThorusCommon.IO
 {
-    public abstract class FileImporter
+    public abstract class FileImporter : IDisposable
     {
         protected string TemperatureFileLow = "T00.thd";
         protected string TemperatureFileMid = "T01.thd";
@@ -108,5 +108,6 @@ namespace ThorusCommon.IO
 
         protected abstract void ImportSurface();
         protected abstract void ImportLevel(int idx);
+        public virtual void Dispose() { }
     }
 }

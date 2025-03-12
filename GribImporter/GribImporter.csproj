@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>ThorusCommon.Data</RootNamespace>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard20</TargetFramework>
     <OutputPath>..\bin\</OutputPath>
       <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -10,9 +10,7 @@
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Grib.Api" Version="1.0.0-beta4" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\NGrib\src\NGrib\NGrib.csproj" />
     <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />
   </ItemGroup>
 </Project>

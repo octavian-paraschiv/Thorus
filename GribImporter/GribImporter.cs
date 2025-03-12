@@ -1,12 +1,8 @@
-﻿using Grib.Api;
-using MathNet.Numerics.LinearAlgebra.Single;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using NGrib.Grib2.Templates.ProductDefinitions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using ThorusCommon.Engine;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
@@ -22,29 +18,21 @@ namespace ThorusCommon.Data
 
         bool time = false;
 
-        GribMessage[] _messages = null;
+        NGrib.Grib2Reader _reader;
+        NGrib.Grib2.Message[] _messages;
 
         public GribImporter(string inputFile)
         {
             _inputFile = inputFile;
-            CorrectFilePath(ref _inputFile);            
+            CorrectFilePath(ref _inputFile);
 
-            bool ok = false;
-            while (!ok)
-            {
-                try
-                {
-                    GribEnvironment.Init();
-                    ok = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
+            _reader = new NGrib.Grib2Reader(_inputFile);
+            _messages = _reader.ReadMessages().ToArray();
+        }
 
-            using (var gf = new Grib.Api.GribFile(_inputFile))
-                _messages = gf.ToArray();
+        public override void Dispose()
+        {
+            _reader.Dispose();
         }
 
         protected override void ImportSurface()
@@ -62,7 +50,7 @@ namespace ThorusCommon.Data
         {
             // T, P, H must be read and built in this order
             // Calculation of P depends on T;
-            DenseMatrix t = ImportLevelData(TempFiles[idx], 
+            DenseMatrix t = ImportLevelData(TempFiles[idx],
                 "Temperature", idx,
                 (d) => (d > 1000) ? 0 : (d - AbsoluteConstants.WaterFreezePoint));
 
@@ -118,6 +106,26 @@ namespace ThorusCommon.Data
 
             int level = (levelIdx < 0) ? 0 : _levels[levelIdx];
 
+            var message = _messages.Where(m =>
+            {
+                if (m.DataSets?.FirstOrDefault()?.ProductDefinitionSection?.ProductDefinition is ProductDefinition0001 def &&
+                    def.Parameter.HasValue && def.Parameter.Value.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return (level == 0 || def.FirstFixedSurfaceType == NGrib.Grib2.CodeTables.FixedSurfaceType.IsobaricSurface);
+                }
+
+                return false;
+
+            }).FirstOrDefault();
+
+            var unfiltered = _reader.ReadDataSetValues(message.DataSets.First()).ToArray();
+            var nodes = unfiltered.Where(gs =>
+                (gs.Key.Latitude >= EarthModel.MinLat && gs.Key.Latitude <= EarthModel.MaxLat) &&
+                (gs.Key.Longitude >= EarthModel.MinLon && gs.Key.Longitude <= EarthModel.MaxLon) &&
+                (gs.Key.Latitude == Math.Truncate(gs.Key.Latitude)) &&
+                gs.Key.Longitude == Math.Truncate(gs.Key.Longitude))
+                .ToArray();
+            /*
             var messages = _messages.Where(m => m.ParameterName.Contains(paramName) && m.Level == level).First();
 
             var nodes = messages.GridCoordinateValues.Where(gs => gs.IsMissing == false &&
@@ -126,10 +134,11 @@ namespace ThorusCommon.Data
                 (gs.Latitude == Math.Truncate(gs.Latitude)) &&
                 gs.Longitude == Math.Truncate(gs.Longitude))
                 .ToArray();
+            */
 
             if (!time)
             {
-                DateTime dt = messages.ReferenceTime;
+                DateTime dt = message.IdentificationSection.ReferenceTime;
                 SimDateTime sdt = new SimDateTime(dt);
 
                 string timeSeedFile = "timeSeed.thd";
@@ -143,9 +152,18 @@ namespace ThorusCommon.Data
 
             foreach (var node in nodes)
             {
-                int r = EarthModel.MaxLat - (int)node.Latitude;
-                int c = ((int)node.Longitude - EarthModel.MinLon) % 360;
-                mat[r, c] = conversionFunc((float)node.Value);
+                int r = EarthModel.MaxLat - (int)node.Key.Latitude;
+                int c = ((int)node.Key.Longitude - EarthModel.MinLon) % 360;
+
+                try
+                {
+                    mat[r, c] = conversionFunc((float)node.Value.GetValueOrDefault());
+                }
+                catch (Exception ex)
+                {
+                    _ = ex.Message;
+                }
+
             }
 
             if (string.IsNullOrEmpty(dataFile) == false)

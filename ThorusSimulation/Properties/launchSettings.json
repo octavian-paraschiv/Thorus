@@ -2,7 +2,7 @@
   "profiles": {
     "ThorusSimulation": {
       "commandName": "Project",
-      "commandLineArgs": "0 2 regen"
+      "commandLineArgs": "0 7 -regen -export"
     }
   }
 }

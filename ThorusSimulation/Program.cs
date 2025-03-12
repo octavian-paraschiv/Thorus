@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
+using ThorusCommon;
 using ThorusCommon.Data;
 using ThorusCommon.Engine;
-using ThorusCommon.IO;
-using ThorusCommon.MatrixExtensions;
+using ThorusCommon.Export;
 using ThorusCommon.Thermodynamics;
-using System.Threading;
-using System.Diagnostics;
-using ThorusCommon;
 
 namespace ThorusSimulation
 {
@@ -34,7 +29,7 @@ namespace ThorusSimulation
 
             SimDateTime sdtStart = null;
             SimDateTime sdtEnd = null;
-            
+
             int totalDays = 0;
             int totalDaysArg = 0;
             int nofSnapshots = 3;
@@ -42,7 +37,8 @@ namespace ThorusSimulation
 
             int totalExpectedArgs = 4;
             bool runSim = true;
-            bool regenerateInitialConditions = Environment.CommandLine.EndsWith(" regen");
+            bool autoExportSubregion = args.ToList().Contains("-export");
+            bool regenerateInitialConditions = args.ToList().Contains("-regen");
 
             if (string.Compare(args[argCnt], "nosim", true) != 0)
             {
@@ -84,11 +80,12 @@ namespace ThorusSimulation
                 totalExpectedArgs = 3;
                 runSim = false;
             }
-             
+
             if (args.Length >= totalExpectedArgs)
             {
                 runStats = string.Compare(args[argCnt++], "stat", true) == 0;
-                statRangeLen = int.Parse(args[argCnt++]);
+                if (runStats)
+                    statRangeLen = int.Parse(args[argCnt++]);
             }
             // -------------------------
 
@@ -116,7 +113,7 @@ namespace ThorusSimulation
                 {
                     string timeSeedFile = "timeSeed.thd";
                     NetCdfImporter.CorrectFilePath(ref timeSeedFile);
-                    
+
                     if (sdtStart == null && File.Exists(timeSeedFile))
                     {
                         try
@@ -145,6 +142,22 @@ namespace ThorusSimulation
 
                     SimulationEngine sim = new SimulationEngine(sdtStart, totalDays, nofSnapshots);
                     sim.Run(dtInit);
+
+                    if (autoExportSubregion)
+                    {
+                        DateTime dtInitCurrent = DateTime.Now;
+
+                        ExportEngine.GenerateSubregionData((current, total, desc) =>
+                        {
+                            DateTime now = DateTime.Now;
+                            TimeSpan tsDiffCurrent = now - dtInitCurrent;
+                            TimeSpan tsDiff = now - dtInit;
+
+                            var percent = (int)(100 * current / total);
+                            Console.WriteLine($" EXP: [{percent:d2}% done] -> {desc} " +
+                                $"[current: {(int)tsDiff.TotalMilliseconds} msec, total: {(int)tsDiffCurrent.TotalMilliseconds} msec]");
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

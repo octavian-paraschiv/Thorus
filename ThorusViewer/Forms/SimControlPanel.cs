@@ -167,6 +167,7 @@ namespace ThorusViewer
                 bool runSim = !cbRunStatsOnly.Checked;
                 bool runStats = cbRunStats.Checked || cbRunStatsOnly.Checked;
                 bool runViewer = cbAutoClose.Checked;
+                bool autoExport = cbAutoExport.Checked;
 
                 string statRange = cmbRange.Text;
 
@@ -197,7 +198,10 @@ namespace ThorusViewer
                         if (runStats)
                             args += string.Format("stat {0}", statRange);
                         else
-                            args += " regen";
+                            args += " -regen";
+
+                        if (autoExport)
+                            args += " -export";
 
                         psi.Arguments = args;
                         psi.CreateNoWindow = true;

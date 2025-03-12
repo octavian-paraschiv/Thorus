@@ -28,527 +28,562 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbAutoClose = new System.Windows.Forms.CheckBox();
-            this.gbSimParams = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.dtpSimStop = new System.Windows.Forms.DateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lnkSimParams = new System.Windows.Forms.LinkLabel();
-            this.dtpSimStart = new System.Windows.Forms.DateTimePicker();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbRunStatsOnly = new System.Windows.Forms.CheckBox();
-            this.cbRunStats = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cmbRange = new System.Windows.Forms.ComboBox();
-            this.cmbStepLen = new System.Windows.Forms.ComboBox();
-            this.gbInitialConditions = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.pbSST = new System.Windows.Forms.PictureBox();
-            this.pbGrib = new System.Windows.Forms.PictureBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.btnFetchData = new System.Windows.Forms.Button();
-            this.gbSimControl = new System.Windows.Forms.GroupBox();
-            this.txtSimProcOut = new System.Windows.Forms.TextBox();
-            this.pbSimProgress = new System.Windows.Forms.ProgressBar();
-            this.btnSimStart = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.gbSimParams.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.gbInitialConditions.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSST)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).BeginInit();
-            this.gbSimControl.SuspendLayout();
-            this.SuspendLayout();
+            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            cbAutoClose = new System.Windows.Forms.CheckBox();
+            gbSimParams = new System.Windows.Forms.GroupBox();
+            tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            dtpSimStop = new System.Windows.Forms.DateTimePicker();
+            label5 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            lnkSimParams = new System.Windows.Forms.LinkLabel();
+            dtpSimStart = new System.Windows.Forms.DateTimePicker();
+            groupBox2 = new System.Windows.Forms.GroupBox();
+            tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            cbRunStatsOnly = new System.Windows.Forms.CheckBox();
+            cbRunStats = new System.Windows.Forms.CheckBox();
+            label6 = new System.Windows.Forms.Label();
+            cmbRange = new System.Windows.Forms.ComboBox();
+            btnClose = new System.Windows.Forms.Button();
+            cbAutoExport = new System.Windows.Forms.CheckBox();
+            cmbStepLen = new System.Windows.Forms.ComboBox();
+            gbInitialConditions = new System.Windows.Forms.GroupBox();
+            tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            groupBox5 = new System.Windows.Forms.GroupBox();
+            tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            pbSST = new System.Windows.Forms.PictureBox();
+            pbGrib = new System.Windows.Forms.PictureBox();
+            label11 = new System.Windows.Forms.Label();
+            label12 = new System.Windows.Forms.Label();
+            btnFetchData = new System.Windows.Forms.Button();
+            gbSimControl = new System.Windows.Forms.GroupBox();
+            txtSimProcOut = new System.Windows.Forms.TextBox();
+            pbSimProgress = new System.Windows.Forms.ProgressBar();
+            btnSimStart = new System.Windows.Forms.Button();
+            tableLayoutPanel1.SuspendLayout();
+            gbSimParams.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            groupBox2.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            gbInitialConditions.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
+            groupBox5.SuspendLayout();
+            tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbSST).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbGrib).BeginInit();
+            gbSimControl.SuspendLayout();
+            SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.cbAutoClose, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.gbSimParams, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.gbInitialConditions, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.gbSimControl, 0, 3);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 551);
-            this.tableLayoutPanel1.TabIndex = 0;
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(cbAutoClose, 0, 4);
+            tableLayoutPanel1.Controls.Add(gbSimParams, 0, 2);
+            tableLayoutPanel1.Controls.Add(gbInitialConditions, 0, 1);
+            tableLayoutPanel1.Controls.Add(gbSimControl, 0, 3);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.Size = new System.Drawing.Size(901, 636);
+            tableLayoutPanel1.TabIndex = 0;
             // 
             // cbAutoClose
             // 
-            this.cbAutoClose.AutoSize = true;
-            this.cbAutoClose.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbAutoClose.Location = new System.Drawing.Point(3, 531);
-            this.cbAutoClose.Name = "cbAutoClose";
-            this.cbAutoClose.Size = new System.Drawing.Size(766, 17);
-            this.cbAutoClose.TabIndex = 2;
-            this.cbAutoClose.Text = "Automatically close this dialog after the simulation ends";
-            this.cbAutoClose.UseVisualStyleBackColor = true;
+            cbAutoClose.AutoSize = true;
+            cbAutoClose.Dock = System.Windows.Forms.DockStyle.Fill;
+            cbAutoClose.Location = new System.Drawing.Point(4, 614);
+            cbAutoClose.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cbAutoClose.Name = "cbAutoClose";
+            cbAutoClose.Size = new System.Drawing.Size(893, 19);
+            cbAutoClose.TabIndex = 2;
+            cbAutoClose.Text = "Automatically close this dialog after the simulation ends";
+            cbAutoClose.UseVisualStyleBackColor = true;
             // 
             // gbSimParams
             // 
-            this.gbSimParams.AutoSize = true;
-            this.gbSimParams.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.gbSimParams.Controls.Add(this.tableLayoutPanel2);
-            this.gbSimParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbSimParams.Location = new System.Drawing.Point(3, 103);
-            this.gbSimParams.Name = "gbSimParams";
-            this.gbSimParams.Size = new System.Drawing.Size(766, 126);
-            this.gbSimParams.TabIndex = 1;
-            this.gbSimParams.TabStop = false;
-            this.gbSimParams.Text = "Simulation Parameters";
+            gbSimParams.AutoSize = true;
+            gbSimParams.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            gbSimParams.Controls.Add(tableLayoutPanel2);
+            gbSimParams.Dock = System.Windows.Forms.DockStyle.Fill;
+            gbSimParams.Location = new System.Drawing.Point(4, 117);
+            gbSimParams.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbSimParams.Name = "gbSimParams";
+            gbSimParams.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbSimParams.Size = new System.Drawing.Size(893, 143);
+            gbSimParams.TabIndex = 1;
+            gbSimParams.TabStop = false;
+            gbSimParams.Text = "Simulation Parameters";
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.AutoSize = true;
-            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 4;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.dtpSimStop, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label5, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.lnkSimParams, 1, 3);
-            this.tableLayoutPanel2.Controls.Add(this.dtpSimStart, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox2, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.cmbStepLen, 1, 2);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 4;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(760, 107);
-            this.tableLayoutPanel2.TabIndex = 0;
+            tableLayoutPanel2.AutoSize = true;
+            tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel2.Controls.Add(dtpSimStop, 1, 1);
+            tableLayoutPanel2.Controls.Add(label5, 0, 3);
+            tableLayoutPanel2.Controls.Add(label1, 0, 0);
+            tableLayoutPanel2.Controls.Add(label2, 0, 1);
+            tableLayoutPanel2.Controls.Add(label3, 0, 2);
+            tableLayoutPanel2.Controls.Add(lnkSimParams, 1, 3);
+            tableLayoutPanel2.Controls.Add(dtpSimStart, 1, 0);
+            tableLayoutPanel2.Controls.Add(groupBox2, 3, 0);
+            tableLayoutPanel2.Controls.Add(cmbStepLen, 1, 2);
+            tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel2.Location = new System.Drawing.Point(4, 19);
+            tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 4;
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            tableLayoutPanel2.Size = new System.Drawing.Size(885, 121);
+            tableLayoutPanel2.TabIndex = 0;
             // 
             // dtpSimStop
             // 
-            this.dtpSimStop.CustomFormat = "yyyy-MM-dd_HH";
-            this.dtpSimStop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtpSimStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpSimStop.Location = new System.Drawing.Point(114, 29);
-            this.dtpSimStop.Name = "dtpSimStop";
-            this.dtpSimStop.Size = new System.Drawing.Size(121, 20);
-            this.dtpSimStop.TabIndex = 7;
+            dtpSimStop.CustomFormat = "yyyy-MM-dd_HH";
+            dtpSimStop.Dock = System.Windows.Forms.DockStyle.Fill;
+            dtpSimStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            dtpSimStop.Location = new System.Drawing.Point(131, 32);
+            dtpSimStop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            dtpSimStop.Name = "dtpSimStop";
+            dtpSimStop.Size = new System.Drawing.Size(141, 23);
+            dtpSimStop.TabIndex = 7;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(3, 79);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(105, 28);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Model params:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label5.AutoSize = true;
+            label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            label5.Location = new System.Drawing.Point(4, 87);
+            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(119, 34);
+            label5.TabIndex = 3;
+            label5.Text = "Model params:";
+            label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 26);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Start Date/Time:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label1.AutoSize = true;
+            label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            label1.Location = new System.Drawing.Point(4, 0);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(119, 29);
+            label1.TabIndex = 0;
+            label1.Text = "Start Date/Time:";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 26);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(105, 26);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Stop Date/Time:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label2.AutoSize = true;
+            label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            label2.Location = new System.Drawing.Point(4, 29);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(119, 29);
+            label2.TabIndex = 1;
+            label2.Text = "Stop Date/Time:";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Enabled = false;
-            this.label3.Location = new System.Drawing.Point(3, 52);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(105, 27);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Sim step length (hrs):";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Visible = false;
+            label3.AutoSize = true;
+            label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            label3.Enabled = false;
+            label3.Location = new System.Drawing.Point(4, 58);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(119, 29);
+            label3.TabIndex = 2;
+            label3.Text = "Sim step length (hrs):";
+            label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label3.Visible = false;
             // 
             // lnkSimParams
             // 
-            this.tableLayoutPanel2.SetColumnSpan(this.lnkSimParams, 2);
-            this.lnkSimParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lnkSimParams.Location = new System.Drawing.Point(114, 79);
-            this.lnkSimParams.Name = "lnkSimParams";
-            this.lnkSimParams.Size = new System.Drawing.Size(141, 28);
-            this.lnkSimParams.TabIndex = 4;
-            this.lnkSimParams.TabStop = true;
-            this.lnkSimParams.Text = "Click to view and edit ...";
-            this.lnkSimParams.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lnkSimParams.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLinkClicked);
+            tableLayoutPanel2.SetColumnSpan(lnkSimParams, 2);
+            lnkSimParams.Dock = System.Windows.Forms.DockStyle.Fill;
+            lnkSimParams.Location = new System.Drawing.Point(131, 87);
+            lnkSimParams.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            lnkSimParams.Name = "lnkSimParams";
+            lnkSimParams.Size = new System.Drawing.Size(164, 34);
+            lnkSimParams.TabIndex = 4;
+            lnkSimParams.TabStop = true;
+            lnkSimParams.Text = "Click to view and edit ...";
+            lnkSimParams.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lnkSimParams.LinkClicked += OnLinkClicked;
             // 
             // dtpSimStart
             // 
-            this.dtpSimStart.CustomFormat = "yyyy-MM-dd_HH";
-            this.dtpSimStart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtpSimStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpSimStart.Location = new System.Drawing.Point(114, 3);
-            this.dtpSimStart.Name = "dtpSimStart";
-            this.dtpSimStart.Size = new System.Drawing.Size(121, 20);
-            this.dtpSimStart.TabIndex = 5;
+            dtpSimStart.CustomFormat = "yyyy-MM-dd_HH";
+            dtpSimStart.Dock = System.Windows.Forms.DockStyle.Fill;
+            dtpSimStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            dtpSimStart.Location = new System.Drawing.Point(131, 3);
+            dtpSimStart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            dtpSimStart.Name = "dtpSimStart";
+            dtpSimStart.Size = new System.Drawing.Size(141, 23);
+            dtpSimStart.TabIndex = 5;
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.tableLayoutPanel4);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Location = new System.Drawing.Point(261, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.tableLayoutPanel2.SetRowSpan(this.groupBox2, 4);
-            this.groupBox2.Size = new System.Drawing.Size(496, 100);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Statistic analisys";
+            groupBox2.Controls.Add(tableLayoutPanel4);
+            groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            groupBox2.Location = new System.Drawing.Point(303, 3);
+            groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel2.SetRowSpan(groupBox2, 4);
+            groupBox2.Size = new System.Drawing.Size(578, 115);
+            groupBox2.TabIndex = 10;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Post-simulation";
             // 
             // tableLayoutPanel4
             // 
-            this.tableLayoutPanel4.AutoSize = true;
-            this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel4.ColumnCount = 3;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.Controls.Add(this.cbRunStatsOnly, 0, 1);
-            this.tableLayoutPanel4.Controls.Add(this.cbRunStats, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.label6, 0, 2);
-            this.tableLayoutPanel4.Controls.Add(this.cmbRange, 1, 2);
-            this.tableLayoutPanel4.Controls.Add(this.btnClose, 2, 2);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 3;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(490, 81);
-            this.tableLayoutPanel4.TabIndex = 0;
+            tableLayoutPanel4.AutoSize = true;
+            tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel4.ColumnCount = 3;
+            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel4.Controls.Add(cbRunStatsOnly, 0, 2);
+            tableLayoutPanel4.Controls.Add(cbRunStats, 0, 1);
+            tableLayoutPanel4.Controls.Add(label6, 0, 3);
+            tableLayoutPanel4.Controls.Add(cmbRange, 1, 3);
+            tableLayoutPanel4.Controls.Add(btnClose, 2, 2);
+            tableLayoutPanel4.Controls.Add(cbAutoExport, 0, 0);
+            tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel4.Location = new System.Drawing.Point(4, 19);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 4;
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel4.Size = new System.Drawing.Size(570, 93);
+            tableLayoutPanel4.TabIndex = 0;
             // 
             // cbRunStatsOnly
             // 
-            this.tableLayoutPanel4.SetColumnSpan(this.cbRunStatsOnly, 2);
-            this.cbRunStatsOnly.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbRunStatsOnly.Location = new System.Drawing.Point(3, 30);
-            this.cbRunStatsOnly.Name = "cbRunStatsOnly";
-            this.cbRunStatsOnly.Size = new System.Drawing.Size(477, 21);
-            this.cbRunStatsOnly.TabIndex = 7;
-            this.cbRunStatsOnly.Text = "Run statistical analisys only (on existing simulation data)";
-            this.cbRunStatsOnly.UseVisualStyleBackColor = true;
-            this.cbRunStatsOnly.CheckedChanged += new System.EventHandler(this.OnRunStatsOnlyCheckedChanged);
+            cbRunStatsOnly.AutoSize = true;
+            tableLayoutPanel4.SetColumnSpan(cbRunStatsOnly, 2);
+            cbRunStatsOnly.Dock = System.Windows.Forms.DockStyle.Fill;
+            cbRunStatsOnly.Location = new System.Drawing.Point(3, 49);
+            cbRunStatsOnly.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            cbRunStatsOnly.Name = "cbRunStatsOnly";
+            cbRunStatsOnly.Size = new System.Drawing.Size(555, 20);
+            cbRunStatsOnly.TabIndex = 7;
+            cbRunStatsOnly.Text = "Run statistical analisys only (on existing simulation data)";
+            cbRunStatsOnly.UseVisualStyleBackColor = true;
+            cbRunStatsOnly.CheckedChanged += OnRunStatsOnlyCheckedChanged;
             // 
             // cbRunStats
             // 
-            this.cbRunStats.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.cbRunStats, 2);
-            this.cbRunStats.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbRunStats.Location = new System.Drawing.Point(3, 3);
-            this.cbRunStats.Name = "cbRunStats";
-            this.cbRunStats.Size = new System.Drawing.Size(477, 21);
-            this.cbRunStats.TabIndex = 0;
-            this.cbRunStats.Text = "Automatically run statistical analisys after the simulation ends";
-            this.cbRunStats.UseVisualStyleBackColor = true;
-            this.cbRunStats.CheckedChanged += new System.EventHandler(this.OnRunStatsCheckedChanged);
+            cbRunStats.AutoSize = true;
+            tableLayoutPanel4.SetColumnSpan(cbRunStats, 2);
+            cbRunStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            cbRunStats.Location = new System.Drawing.Point(3, 26);
+            cbRunStats.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            cbRunStats.Name = "cbRunStats";
+            cbRunStats.Size = new System.Drawing.Size(555, 20);
+            cbRunStats.TabIndex = 0;
+            cbRunStats.Text = "Automatically run statistical analisys after the simulation ends";
+            cbRunStats.UseVisualStyleBackColor = true;
+            cbRunStats.CheckedChanged += OnRunStatsCheckedChanged;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 54);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(136, 27);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Statistic Range Size (days):";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label6.AutoSize = true;
+            label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            label6.Location = new System.Drawing.Point(3, 72);
+            label6.Margin = new System.Windows.Forms.Padding(3);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(145, 18);
+            label6.TabIndex = 2;
+            label6.Text = "Statistic Range Size (days):";
+            label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // cmbRange
             // 
-            this.cmbRange.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmbRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbRange.FormattingEnabled = true;
-            this.cmbRange.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "5",
-            "7",
-            "10",
-            "15",
-            "30",
-            "120",
-            "240",
-            "365"});
-            this.cmbRange.Location = new System.Drawing.Point(145, 57);
-            this.cmbRange.Name = "cmbRange";
-            this.cmbRange.Size = new System.Drawing.Size(335, 21);
-            this.cmbRange.TabIndex = 5;
-            // 
-            // cmbStepLen
-            // 
-            this.cmbStepLen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbStepLen.Enabled = false;
-            this.cmbStepLen.FormattingEnabled = true;
-            this.cmbStepLen.Items.AddRange(new object[] {
-            "2",
-            "3",
-            "6",
-            "8",
-            "12",
-            "24"});
-            this.cmbStepLen.Location = new System.Drawing.Point(114, 55);
-            this.cmbStepLen.Name = "cmbStepLen";
-            this.cmbStepLen.Size = new System.Drawing.Size(121, 21);
-            this.cmbStepLen.TabIndex = 11;
-            this.cmbStepLen.Visible = false;
-            // 
-            // gbInitialConditions
-            // 
-            this.gbInitialConditions.Controls.Add(this.tableLayoutPanel5);
-            this.gbInitialConditions.Location = new System.Drawing.Point(3, 3);
-            this.gbInitialConditions.Name = "gbInitialConditions";
-            this.gbInitialConditions.Size = new System.Drawing.Size(766, 94);
-            this.gbInitialConditions.TabIndex = 0;
-            this.gbInitialConditions.TabStop = false;
-            this.gbInitialConditions.Text = "Initial Model Conditions";
-            // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.AutoSize = true;
-            this.tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel5.ColumnCount = 3;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel5.Controls.Add(this.groupBox5, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.btnFetchData, 1, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(760, 75);
-            this.tableLayoutPanel5.TabIndex = 3;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox5.Controls.Add(this.tableLayoutPanel6);
-            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox5.Location = new System.Drawing.Point(3, 3);
-            this.groupBox5.Name = "groupBox5";
-            this.tableLayoutPanel5.SetRowSpan(this.groupBox5, 2);
-            this.groupBox5.Size = new System.Drawing.Size(147, 69);
-            this.groupBox5.TabIndex = 3;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Initial conditions validity";
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.AutoSize = true;
-            this.tableLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel6.ColumnCount = 4;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.Controls.Add(this.pbSST, 3, 0);
-            this.tableLayoutPanel6.Controls.Add(this.pbGrib, 3, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label11, 2, 0);
-            this.tableLayoutPanel6.Controls.Add(this.label12, 2, 1);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 2;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(141, 52);
-            this.tableLayoutPanel6.TabIndex = 0;
-            // 
-            // pbSST
-            // 
-            this.pbSST.Location = new System.Drawing.Point(42, 3);
-            this.pbSST.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbSST.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbSST.Name = "pbSST";
-            this.pbSST.Size = new System.Drawing.Size(20, 20);
-            this.pbSST.TabIndex = 10;
-            this.pbSST.TabStop = false;
-            // 
-            // pbGrib
-            // 
-            this.pbGrib.Location = new System.Drawing.Point(42, 29);
-            this.pbGrib.MaximumSize = new System.Drawing.Size(20, 20);
-            this.pbGrib.MinimumSize = new System.Drawing.Size(20, 20);
-            this.pbGrib.Name = "pbGrib";
-            this.pbGrib.Size = new System.Drawing.Size(20, 20);
-            this.pbGrib.TabIndex = 11;
-            this.pbGrib.TabStop = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Location = new System.Drawing.Point(3, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(33, 26);
-            this.label11.TabIndex = 8;
-            this.label11.Text = "SST";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(3, 26);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(33, 26);
-            this.label12.TabIndex = 9;
-            this.label12.Text = "GRIB";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // btnFetchData
-            // 
-            this.btnFetchData.AutoSize = true;
-            this.btnFetchData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnFetchData.Location = new System.Drawing.Point(156, 23);
-            this.btnFetchData.Margin = new System.Windows.Forms.Padding(3, 23, 3, 3);
-            this.btnFetchData.Name = "btnFetchData";
-            this.tableLayoutPanel5.SetRowSpan(this.btnFetchData, 2);
-            this.btnFetchData.Size = new System.Drawing.Size(145, 36);
-            this.btnFetchData.TabIndex = 6;
-            this.btnFetchData.Text = "Download initial conditions \r\nfiles from NOAA server";
-            this.btnFetchData.UseVisualStyleBackColor = true;
-            this.btnFetchData.Click += new System.EventHandler(this.OnFetchDataClick);
-            // 
-            // gbSimControl
-            // 
-            this.gbSimControl.Controls.Add(this.txtSimProcOut);
-            this.gbSimControl.Controls.Add(this.pbSimProgress);
-            this.gbSimControl.Controls.Add(this.btnSimStart);
-            this.gbSimControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbSimControl.Location = new System.Drawing.Point(3, 235);
-            this.gbSimControl.Name = "gbSimControl";
-            this.gbSimControl.Size = new System.Drawing.Size(766, 290);
-            this.gbSimControl.TabIndex = 3;
-            this.gbSimControl.TabStop = false;
-            this.gbSimControl.Text = "Simulation Progress and Control";
-            // 
-            // txtSimProcOut
-            // 
-            this.txtSimProcOut.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSimProcOut.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSimProcOut.Location = new System.Drawing.Point(6, 51);
-            this.txtSimProcOut.Multiline = true;
-            this.txtSimProcOut.Name = "txtSimProcOut";
-            this.txtSimProcOut.ReadOnly = true;
-            this.txtSimProcOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSimProcOut.Size = new System.Drawing.Size(757, 233);
-            this.txtSimProcOut.TabIndex = 2;
-            this.txtSimProcOut.WordWrap = false;
-            // 
-            // pbSimProgress
-            // 
-            this.pbSimProgress.Location = new System.Drawing.Point(122, 19);
-            this.pbSimProgress.Name = "pbSimProgress";
-            this.pbSimProgress.Size = new System.Drawing.Size(641, 23);
-            this.pbSimProgress.TabIndex = 1;
-            // 
-            // btnSimStart
-            // 
-            this.btnSimStart.Location = new System.Drawing.Point(6, 19);
-            this.btnSimStart.Name = "btnSimStart";
-            this.btnSimStart.Size = new System.Drawing.Size(97, 23);
-            this.btnSimStart.TabIndex = 0;
-            this.btnSimStart.Text = "Start Simulation";
-            this.btnSimStart.UseVisualStyleBackColor = true;
-            this.btnSimStart.Click += new System.EventHandler(this.OnStartStopSimulation);
+            cmbRange.Dock = System.Windows.Forms.DockStyle.Fill;
+            cmbRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbRange.FormattingEnabled = true;
+            cmbRange.Items.AddRange(new object[] { "1", "2", "5", "7", "10", "15", "30", "120", "240", "365" });
+            cmbRange.Location = new System.Drawing.Point(151, 69);
+            cmbRange.Margin = new System.Windows.Forms.Padding(0);
+            cmbRange.Name = "cmbRange";
+            cmbRange.Size = new System.Drawing.Size(410, 23);
+            cmbRange.TabIndex = 5;
             // 
             // btnClose
             // 
-            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(486, 57);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(1, 1);
-            this.btnClose.TabIndex = 8;
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.button1_Click);
+            btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            btnClose.Location = new System.Drawing.Point(565, 49);
+            btnClose.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new System.Drawing.Size(1, 1);
+            btnClose.TabIndex = 8;
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += button1_Click;
+            // 
+            // cbAutoExport
+            // 
+            cbAutoExport.AutoSize = true;
+            tableLayoutPanel4.SetColumnSpan(cbAutoExport, 3);
+            cbAutoExport.Dock = System.Windows.Forms.DockStyle.Fill;
+            cbAutoExport.Location = new System.Drawing.Point(3, 3);
+            cbAutoExport.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            cbAutoExport.Name = "cbAutoExport";
+            cbAutoExport.Size = new System.Drawing.Size(564, 20);
+            cbAutoExport.TabIndex = 9;
+            cbAutoExport.Text = "Automatically export subregion data after the simulation ends";
+            cbAutoExport.Checked = true;
+            cbAutoExport.UseVisualStyleBackColor = true;
+            // 
+            // cmbStepLen
+            // 
+            cmbStepLen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cmbStepLen.Enabled = false;
+            cmbStepLen.FormattingEnabled = true;
+            cmbStepLen.Items.AddRange(new object[] { "2", "3", "6", "8", "12", "24" });
+            cmbStepLen.Location = new System.Drawing.Point(131, 61);
+            cmbStepLen.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cmbStepLen.Name = "cmbStepLen";
+            cmbStepLen.Size = new System.Drawing.Size(140, 23);
+            cmbStepLen.TabIndex = 11;
+            cmbStepLen.Visible = false;
+            // 
+            // gbInitialConditions
+            // 
+            gbInitialConditions.Controls.Add(tableLayoutPanel5);
+            gbInitialConditions.Location = new System.Drawing.Point(4, 3);
+            gbInitialConditions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbInitialConditions.Name = "gbInitialConditions";
+            gbInitialConditions.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbInitialConditions.Size = new System.Drawing.Size(893, 108);
+            gbInitialConditions.TabIndex = 0;
+            gbInitialConditions.TabStop = false;
+            gbInitialConditions.Text = "Initial Model Conditions";
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.AutoSize = true;
+            tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel5.ColumnCount = 3;
+            tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel5.Controls.Add(groupBox5, 0, 0);
+            tableLayoutPanel5.Controls.Add(btnFetchData, 1, 0);
+            tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel5.Location = new System.Drawing.Point(4, 19);
+            tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 2;
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            tableLayoutPanel5.Size = new System.Drawing.Size(885, 86);
+            tableLayoutPanel5.TabIndex = 3;
+            // 
+            // groupBox5
+            // 
+            groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            groupBox5.Controls.Add(tableLayoutPanel6);
+            groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+            groupBox5.Location = new System.Drawing.Point(4, 3);
+            groupBox5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel5.SetRowSpan(groupBox5, 2);
+            groupBox5.Size = new System.Drawing.Size(172, 80);
+            groupBox5.TabIndex = 3;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Initial conditions validity";
+            // 
+            // tableLayoutPanel6
+            // 
+            tableLayoutPanel6.AutoSize = true;
+            tableLayoutPanel6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel6.ColumnCount = 4;
+            tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel6.Controls.Add(pbSST, 3, 0);
+            tableLayoutPanel6.Controls.Add(pbGrib, 3, 1);
+            tableLayoutPanel6.Controls.Add(label11, 2, 0);
+            tableLayoutPanel6.Controls.Add(label12, 2, 1);
+            tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
+            tableLayoutPanel6.Location = new System.Drawing.Point(4, 19);
+            tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.RowCount = 2;
+            tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel6.Size = new System.Drawing.Size(164, 58);
+            tableLayoutPanel6.TabIndex = 0;
+            // 
+            // pbSST
+            // 
+            pbSST.Location = new System.Drawing.Point(44, 3);
+            pbSST.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            pbSST.MaximumSize = new System.Drawing.Size(23, 23);
+            pbSST.MinimumSize = new System.Drawing.Size(23, 23);
+            pbSST.Name = "pbSST";
+            pbSST.Size = new System.Drawing.Size(23, 23);
+            pbSST.TabIndex = 10;
+            pbSST.TabStop = false;
+            // 
+            // pbGrib
+            // 
+            pbGrib.Location = new System.Drawing.Point(44, 32);
+            pbGrib.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            pbGrib.MaximumSize = new System.Drawing.Size(23, 23);
+            pbGrib.MinimumSize = new System.Drawing.Size(23, 23);
+            pbGrib.Name = "pbGrib";
+            pbGrib.Size = new System.Drawing.Size(23, 23);
+            pbGrib.TabIndex = 11;
+            pbGrib.TabStop = false;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Dock = System.Windows.Forms.DockStyle.Fill;
+            label11.Location = new System.Drawing.Point(4, 0);
+            label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label11.Name = "label11";
+            label11.Size = new System.Drawing.Size(32, 29);
+            label11.TabIndex = 8;
+            label11.Text = "SST";
+            label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Dock = System.Windows.Forms.DockStyle.Fill;
+            label12.Location = new System.Drawing.Point(4, 29);
+            label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label12.Name = "label12";
+            label12.Size = new System.Drawing.Size(32, 29);
+            label12.TabIndex = 9;
+            label12.Text = "GRIB";
+            label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // btnFetchData
+            // 
+            btnFetchData.AutoSize = true;
+            btnFetchData.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnFetchData.Location = new System.Drawing.Point(184, 27);
+            btnFetchData.Margin = new System.Windows.Forms.Padding(4, 27, 4, 3);
+            btnFetchData.Name = "btnFetchData";
+            tableLayoutPanel5.SetRowSpan(btnFetchData, 2);
+            btnFetchData.Size = new System.Drawing.Size(165, 40);
+            btnFetchData.TabIndex = 6;
+            btnFetchData.Text = "Download initial conditions \r\nfiles from NOAA server";
+            btnFetchData.UseVisualStyleBackColor = true;
+            btnFetchData.Click += OnFetchDataClick;
+            // 
+            // gbSimControl
+            // 
+            gbSimControl.Controls.Add(txtSimProcOut);
+            gbSimControl.Controls.Add(pbSimProgress);
+            gbSimControl.Controls.Add(btnSimStart);
+            gbSimControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            gbSimControl.Location = new System.Drawing.Point(4, 266);
+            gbSimControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbSimControl.Name = "gbSimControl";
+            gbSimControl.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            gbSimControl.Size = new System.Drawing.Size(893, 342);
+            gbSimControl.TabIndex = 3;
+            gbSimControl.TabStop = false;
+            gbSimControl.Text = "Simulation Progress and Control";
+            // 
+            // txtSimProcOut
+            // 
+            txtSimProcOut.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            txtSimProcOut.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            txtSimProcOut.Location = new System.Drawing.Point(7, 59);
+            txtSimProcOut.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            txtSimProcOut.Multiline = true;
+            txtSimProcOut.Name = "txtSimProcOut";
+            txtSimProcOut.ReadOnly = true;
+            txtSimProcOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            txtSimProcOut.Size = new System.Drawing.Size(881, 275);
+            txtSimProcOut.TabIndex = 2;
+            txtSimProcOut.WordWrap = false;
+            // 
+            // pbSimProgress
+            // 
+            pbSimProgress.Location = new System.Drawing.Point(142, 22);
+            pbSimProgress.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            pbSimProgress.Name = "pbSimProgress";
+            pbSimProgress.Size = new System.Drawing.Size(748, 27);
+            pbSimProgress.TabIndex = 1;
+            // 
+            // btnSimStart
+            // 
+            btnSimStart.Location = new System.Drawing.Point(7, 22);
+            btnSimStart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            btnSimStart.Name = "btnSimStart";
+            btnSimStart.Size = new System.Drawing.Size(113, 27);
+            btnSimStart.TabIndex = 0;
+            btnSimStart.Text = "Start Simulation";
+            btnSimStart.UseVisualStyleBackColor = true;
+            btnSimStart.Click += OnStartStopSimulation;
             // 
             // SimControlPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(772, 551);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SimControlPanel";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Simulation Control Panel";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.gbSimParams.ResumeLayout(false);
-            this.gbSimParams.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
-            this.gbInitialConditions.ResumeLayout(false);
-            this.gbInitialConditions.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbSST)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGrib)).EndInit();
-            this.gbSimControl.ResumeLayout(false);
-            this.gbSimControl.PerformLayout();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            CancelButton = btnClose;
+            ClientSize = new System.Drawing.Size(901, 636);
+            Controls.Add(tableLayoutPanel1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            Name = "SimControlPanel";
+            ShowInTaskbar = false;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            Text = "Simulation Control Panel";
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            gbSimParams.ResumeLayout(false);
+            gbSimParams.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
+            gbInitialConditions.ResumeLayout(false);
+            gbInitialConditions.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            tableLayoutPanel6.ResumeLayout(false);
+            tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbSST).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbGrib).EndInit();
+            gbSimControl.ResumeLayout(false);
+            gbSimControl.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -585,5 +620,6 @@
         private System.Windows.Forms.PictureBox pbGrib;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.CheckBox cbAutoExport;
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using ThorusCommon.Data;
+using System.Linq;
 using ThorusCommon.Engine;
+using ThorusCommon.Export;
 
 namespace ThorusViewer.Models
 {
@@ -12,7 +13,6 @@ namespace ThorusViewer.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Viewport settings
-        public List<Viewport> Viewports { get; private set; }
 
         private Viewport _selViewport = null;
         public Viewport SelectedViewport
@@ -117,31 +117,6 @@ namespace ThorusViewer.Models
 
         public ControlPanelModel()
         {
-            Viewports = new List<Viewport>();
-
-            Viewports.Add(new Viewport("Entire World", "EWR", EarthModel.MinLat, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
-
-            Viewports.Add(new Viewport("Northern Hemisphere", "NHM", 0, EarthModel.MaxLat, EarthModel.MinLon, EarthModel.MaxLon));
-            Viewports.Add(new Viewport("Southern Hemisphere", "SHM", EarthModel.MinLat, 0, EarthModel.MinLon, EarthModel.MaxLon));
-
-            var euView = new Viewport("Europe", "EU", 25, EarthModel.MaxLat, -30, 65, 2);
-            Viewports.Add(euView);
-
-            var roView = new Viewport("Romania", "RO", 43, 49, 20, 30, 2);
-            Viewports.Add(roView);
-
-            Viewports.Add(new Viewport("Africa", "AF", -35, 40, -55, 95, 2));
-
-            Viewports.Add(new Viewport("N America", "NAM", 0, EarthModel.MaxLat, EarthModel.MinLon, -30, 2));
-            Viewports.Add(new Viewport("N Asia", "NAS", 0, EarthModel.MaxLat, 65, EarthModel.MaxLon, 2));
-
-            Viewports.Add(new Viewport("N Atlantic", "NAT", 0, EarthModel.MaxLat, -75, 20, 2));
-            Viewports.Add(new Viewport("E.Europe and Russia", "EER", 25, EarthModel.MaxLat, 20, 115, 2));
-
-            Viewports.Add(new Viewport("S America", "SAM", -60, 15, -105, -25, 2));
-            Viewports.Add(new Viewport("S Atlantic", "SAT", EarthModel.MinLat, 0, -70, 30, 2));
-
-            Viewports.Add(new Viewport("Australia + Indonesia", "AUI", -50, 10, 90, EarthModel.MaxLon, 2));
 
             DataTypes = new List<DataType>();
 
@@ -242,7 +217,7 @@ namespace ThorusViewer.Models
 
             #endregion
 
-            SelectedViewport = roView;
+            SelectedViewport = Viewport.AllViewports.Where(v => v.Code == "RO").FirstOrDefault();
             SelectedDataType = meanTe;
         }
 
@@ -259,47 +234,6 @@ namespace ThorusViewer.Models
         {
             if (this.AutoSaveImage)
                 FirePropertyChanged("AutoSave");
-        }
-    }
-
-
-    public class Viewport
-    {
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-
-        public float MinLat { get; private set; }
-        public float MaxLat { get; private set; }
-        public float MinLon { get; private set; }
-        public float MaxLon { get; private set; }
-        public float DataStep { get; private set; }
-
-        public float AspectRatio
-        {
-            get
-            {
-                float h = MaxLat - MinLat;
-                float w = MaxLon - MinLon;
-
-                if (h == 0)
-                    h = 1;
-
-                return w / h;
-            }
-        }
-
-        public override string ToString()
-            => $"{Name} [{Code}] Lat=[{MinLat}..{MaxLat}], Lon=[{MinLon}..{MaxLon}]";
-
-        public Viewport(string name, string code, float minLat, float maxLat, float minLon, float maxLon, float dataStep = 5)
-        {
-            this.Name = name;
-            this.Code = code;
-            this.MinLat = minLat;
-            this.MaxLat = maxLat;
-            this.MinLon = minLon;
-            this.MaxLon = maxLon;
-            this.DataStep = dataStep;
         }
     }
 

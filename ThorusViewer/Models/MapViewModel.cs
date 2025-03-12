@@ -101,22 +101,22 @@ namespace ThorusViewer.Models
 
         public void RefitMap()
         {
-            Viewport v = ControlPanelModel.Instance.SelectedViewport;
+            var viewport = ControlPanelModel.Instance.SelectedViewport;
 
             const float AspectRatioThreshold = 2.5f;
 
             float MaxWidth = (float)_parent.Width;
             float MaxHeight = (float)_parent.Height;
 
-            if (v.AspectRatio > AspectRatioThreshold)
+            if (viewport.AspectRatio > AspectRatioThreshold)
             {
-                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Height = (int)(MaxWidth / v.AspectRatio);
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Height = (int)(MaxWidth / viewport.AspectRatio);
                 (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Width = (int)MaxWidth;
             }
             else
             {
                 (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Height = (int)MaxHeight;
-                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Width = (int)(MaxHeight * v.AspectRatio);
+                (this.Model.PlotView as OxyPlot.WindowsForms.PlotView).Width = (int)(MaxHeight * viewport.AspectRatio);
             }
         }
 

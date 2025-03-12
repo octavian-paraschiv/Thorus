@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using ThorusCommon.Export;
 using ThorusViewer.Models;
 
 namespace OPMedia.UI.Controls
@@ -10,7 +11,7 @@ namespace OPMedia.UI.Controls
         {
             InitializeComponent();
 
-            cmbViewport.DataSource = ControlPanelModel.Instance.Viewports;
+            cmbViewport.DataSource = Viewport.AllViewports;
             cmbViewport.SelectedItem = ControlPanelModel.Instance.SelectedViewport;
             cmbViewport.SelectedIndexChanged += OnViewportChanged;
         }

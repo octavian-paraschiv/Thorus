@@ -10,6 +10,7 @@ namespace ThorusViewer.Forms
         }
 
         private delegate void DisplayProgressDG(Form owner, int current, int total, string desc);
+
         public void DisplayProgress(Form owner, int current, int total, string desc)
         {
             if (this.InvokeRequired)

@@ -38,6 +38,7 @@ namespace ThorusViewer
             {
                 FolderBrowserDialog dlg = new FolderBrowserDialog
                 {
+                    AutoUpgradeEnabled = false,
                     SelectedPath = SimulationData.WorkFolder,
 
                     Description = string.IsNullOrEmpty(SimulationData.WorkFolder) ?
@@ -68,6 +69,7 @@ namespace ThorusViewer
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog
             {
+                AutoUpgradeEnabled = false,
                 SelectedPath = SimulationData.DataFolder,
                 Description = $"Please select the dataset root path (current value: {SimulationData.DataFolder ?? ""})\r\n" +
                 $"Click Cancel or hit Escape to leave it as-is."

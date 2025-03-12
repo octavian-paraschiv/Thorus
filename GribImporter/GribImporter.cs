@@ -121,10 +121,10 @@ namespace ThorusCommon.Data
             }).FirstOrDefault();
 
             var unfiltered = _reader.ReadDataSetValues(message.DataSets.First()).ToArray();
-            var nodes = unfiltered.Where(gs =>
-                (gs.Key.Latitude >= EarthModel.MinLat && gs.Key.Latitude <= EarthModel.MaxLat) &&
-                (gs.Key.Longitude >= EarthModel.MinLon && gs.Key.Longitude <= EarthModel.MaxLon) &&
-                (gs.Key.Latitude == (int)gs.Key.Latitude) &&
+            var nodes = unfiltered.Where(gs => gs.Value.HasValue &&
+                //(gs.Key.Latitude >= EarthModel.MinLat && gs.Key.Latitude <= EarthModel.MaxLat) &&
+                //(gs.Key.Longitude >= EarthModel.MinLon && gs.Key.Longitude <= EarthModel.MaxLon) &&
+                gs.Key.Latitude == (int)gs.Key.Latitude &&
                 gs.Key.Longitude == (int)gs.Key.Longitude)
                 .ToArray();
 
@@ -147,20 +147,19 @@ namespace ThorusCommon.Data
                 int r = EarthModel.MaxLat - (int)node.Key.Latitude;
                 int c = ((int)node.Key.Longitude - EarthModel.MinLon) % 360;
 
+                if (r < 0 || r >= mat.RowCount ||
+                    c < 0 || c >= mat.ColumnCount)
+                    continue;
+
                 try
                 {
                     mat[r, c] = conversionFunc((float)node.Value.GetValueOrDefault());
                 }
-                catch (Exception ex)
-                {
-                    _ = ex.Message;
-                }
+                catch { }
             }
 
             if (string.IsNullOrEmpty(dataFile) == false)
-            {
                 FileSupport.SaveMatrixToFile(mat, dataFile, false);
-            }
 
             return mat;
         }

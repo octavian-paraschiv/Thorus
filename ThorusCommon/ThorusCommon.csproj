@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+      <RootNamespace>ThorusCommon</RootNamespace>
+    <TargetFramework>netstandard20</TargetFramework>
     <AssemblyTitle>ThorusCommon</AssemblyTitle>
     <OutputPath>..\bin\</OutputPath>
       <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
@@ -27,9 +28,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="ThorusCommon.IO" Version="2.0.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>ThorusSimulation</RootNamespace>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <OutputType>Exe</OutputType>
         <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

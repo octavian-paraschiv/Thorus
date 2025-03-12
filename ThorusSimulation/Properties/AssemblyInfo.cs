@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 using ThorusCommon.IO;
 using ThorusCommon.Properties;
 
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
+
 [assembly: ComVisible(false)]
 [assembly: AssemblyCompany(Constants.Company)]
 [assembly: AssemblyProduct(Constants.Product)]

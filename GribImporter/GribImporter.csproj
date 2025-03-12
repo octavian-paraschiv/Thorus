@@ -10,7 +10,9 @@
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NGrib\src\NGrib\NGrib.csproj" />
+    <PackageReference Include="NGrib" Version="0.12.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />
   </ItemGroup>
 </Project>

@@ -33,7 +33,8 @@ OutputDir={#OUTDIR}
 
 ;------------------------------
 AllowNoIcons=true
-ChangesEnvironment=true
+PrivilegesRequired=none
+ChangesEnvironment=false
 Compression=lzma
 DirExistsWarning=yes
 DisableFinishedPage=false

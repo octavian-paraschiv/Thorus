@@ -42,8 +42,8 @@ DisableStartupPrompt=true
 EnableDirDoesntExistWarning=true
 LanguageDetectionMethod=locale
 
-; Minimum Windows 7 with Service Pack 1
-MinVersion=0,6.1.7601
+; Minimum Windows 10 1607 (because of .NET 8)
+MinVersion=0,10.0.14393
 
 SetupLogging=true
 ShowLanguageDialog=yes
@@ -66,7 +66,7 @@ Source: "{#BINDIR}\*.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\Data\*"; DestDir: "{app}\Data"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "{#BINDIR}\Images\*"; DestDir: "{app}\Images\Palettes"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "{#BINDIR}\Palettes\*"; DestDir: "{app}\Palettes"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "{#BINDIR}\runtimes\**\*"; DestDir: "{app}\runtimes"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "{#BINDIR}\runtimes\*"; DestDir: "{app}\runtimes"; Flags: ignoreversion createallsubdirs recursesubdirs
 
 [Icons]
 Name: "{group}\Thorus Weather Studio"; Filename: "{app}\ThorusViewer.exe"; WorkingDir: "{app}"; IconFilename: "{app}\ThorusViewer.exe"

@@ -74,7 +74,7 @@ namespace ThorusCommon.Data
                             if (WL[r, c] < 1)
                                 return tl[r, c];
 
-                            return 1000;
+                            return 60f;
 
                         });
                     }
@@ -90,7 +90,7 @@ namespace ThorusCommon.Data
                             if (WL[r, c] > 0)
                                 return tw[r, c];
 
-                            return 1000f;
+                            return 60f;
 
                         });
                     }

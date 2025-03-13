@@ -78,12 +78,6 @@ namespace ThorusCommon
             this.MinTsForMelting = 0.1f;
             this.MaxFreezingRainDelta = 5f;
 
-            this.JetStreamPattern = JetStreamPatterns.VariableJet_SeasonalReversal;
-            this.JetStreamVariabilityPeriod = 7f;
-            this.JetStreamVariabilitySeed = 0f;
-
-            this.JetStreamPluginName = "";
-
             this.FrontsDelta = 0.2f;
         }
 
@@ -377,92 +371,6 @@ namespace ThorusCommon
                 return (360f / (JetStreamPeriod * JetStreamPeaks));
             }
         }
-
-        public enum JetStreamPatterns
-        {
-            /// <summary>
-            /// Single hemispherical jet, with reversal at Poles and Equator
-            /// </summary>
-            SingleJet_WithReversal = 0,
-
-            /// <summary>
-            /// Single hemispherical jet, with reversal zones depending on season
-            /// </summary>
-            SingleJet_SeasonalReversal,
-
-            /// <summary>
-            /// Dual jet with reversal at Tropics and Polar Circles
-            /// </summary>
-            DualJet_WithReversal,
-
-            /// <summary>
-            /// Dual jet with reversal zones depending on season
-            /// </summary>
-            DualJet_SeasonalReversal,
-
-            /// <summary>
-            /// Variable jet with reversal (Combination of Single and Dual with reversal)
-            /// </summary>
-            VariableJet_WithReversal,
-
-            /// <summary>
-            /// Variable jet with reversal depending on season  (Combination of Single and Dual with seasonal reversal)
-            /// </summary>
-            VariableJet_SeasonalReversal,
-
-            /// <summary>
-            /// Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)
-            /// </summary>
-            VariableJet_SeasonalAndBlock_Reversal,
-
-            /// <summary>
-            /// Adaptive model
-            /// </summary>
-            AdaptiveJet,
-
-            /// <summary>
-            /// Adaptive with high pressure block model
-            /// </summary>
-            AdaptiveJet_WithBlock,
-        }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the pattern of the jet stream oscillation.\n\n" +
-            "SingleJet_NoReversal => Single hemispherical jet, without reversal [Theoretical pattern only]\n" +
-            "SingleJet_WithReversal => Single hemispherical jet, with reversal at Poles and Equator [Applicable in cold season]\n" +
-            "SingleJet_SeasonalReversal => Single hemispherical jet with reversal zones depending on season" +
-
-            "DualJet_NoReversal => Dual hemispherical jet without reversal. [Theoretical pattern only]\n\n" +
-            "DualJet_WithReversal => Dual hemispherical jet, with reversal at Tropics and Polar Circles [Applicable in warm season]\n" +
-            "DualJet_SeasonalReversal => Dual hemispherical jet with reversal zones depending on season\n\n" +
-
-            "Variable_WithReversal => Variable hemispherical jet, with reversal [Combination of Single and Dual with reversal]\n" +
-            "Variable_SeasonalReversal => Variable hemispherical jet, with reversal depending on season [Combination of Single and Dual with seasonal reversal]\n" +
-            "Variable_SeasonalAndBlock_Reversal =>  Variable jet with reversal depending on season and high pressure blocks (like Siberian or Azores Highs)\n\n"
-        )]
-
-        [DefaultValue(JetStreamPatterns.AdaptiveJet)]
-        public JetStreamPatterns JetStreamPattern { get; set; }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A variable that represents the variation period of the jet stream oscillation.\n\n" +
-            "It is applicable only when Variable_WithReversal is selected")]
-        [DefaultValue(6.5f)]
-        [Range(-365f, 365f)]
-        public float JetStreamVariabilityPeriod { get; set; }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A variable that represents the initial phase the jet stream oscillation.\n\n" +
-            "It is applicable only when Variable_WithReversal is selected\n" +
-            "-1 => Start from pure single jet; 1 => Start from pure dual jet\n")]
-        [DefaultValue(0f)]
-        [Range(-1f, 1f)]
-        public float JetStreamVariabilitySeed { get; set; }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("Jet stream model plugin name")]
-        [DefaultValue("Default")]
-        public string JetStreamPluginName { get; set; }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("Mid-Level Temperature minimum absolute difference for a front")]

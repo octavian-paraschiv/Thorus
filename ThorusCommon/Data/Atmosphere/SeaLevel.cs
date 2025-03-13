@@ -50,10 +50,10 @@ namespace ThorusCommon.Data
             DenseMatrix warmup = (1f + 1f / 3f) * Earth.ATM.Warmup;
 
             // Shift temperature field and apply seasonal warmup corrections.
-            var shiftedT = T.ApplyDeviations(applyDevs, null);
+            var shiftedT = T.ApplyDeviations(applyDevs);
 
             var projT = (shiftedT + warmup).EQ();
-            var projH = H.ApplyDeviations(applyDevs, null).EQ();
+            var projH = H.ApplyDeviations(applyDevs);
 
             ApplyAdvection(projT, projH);
 

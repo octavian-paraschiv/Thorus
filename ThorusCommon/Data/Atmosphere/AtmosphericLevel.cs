@@ -180,8 +180,8 @@ namespace ThorusCommon.Engine
 
             for (int i = 0; i < count; i++)
             {
-                projT_adv = projT_adv.ApplyDeviations(advDev, null);
-                projH_adv = projH_adv.ApplyDeviations(advDev, null);
+                projT_adv = projT_adv.ApplyDeviations(advDev);
+                projH_adv = projH_adv.ApplyDeviations(advDev);
             }
 
             T = (_fNonAdvect * projT + _fProAdvect * projT_adv).EQ();
@@ -308,7 +308,7 @@ namespace ThorusCommon.Engine
             projP.SetSubMatrix(0, pNorth.RowCount, 0, pNorth.ColumnCount, projPNorth);
             projP.SetSubMatrix(pNorth.RowCount, pSouth.RowCount, 0, pSouth.ColumnCount, projPSouth);
 
-            P = projP.EQ(4).ApplyDeviations(applyDevs, null).EQ(4);
+            P = projP.EQ(4).ApplyDeviations(applyDevs).EQ(4);
         }
 
         float _weakBlock = -1;

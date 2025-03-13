@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.Engine;
-using ThorusCommon.Thermodynamics;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using ThorusCommon.Data;
 
 namespace ThorusCommon.MatrixExtensions
@@ -150,7 +145,7 @@ namespace ThorusCommon.MatrixExtensions
 
 
 
-        public static DenseMatrix RegionSubMatrix(this DenseMatrix globalMatrix,  int minLon, int maxLon, int minLat, int maxLat)
+        public static DenseMatrix RegionSubMatrix(this DenseMatrix globalMatrix, int minLon, int maxLon, int minLat, int maxLat)
         {
             int rowCount = maxLat - minLat + 1;
             int colCount = maxLon - minLon + 1;
@@ -248,91 +243,6 @@ namespace ThorusCommon.MatrixExtensions
             });
         }
 
-        private static DenseMatrix EQ_Type_1(DenseMatrix m)
-        {
-            int lim_r = m.RowCount - 1;
-            int lim_c = m.ColumnCount - 1;
-
-            // ----------------------------------------------------------------
-            DenseMatrix 
-            tmp =  m
-                .InsertRow(lim_r, m.Row(lim_r))
-                .InsertRow(lim_r+1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m1 = tmp
-                .InsertColumn(lim_c, tmp.Column(lim_c))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(0, m.Row(0)) as DenseMatrix;
-            DenseMatrix m2 = tmp
-                .InsertColumn(lim_c, tmp.Column(lim_c))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(lim_r + 1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m3 = tmp
-                .InsertColumn(lim_c, tmp.Column(lim_c))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(lim_r, m.Row(lim_r))
-                .InsertRow(lim_r + 1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m4 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(0, tmp.Column(0)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(0, m.Row(0)) as DenseMatrix;
-            DenseMatrix m5 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(0, tmp.Column(0)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(lim_r + 1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m6 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(0, tmp.Column(0)) as DenseMatrix;
-
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(lim_r, m.Row(lim_r))
-                .InsertRow(lim_r + 1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m7 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(0, m.Row(0)) as DenseMatrix;
-            DenseMatrix m8 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-            // ----------------------------------------------------------------
-            tmp = m
-                .InsertRow(0, m.Row(0))
-                .InsertRow(lim_r + 1, m.Row(lim_r)) as DenseMatrix;
-            DenseMatrix m9 = tmp
-                .InsertColumn(0, tmp.Column(0))
-                .InsertColumn(lim_c + 1, tmp.Column(lim_c)) as DenseMatrix;
-
-
-            DenseMatrix mm = (m1+m2+m3+m4+m5+m6+m7+m8+m9).Divide(9) as DenseMatrix;
-            return mm.SubMatrix(1, lim_r+1, 1, lim_c+1) as DenseMatrix;
-        }
-
         public static float[] MinMax(this DenseMatrix V)
         {
             return new float[]
@@ -428,16 +338,9 @@ namespace ThorusCommon.MatrixExtensions
             return (int)Math.Round(mod) * sgn;
         }
 
-        // -----------------------
-        public static DenseMatrix ApplyDeviations(this DenseMatrix V, DenseMatrix[] dev, float defaultValue)
+        public static DenseMatrix ApplyDeviations(this DenseMatrix V, DenseMatrix[] dev)
         {
-            DenseMatrix defaultValues = MatrixFactory.Init(defaultValue);
-            return V.ApplyDeviations(dev, defaultValues);
-        }
-
-        public static DenseMatrix ApplyDeviations(this DenseMatrix V, DenseMatrix[] dev, DenseMatrix defaultValues)
-        {
-            DenseMatrix V2 = MatrixFactory.Init(float.MinValue);
+            DenseMatrix V2 = V.Clone() as DenseMatrix;
 
             for (int r = 0; r < V.RowCount; r++)
             {
@@ -456,22 +359,7 @@ namespace ThorusCommon.MatrixExtensions
                 }
             }
 
-            // Compensation: Cover the areas yet not affected by deviations
-            for (int r = 0; r < V.RowCount; r++)
-            {
-                for (int c = 0; c < V.ColumnCount; c++)
-                {
-                    if (V2[r, c] == float.MinValue)
-                    {
-                        if (defaultValues != null)
-                            V2[r, c] = defaultValues[r, c];
-                        else
-                            V2[r, c] = V[r, c];
-                    }
-                }
-            }
-
-            return V2;
+            return V2.EQ();
         }
         // -----------------------
 

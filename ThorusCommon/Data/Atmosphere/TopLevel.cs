@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
 using ThorusCommon.Engine;
 using ThorusCommon.MatrixExtensions;
-using ThorusCommon.IO;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.Thermodynamics;
-using MathNet.Numerics;
 
 namespace ThorusCommon.Data
 {
@@ -49,7 +42,7 @@ namespace ThorusCommon.Data
             var T0 = T.Clone() as DenseMatrix;
 
             // Temperature correction due to seasonal warmup/cooldown
-            DenseMatrix warmup = 0.33f * Earth.ATM.Warmup;
+            DenseMatrix warmup = (1f - 1f / 3f) * Earth.ATM.Warmup;
 
             // Shift temperature field and apply seasonal warmup corrections.
             var shiftedT = T.ApplyDeviations(applyDevs, null);

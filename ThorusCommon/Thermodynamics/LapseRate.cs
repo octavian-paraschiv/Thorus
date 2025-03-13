@@ -16,7 +16,7 @@ namespace ThorusCommon.Thermodynamics
                     float lr = LR[r, c];
                     float dh = dH[r, c];
 
-                    return (t1 + lr * dh / 1000);
+                    return (t1 - lr * dh / 1000);
                 });
         }
 

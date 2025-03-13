@@ -1,17 +1,8 @@
 ﻿#define HAVE_TESTSIMBREAKPOINT
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
 using ThorusCommon.Data;
 using ThorusCommon.Engine;
-
-namespace ThorusCommon.Engine
-{
-   
-}
 
 namespace ThorusCommon
 {
@@ -116,22 +107,13 @@ namespace ThorusCommon.Thermodynamics
         public static float FTopMixOld = 0.8f;
         public static float FTopMixNew = 1 - FTopMixOld;
 
-        public static readonly float[] LevelHeights = 
-        { 
+        public static readonly float[] LevelHeights =
+        {
             0,
             1500,
             5500,
             10000,
         };
-
-        public static readonly float[] Thicknesses = 
-        { 
-            0,
-            LevelHeights[LevelType.MidLevel] - LevelHeights[LevelType.SeaLevel],
-            LevelHeights[LevelType.MidLevel] - LevelHeights[LevelType.TopLevel],
-            LevelHeights[LevelType.TopLevel] - LevelHeights[LevelType.JetLevel],
-        };
-
 
         public const float AngleBetweenWindAndIsobars = (float)(-(float)Math.PI / 2);
 

@@ -15,8 +15,6 @@ namespace ThorusCommon
         const string DataFileName = "SimParams.thd";
         private readonly string DataFilePath = string.Empty;
 
-        const float DefSolarWarmupDailyQuantum = 0.1644f;
-
         #region Singleton
         public static SimulationParameters __instance = new SimulationParameters();
 
@@ -73,8 +71,6 @@ namespace ThorusCommon
             this.TropicalContinentalAirMassTemp = 18;
 
             this._DefaultRefTemp = 25;
-            this.SolarWarmupDailyQuantum = DefSolarWarmupDailyQuantum;
-
 
             this.MaxTeForSolidPrecip = -2.5f;
             this.MinTeForLiquidPrecip = 2.5f;
@@ -300,13 +296,6 @@ namespace ThorusCommon
         [DefaultValue(0.182f)]
         [Range(0.1, 0.2)]
         public float SoilTempChangeFactor { get; set; }
-
-
-        [Category("Temperature model / Sun Warmup")]
-        [Description("Describes the amount of solar energy transmitted daily to the Earth atmosphere, converted into temperature.")]
-        [DefaultValue(DefSolarWarmupDailyQuantum)]
-        [Range(0f, 0.2f)]
-        public float SolarWarmupDailyQuantum { get; set; }
 
         [Category("Temperature model / Ref Temp Delay")]
         [Description("Ref Temp Delay (days)")]

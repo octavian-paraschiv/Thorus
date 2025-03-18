@@ -157,7 +157,7 @@ namespace ThorusCommon.Engine
             DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
 
             int count = 1;
-            float mul = 3 / (float)count;
+            float mul = 1 / (float)count;
 
             DenseMatrix[] advDev = new DenseMatrix[]
             {

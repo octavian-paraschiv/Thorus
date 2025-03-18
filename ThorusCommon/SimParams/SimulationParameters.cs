@@ -357,7 +357,7 @@ namespace ThorusCommon
         {
             get
             {
-                return 1.5f * (360f / (JetStreamPeriod * JetStreamPeaks));
+                return (360f / (JetStreamPeriod * JetStreamPeaks));
             }
         }
 

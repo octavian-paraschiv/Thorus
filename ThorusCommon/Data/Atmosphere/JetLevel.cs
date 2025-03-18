@@ -61,15 +61,14 @@ namespace ThorusCommon.Data
                     const float subtrop = 15f;
                     float latRad1 = (lat - subtrop) * (float)Math.PI / 180;
                     float latRad2 = (lat + subtrop) * (float)Math.PI / 180;
-                    float f = (float)(Math.Sin(latRad1) * Math.Sin(latRad2));
+
+                    float f = 1f;// (float)(Math.Sin(latRad1) * Math.Sin(latRad2));
 
 
                     if (SimConstants.SimBreakPoint(r, c))
                         _ = 0;
 
-                    //float f = 1;
-
-                    var devX1 = dailyJetAdvance;
+                    var devX1 = f * dailyJetAdvance;
 
                     var devX = Earth.SnapshotDivFactor * (
                       JetDevFactor_X * devX1 +

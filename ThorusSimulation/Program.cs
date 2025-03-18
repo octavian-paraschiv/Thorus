@@ -142,22 +142,6 @@ namespace ThorusSimulation
 
                     SimulationEngine sim = new SimulationEngine(sdtStart, totalDays, nofSnapshots);
                     sim.Run(dtInit);
-
-                    if (autoExportSubregion)
-                    {
-                        DateTime dtInitCurrent = DateTime.Now;
-
-                        ExportEngine.GenerateSubregionData((current, total, desc) =>
-                        {
-                            DateTime now = DateTime.Now;
-                            TimeSpan tsDiffCurrent = now - dtInitCurrent;
-                            TimeSpan tsDiff = now - dtInit;
-
-                            var percent = (int)(100 * current / total);
-                            Console.WriteLine($" EXP: [{percent:d2}% done] -> {desc} " +
-                                $"[current: {(int)tsDiff.TotalMilliseconds} msec, total: {(int)tsDiffCurrent.TotalMilliseconds} msec]");
-                        });
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -165,6 +149,24 @@ namespace ThorusSimulation
                 }
             }
             // -------------------------
+
+            GC.Collect();
+
+            if (autoExportSubregion)
+            {
+                DateTime dtInitCurrent = DateTime.Now;
+
+                ExportEngine.GenerateSubregionData((current, total, desc) =>
+                {
+                    DateTime now = DateTime.Now;
+                    TimeSpan tsDiffCurrent = now - dtInitCurrent;
+                    TimeSpan tsDiff = now - dtInit;
+
+                    var percent = (int)(100 * current / total);
+                    Console.WriteLine($" EXP: [{percent:d2}% done] -> {desc} " +
+                        $"[current: {(int)tsDiff.TotalMilliseconds} msec, total: {(int)tsDiffCurrent.TotalMilliseconds} msec]");
+                });
+            }
 
             GC.Collect();
 

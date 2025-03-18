@@ -23,11 +23,11 @@ namespace ThorusCommon.Engine
         protected DenseMatrix[] _actualDev = MatrixFactory.Init2D();
         protected DenseMatrix[] _advDev = MatrixFactory.Init2D();
 
-        protected float _fNonAdvect = 0.9f;
-        protected float _fProAdvect = 0.1f;
+        protected virtual float FProAdvect => 0.15f;
+        protected virtual float FScaleWindX => 0.15f;
 
-        protected float _fScaleWindX = 0.25f;
-        protected float _fScaleWindY = 0.25f;
+        protected virtual float FNonAdvect => 1 - FProAdvect;
+        protected virtual float FScaleWindY => FScaleWindX;
 
         public DenseMatrix[] ActualDev
         {
@@ -156,26 +156,13 @@ namespace ThorusCommon.Engine
             DenseMatrix projT_adv = projT.Clone() as DenseMatrix;
             DenseMatrix projH_adv = projH.Clone() as DenseMatrix;
 
-            float mul = 1;
             int count = 1;
-
-            switch (SimulationParameters.Instance.AdvectionModel)
-            {
-                case AdvectionModels.Coarse:
-                    mul = 1;
-                    count = 1;
-                    break;
-
-                case AdvectionModels.Fine:
-                    mul = 0.1f;
-                    count = 10;
-                    break;
-            }
+            float mul = 3 / (float)count;
 
             DenseMatrix[] advDev = new DenseMatrix[]
             {
-                mul * _fScaleWindX * wind[Direction.X],
-                mul * _fScaleWindY * wind[Direction.Y],
+                mul * FScaleWindX * wind[Direction.X],
+                mul * FScaleWindY * wind[Direction.Y],
             };
 
             for (int i = 0; i < count; i++)
@@ -184,9 +171,9 @@ namespace ThorusCommon.Engine
                 projH_adv = projH_adv.ApplyDeviations(advDev);
             }
 
-            T = (_fNonAdvect * projT + _fProAdvect * projT_adv).EQ();
+            T = (FNonAdvect * projT + FProAdvect * projT_adv).EQ();
 
-            H = (_fNonAdvect * projH + _fProAdvect * projH_adv)
+            H = (FNonAdvect * projH + FProAdvect * projH_adv)
                 // Can't be lower than 0 or higher than 100
                 .MAX(0).MIN(100)
                 .EQ();

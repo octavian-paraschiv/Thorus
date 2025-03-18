@@ -175,11 +175,11 @@ namespace ThorusCommon.MatrixExtensions
         {
             var G = V.Gradient();
 
-            var x = G[Direction.X];
-            var y = G[Direction.Y];
+            var gx = G[Direction.X];
+            var gy = G[Direction.Y];
 
-            int rc = x.RowCount;
-            int cc = x.ColumnCount;
+            int rc = gx.RowCount;
+            int cc = gx.ColumnCount;
 
             return new DenseMatrix[]
             {
@@ -187,14 +187,14 @@ namespace ThorusCommon.MatrixExtensions
                 {
                     float lat = EarthModel.MaxLat - r;
                     var p = rot * Math.Sign(lat);
-                    return x[r, c] * (float)Math.Cos(p) - y[r, c] * (float)Math.Sin(p);
+                    return gx[r, c] * (float)Math.Cos(p) - gy[r, c] * (float)Math.Sin(p);
                 }),
 
             DenseMatrix.Create(rc, cc, (r, c) =>
                 {
                     float lat = EarthModel.MaxLat - r;
                     var p = rot * Math.Sign(lat);
-                    return x[r, c] * (float)Math.Sin(p) + y[r, c] * (float)Math.Cos(p);
+                    return gx[r, c] * (float)Math.Sin(p) + gy[r, c] * (float)Math.Cos(p);
                 })
             };
         }

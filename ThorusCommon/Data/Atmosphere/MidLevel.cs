@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
 using ThorusCommon.Engine;
 using ThorusCommon.MatrixExtensions;
-using MathNet.Numerics.LinearAlgebra.Single;
-using ThorusCommon.Thermodynamics;
-using MathNet.Numerics;
 
 namespace ThorusCommon.Data
 {
@@ -20,14 +14,12 @@ namespace ThorusCommon.Data
             }
         }
 
+        protected override float FProAdvect => 0.4f;
+        protected override float FScaleWindX => 0.4F;
+
         public MidLevel(EarthModel earth, bool loadFromStateFiles, float defaultValue = 0) :
             base(earth, LevelType.MidLevel, loadFromStateFiles, defaultValue)
         {
-            _fNonAdvect = 0.75f;
-            _fProAdvect = 1 - _fNonAdvect;
-
-            _fScaleWindX = 0.5f;
-            _fScaleWindY = 0.5f;
         }
 
         public override void RebuildState()

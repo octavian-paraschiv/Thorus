@@ -798,7 +798,7 @@ namespace ThorusCommon.Data
                 float te = refTemp[r, c] - SimulationParameters.Instance.HumidLapseRate * dh / 1000;
 
                 // daylength at specified time of year and latitude
-                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
+                float dl = References.GetDayLength_ByLatitude(Earth.UTC, lat);
 
                 // A factor that represents the angle of sun at high noon
                 // True sun angle at high noon is: Actual latitude of the place - Sun current latitude
@@ -841,7 +841,7 @@ namespace ThorusCommon.Data
                 // virtual temp at surface (called also equilibrium temp)
                 float te = TE[r, c];
                 // daylength at specified time of year and latitude
-                float dl = References.GetDayLength_ByRowIndex(Earth.UTC, r);
+                float dl = References.GetDayLength_ByLatitude(Earth.UTC, lat);
 
                 // A factor that represents the angle of sun at high noon
                 // True sun angle at high noon is: Actual latitude of the place - Sun current latitude

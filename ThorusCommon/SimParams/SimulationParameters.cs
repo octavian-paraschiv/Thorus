@@ -206,17 +206,6 @@ namespace ThorusCommon
         [DefaultValue(0.33f)]
         public float AntiCyclogeneticFactor { get; set; }
 
-        public enum AdvectionModels
-        {
-            Coarse = 0,
-            Fine,
-        }
-
-        [Category("Atmosphere model / Advection")]
-        [Description("Model to use to calculate air mass advection")]
-        [DefaultValue(AdvectionModels.Coarse)]
-        public AdvectionModels AdvectionModel { get; set; }
-
         #endregion
 
         #region Temperature models
@@ -368,7 +357,7 @@ namespace ThorusCommon
         {
             get
             {
-                return (360f / (JetStreamPeriod * JetStreamPeaks));
+                return 1.5f * (360f / (JetStreamPeriod * JetStreamPeaks));
             }
         }
 
@@ -378,8 +367,5 @@ namespace ThorusCommon
         public float FrontsDelta { get; set; }
 
         #endregion
-
-
-
     }
 }

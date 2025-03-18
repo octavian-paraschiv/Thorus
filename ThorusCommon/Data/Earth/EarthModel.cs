@@ -7,7 +7,7 @@ namespace ThorusCommon.Data
     public class EarthModel
     {
         public const int MaxLat = 90;
-        public const int MinLat = -89;
+        public const int MinLat = -90;
         public const int MaxLon = 179;
         public const int MinLon = -180;
 

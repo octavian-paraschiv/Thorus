@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Single;
-using MathNet.Numerics.Statistics;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
+using System;
 using ThorusCommon.Data;
 using ThorusCommon.IO;
 using ThorusCommon.MatrixExtensions;
 using ThorusCommon.Thermodynamics;
-using MathNet.Numerics;
 
 namespace ThorusCommon.Engine
 {
@@ -119,10 +112,12 @@ namespace ThorusCommon.Engine
                 var adj_lr = ADJ_LR[r, c];
 
                 AirMassType amt = (AirMassType)AirMass[r, c];
-                
+
                 var precip = Earth.SFC.Precip[r, c];
 
-                float lr = LapseRate.EnvironmentalLapseRate(amt, precip);
+                float lr = (wl > 0) ?
+                    SimulationParameters.Instance.HumidLapseRate :
+                    LapseRate.EnvironmentalLapseRate(amt, precip);
 
                 if (adj_lr != 0)
                     lr += adj_lr;
@@ -241,7 +236,7 @@ namespace ThorusCommon.Engine
             MidLevel.GetMin(atm.MidLevel);
             TopLevel.GetMin(atm.TopLevel);
             JetLevel.GetMin(atm.JetLevel);
-            
+
             AirMass.MIN(atm.AirMass);
             Fronts.MIN(atm.Fronts);
         }
@@ -252,7 +247,7 @@ namespace ThorusCommon.Engine
             MidLevel.GetMax(atm.MidLevel);
             TopLevel.GetMax(atm.TopLevel);
             JetLevel.GetMax(atm.JetLevel);
-            
+
             AirMass.MAX(atm.AirMass);
             Fronts.MAX(atm.Fronts);
         }
@@ -263,7 +258,7 @@ namespace ThorusCommon.Engine
             MidLevel.SaveStats(title, category);
             TopLevel.SaveStats(title, category);
             JetLevel.SaveStats(title, category);
-            
+
             FileSupport.SaveAsStats(AirMass.EQ(), title, "M_00_MAP", category);
             FileSupport.SaveAsStats(Fronts.EQ(), title, "F_00_MAP", category);
         }

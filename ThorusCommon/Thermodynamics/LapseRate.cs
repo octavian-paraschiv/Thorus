@@ -30,28 +30,28 @@ namespace ThorusCommon.Thermodynamics
 
             switch (amt)
             {
-                case AirMassType.ContinentalTropical:
-                    elr += 2.0f;
-                    break;
+                //case AirMassType.ContinentalTropical:
+                //    elr += 1.0f;
+                //    break;
 
-                case AirMassType.MaritimeTropical:
-                    elr += 1.0f;
-                    break;
+                //case AirMassType.MaritimeTropical:
+                //    elr += 0.5f;
+                //    break;
 
-                case AirMassType.WarmMaritimePolar:
-                    elr += 0.5f;
-                    break;
+                //case AirMassType.WarmMaritimePolar:
+                //    elr += 0.25f;
+                //    break;
 
                 case AirMassType.ColdMaritimePolar:
-                    elr -= 0.5f;
+                    elr -= 1f;
                     break;
 
                 case AirMassType.ContinentalPolar:
-                    elr -= 1.0f;
+                    elr -= 2.0f;
                     break;
 
                 case AirMassType.Arctic:
-                    elr -= 2.0f;
+                    elr -= 4.0f;
                     break;
 
                 default:

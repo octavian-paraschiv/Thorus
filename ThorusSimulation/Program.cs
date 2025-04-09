@@ -90,7 +90,7 @@ namespace ThorusSimulation
             // -------------------------
 
             // This is just for loading the customizable simulation params
-            var x = SimulationParameters.Instance.JetStreamPeriod;
+            var x = SimulationParameters.Instance.FrontsDelta;
 
             // -------------------------
             // Run simulation engine

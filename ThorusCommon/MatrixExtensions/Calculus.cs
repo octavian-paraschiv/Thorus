@@ -1,5 +1,8 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.Statistics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using ThorusCommon.Data;
 using ThorusCommon.Thermodynamics;
 
@@ -304,6 +307,47 @@ namespace ThorusCommon.MatrixExtensions
                 }
 
             return dm2;
+        }
+
+        public static int[] RossbyWaveNumbers(this DenseMatrix dm)
+        {
+            List<int> waveNumbers = new List<int>();
+
+            float centerValue = (float)dm.IdentifyPressureRange().Mean();
+
+            var pNorth = dm.RegionSubMatrix(EarthModel.MinLon, EarthModel.MaxLon, 0, EarthModel.MaxLat);
+            var pSouth = dm.RegionSubMatrix(EarthModel.MinLon, EarthModel.MaxLon, EarthModel.MinLat, -1);
+
+            int wnn = pNorth.EnumerateRows().Select(v => getRossbyWaveNumber(v as DenseVector, centerValue)).Max();
+            int wns = pSouth.EnumerateRows().Select(v => getRossbyWaveNumber(v as DenseVector, centerValue)).Max();
+
+            return new int[] { wnn, wns };
+        }
+
+        private static int getRossbyWaveNumber(DenseVector v, float centerValue)
+        {
+            int ups = 0;
+            int downs = 0;
+
+            float delta = 0;
+            float sgn = 0;
+
+            for (int i = 1; i < v.Count; i++)
+            {
+                delta = v[i] - centerValue;
+
+                var ds = Math.Sign(delta);
+                if (ds != sgn)
+                {
+                    if (ds > 0)
+                        ups++;
+                    else if (ds < 0)
+                        downs++;
+                    sgn = ds;
+                }
+            }
+
+            return (int)Math.Round(0.5f * (ups + downs));
         }
     }
 }

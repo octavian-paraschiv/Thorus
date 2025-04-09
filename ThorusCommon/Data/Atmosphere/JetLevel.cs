@@ -39,9 +39,6 @@ namespace ThorusCommon.Data
             float sunLatRad = References.GetSunLatitude_Radians(Earth.UTC);
             float daysElapsed = (Earth.HoursElapsed / AbsoluteConstants.HoursPerDay);
 
-            float dailyJetAdvance = SimulationParameters.Instance.JetStreamWaveSpeed;
-            float deltaLonRad = daysElapsed * dailyJetAdvance * (float)Math.PI / 180;
-
             P = ((Earth.ATM.SeaLevel.P.Multiply(45 / LevelPressure.SeaLevelPressure) +
                   Earth.ATM.TopLevel.P.Multiply(120 / LevelPressure.TopLevelPressure) +
                   Earth.ATM.MidLevel.P.Multiply(135 / LevelPressure.MidLevelPressure)) as DenseMatrix).EQ();
@@ -51,12 +48,15 @@ namespace ThorusCommon.Data
             var this_BP = this.BP;
             var this_FP = this.FP;
 
+            var waveNumbers = P.RossbyWaveNumbers();
+
             _actualDev.Assign2D
             (
                 (r, c) =>
                 {
-
                     float lat = EarthModel.MaxLat - r;
+                    int waveNumber = lat >= 0 ? waveNumbers[0] : waveNumbers[1];
+                    float waveSpeed = 360f / (waveNumber * waveNumber);
 
                     const float subtrop = 15f;
                     float latRad1 = (lat - subtrop) * (float)Math.PI / 180;
@@ -64,15 +64,11 @@ namespace ThorusCommon.Data
 
                     float f = 1f;// (float)(Math.Sin(latRad1) * Math.Sin(latRad2));
 
-
-                    if (SimConstants.SimBreakPoint(r, c))
-                        _ = 0;
-
-                    var devX1 = f * dailyJetAdvance;
+                    var devX1 = f * waveSpeed;
 
                     var devX = Earth.SnapshotDivFactor * (
-                      JetDevFactor_X * devX1 +
-                      RidgeDevFactor_X * ridgePatternDevs[Direction.X][r, c]);
+                        JetDevFactor_X * devX1 +
+                        RidgeDevFactor_X * ridgePatternDevs[Direction.X][r, c]);
 
                     return (devX % 360);
                 },
@@ -80,6 +76,10 @@ namespace ThorusCommon.Data
                 (r, c) =>
                 {
                     float lat = EarthModel.MaxLat - r;
+                    int waveNumber = lat >= 0 ? waveNumbers[0] : waveNumbers[1];
+                    float waveSpeed = 360f / (waveNumber * waveNumber);
+                    float deltaLonRad = daysElapsed * waveSpeed * (float)Math.PI / 180;
+
                     float lon = c - 180;
 
                     float lonRad = lon * (float)Math.PI / 180;
@@ -87,11 +87,11 @@ namespace ThorusCommon.Data
 
                     float sinLat = (float)Math.Sin(latRad);
                     float cosLat = (float)Math.Cos(latRad);
-                    float sinLon = (float)Math.Sin(SimulationParameters.Instance.JetStreamPeaks * (lonRad - deltaLonRad));
+                    float sinLon = (float)Math.Sin(waveNumber * (lonRad - deltaLonRad));
 
                     float f = (sinLat * cosLat * sinLon) * Math.Sign(lat);
 
-                    var devY1 = f * SimulationParameters.Instance.JetStreamWaveSpeed;
+                    var devY1 = f * waveSpeed;
 
                     var devY = Earth.SnapshotDivFactor * (
                         JetDevFactor_Y * devY1 +

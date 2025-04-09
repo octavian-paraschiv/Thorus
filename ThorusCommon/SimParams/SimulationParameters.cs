@@ -56,9 +56,6 @@ namespace ThorusCommon
             this.DryLapseRate = 9.5f;
             this.HumidLapseRate = 6.5f;
 
-            this.JetStreamPeriod = 7f;
-            this.JetStreamPeaks = 7f;
-
             this.FrontsContribution = 0.55f;
 
             this.AirTempContribution = 0.8f;
@@ -338,28 +335,6 @@ namespace ThorusCommon
         #endregion
 
         #region Atmosphere / Jet Stream and Fronts
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the 'period' of the jet stream oscillation (that is, the interval between two similar phases of the polar jet stream in the same geographical region)")]
-        [DefaultValue(6.5f)]
-        [Range(1, 20)]
-        public float JetStreamPeriod { get; set; }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the number of 'peaks' of the jet stream oscillation")]
-        [DefaultValue(6.5f)]
-        [Range(3, 15)]
-        public float JetStreamPeaks { get; set; }
-
-        [Category(" Atmosphere model / Jet Stream")]
-        [Description("A virtual variable that represents the 'wave speed' of the jet stream oscillation.")]
-        public float JetStreamWaveSpeed
-        {
-            get
-            {
-                return (360f / (JetStreamPeriod * JetStreamPeaks));
-            }
-        }
 
         [Category(" Atmosphere model / Jet Stream")]
         [Description("Mid-Level Temperature minimum absolute difference for a front")]

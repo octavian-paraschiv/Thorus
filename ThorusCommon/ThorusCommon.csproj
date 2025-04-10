@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-      <RootNamespace>ThorusCommon</RootNamespace>
-    <TargetFramework>netstandard20</TargetFramework>
+    <RootNamespace>ThorusCommon</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyTitle>ThorusCommon</AssemblyTitle>
     <OutputPath>..\bin\</OutputPath>
-      <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Data\ADJ_LR.thd">
@@ -29,6 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="ThorusCommon.IO" Version="2.0.4" />
+    <PackageReference Include="ThorusCommon.IO" Version="2.1.0" />
   </ItemGroup>
 </Project>

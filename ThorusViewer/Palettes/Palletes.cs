@@ -14,7 +14,6 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 500;
             _minMax = new Range<float>(0, 9000);
-            _acceptsContourLines = true;
             this.Description = "ELV";
             this.Unit = "m";
             this.ShowContours = false;
@@ -30,7 +29,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1;
             _minMax = new Range<float>(0, 1);
-            _acceptsContourLines = true;
+
             this.Description = "WL mask";
             this.Unit = "";
             this.ShowContours = false;
@@ -46,7 +45,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1f;
             _minMax = new Range<float>(0, 100f);
-            _acceptsContourLines = true;
+
             this.Description = "SNOW COVER";
             this.Unit = "cm";
             this.ShowContours = false;
@@ -61,7 +60,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1f;
             _minMax = new Range<float>(0, 100f);
-            _acceptsContourLines = true;
+
             this.Description = "FALLEN SNOW";
             this.Unit = "cm";
             this.ShowContours = false;
@@ -76,7 +75,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 0.5f;
             _minMax = new Range<float>(0, 15f);
-            _acceptsContourLines = true;
+
             this.Description = "SOIL ACCUMULATED RAIN";
             this.Unit = "cm";
             this.ShowContours = false;
@@ -90,7 +89,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 0.5f;
             _minMax = new Range<float>(0, 100f);
-            _acceptsContourLines = true;
+
             this.Description = "FALLEN RAIN";
             this.Unit = "mm";
             this.ShowContours = false;
@@ -105,7 +104,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1;
             _minMax = new Range<float>(0, 15f);
-            _acceptsContourLines = true;
+
             this.Description = "BLIZZARD CONDITIONS";
             this.Unit = "";
             this.ShowContours = false;
@@ -121,6 +120,7 @@ namespace ThorusViewer.Pallettes
         {
             _lineWidth = 2;
             this.Unit = "hPa";
+            _canToggleContourLines = false;
             this.ShowContours = true;
             this.ShowHeatmap = false;
         }
@@ -177,7 +177,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1f;
             _minMax = TempRange;
-            _acceptsContourLines = true;
+
             this.Unit = "°C";
             this.ShowContours = false;
         }
@@ -299,7 +299,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 5;
             _minMax = new Range<float>(0, 100);
-            _acceptsContourLines = true;
+
 
             this.Unit = "%";
 
@@ -348,7 +348,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1f;
             _lineSpacing = 10;
             _minMax = new Range<float>(0, 100);
-            _acceptsContourLines = true;
+
 
             this.Description = "Fog";
             this.Unit = "%";
@@ -364,7 +364,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1f;
             _lineSpacing = 10;
             _minMax = new Range<float>(0, 1200);
-            _acceptsContourLines = true;
+
 
             this.Description = "PRC";
             this.Unit = "l/mp";
@@ -380,7 +380,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1f;
             _minMax = new Range<float>(-10, 10);
-            _acceptsContourLines = false;
+            _canToggleContourLines = false;
             this.ShowContours = false;
 
             this.Description = "FR";
@@ -395,7 +395,7 @@ namespace ThorusViewer.Pallettes
         {
             _lineWidth = 1;
             _lineSpacing = 1f;
-            _acceptsContourLines = false;
+            _canToggleContourLines = false;
             _minMax = new Range<float>(-3, 3);
             this.ShowContours = false;
             this.Description = "Air mass type";
@@ -443,7 +443,7 @@ namespace ThorusViewer.Pallettes
             : base("Z")
         {
             _lineWidth = 1;
-            _acceptsContourLines = true;
+
             this.Description = "Z";
             this.Unit = "m";
             this.ShowContours = false;
@@ -579,7 +579,7 @@ namespace ThorusViewer.Pallettes
             _lineWidth = 1;
             _lineSpacing = 1f;
             _minMax = new Range<float>(-15, 15);
-            _acceptsContourLines = true;
+
 
             this.Description = "D";
             this.Unit = "";

@@ -53,8 +53,8 @@ namespace ThorusViewer.Palettes
         public bool ShowHeatmap { get; set; }
         public bool ShowContours { get; set; }
 
-        protected bool _acceptsContourLines = false;
-        public bool AcceptsContourLines { get { return _acceptsContourLines; } }
+        protected bool _canToggleContourLines = true;
+        public bool CanToggleContourLines { get { return _canToggleContourLines; } }
 
         protected bool _isDefault = false;
         public bool IsDefault

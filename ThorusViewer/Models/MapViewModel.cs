@@ -268,7 +268,7 @@ namespace ThorusViewer.Models
             var pal = OxyPalette.Interpolate(levels.Count, wdp.ColorSteps.ToArray());
 
             List<OxyColor> lineColors = new List<OxyColor>();
-            foreach (OxyColor c in wdp.ColorSteps)
+            foreach (OxyColor c in pal.Colors)
             {
                 if (heatmap)
                 {

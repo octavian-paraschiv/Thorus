@@ -67,7 +67,7 @@ namespace OPMedia.UI.Controls
             WeatherDataPalette wdp = WeatherDataPaletteFactory.GetPaletteForDataType(dataType);
             if (wdp != null)
             {
-                chkShowContours.Enabled = wdp.AcceptsContourLines;
+                chkShowContours.Enabled = wdp.CanToggleContourLines;
                 chkShowContours.Checked = wdp.ShowContours;
 
                 if (cmbLineWidth.Items.Contains(wdp.LineWidth) == false)
@@ -97,16 +97,13 @@ namespace OPMedia.UI.Controls
         {
             if (_allowEvents)
             {
-                bool showContours = false;
-
-                if (chkShowContours.Enabled)
-                    showContours = chkShowContours.Checked;
-
                 string dataType = ControlPanelModel.Instance.SelectedDataType.Name;
                 WeatherDataPalette wdp = WeatherDataPaletteFactory.GetPaletteForDataType(dataType);
                 if (wdp != null)
                 {
-                    wdp.ShowContours = showContours;
+                    if (chkShowContours.Enabled)
+                        wdp.ShowContours = chkShowContours.Checked;
+
                     wdp.LineWidth = (float)cmbLineWidth.SelectedItem;
                     wdp.LineSpacing = (float)cmbLevelSpacing.SelectedItem;
                     wdp.LineColor = (LineColor)cmbLineColor.SelectedItem;

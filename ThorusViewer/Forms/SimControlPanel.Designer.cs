@@ -353,7 +353,7 @@
             cbAutoExport.Size = new System.Drawing.Size(564, 20);
             cbAutoExport.TabIndex = 9;
             cbAutoExport.Text = "Automatically export subregion data after the simulation ends";
-            cbAutoExport.Checked = true;
+            cbAutoExport.Checked = false;
             cbAutoExport.UseVisualStyleBackColor = true;
             // 
             // cmbStepLen

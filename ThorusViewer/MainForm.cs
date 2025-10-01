@@ -1,5 +1,4 @@
-﻿using OPMFileUploader;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
@@ -67,6 +66,26 @@ namespace ThorusViewer.Forms
         {
             string exportDbPath = Path.Combine(Directory.GetParent(SimulationData.DataFolder).FullName, "Snapshot.db3");
 
+            try
+            {
+                ExportEngine.GenerateSubregionData((current, total, desc) => _pf.DisplayProgress(this, current, total, desc));
+                if (MessageBox.Show("Succesfully generated subregion data.\r\nDo you want to publish it, too?",
+                    Constants.Product, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    MessageBox.Show($"The data was generated and saved as:\r\n{exportDbPath}\r\nRemember this path in case you want to publish it manually to ocpa.ro website.");
+                    return;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to generate subregion data. Details: {ex.Message}",
+                    Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
+
             if (!File.Exists(exportDbPath))
             {
                 MessageBox.Show("Threre is nothing to publish yet.");
@@ -80,8 +99,8 @@ namespace ThorusViewer.Forms
                 string baseUri = ConfigurationManager.AppSettings["apiBaseUri"].TrimEnd('/');
                 string[] credentials = ConfigurationManager.AppSettings["apiCredentials"].Split(':');
 
-                var uploader = new FileUploader(
-                    uploadUrl: $"{baseUri}/meteo/database/preview",
+                var uploader = new OPMFileUploader.FileUploader(
+                    requestUrl: $"{baseUri}/meteo/database/preview",
                     authUrl: $"{baseUri}/users/authenticate",
                     uploadFilePath: exportDbPath,
                     loginId: credentials[0],
@@ -107,21 +126,6 @@ namespace ThorusViewer.Forms
             {
                 _pf.DisplayProgress(this, 0, 0, "");
                 MessageBox.Show($"Failed to publish subregion data. Details: {ex.Message}",
-                    Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void OnGenerateSubregionData(object sender, EventArgs e)
-        {
-            try
-            {
-                ExportEngine.GenerateSubregionData((current, total, desc) => _pf.DisplayProgress(this, current, total, desc));
-                MessageBox.Show("Succesfully generated subregion data.",
-                    Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to generate subregion data. Details: {ex.Message}",
                     Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -37,8 +37,6 @@
             this.tsmImages = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveImage = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAutoSaveImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSubregionData = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiGenerateSubregionData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPublishSubregionData = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mapView = new OPMedia.UI.Controls.MapViewCtl();
@@ -56,8 +54,7 @@
             this.msMain.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile,
-            this.tsmImages,
-            this.tsmiSubregionData});
+            this.tsmImages});
             this.msMain.Location = new System.Drawing.Point(0, 0);
             this.msMain.Name = "msMain";
             this.msMain.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
@@ -71,6 +68,7 @@
             this.tsmiLoadDataset,
             this.toolStripSeparator1,
             this.tsmiLaunchSimulation,
+            this.tsmiPublishSubregionData,
             this.toolStripSeparator2,
             this.tsmiSettings});
             this.tsmiFile.Name = "tsmiFile";
@@ -96,7 +94,7 @@
             // 
             this.tsmiLaunchSimulation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsmiLaunchSimulation.Name = "tsmiLaunchSimulation";
-            this.tsmiLaunchSimulation.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiLaunchSimulation.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.S)));
             this.tsmiLaunchSimulation.Size = new System.Drawing.Size(287, 22);
             this.tsmiLaunchSimulation.Text = "Simulation Control Panel...";
@@ -127,7 +125,7 @@
             // tsmiSaveImage
             // 
             this.tsmiSaveImage.Name = "tsmiSaveImage";
-            this.tsmiSaveImage.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiSaveImage.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.I)));
             this.tsmiSaveImage.Size = new System.Drawing.Size(226, 22);
             this.tsmiSaveImage.Text = "Save as image...";
@@ -142,33 +140,14 @@
             this.tsmiAutoSaveImage.Text = "Auto-save images";
             this.tsmiAutoSaveImage.Click += new System.EventHandler(this.OnToggleAutoSave);
             // 
-            // tsmiSubregionData
-            // 
-            this.tsmiSubregionData.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiGenerateSubregionData,
-            this.tsmiPublishSubregionData});
-            this.tsmiSubregionData.Name = "tsmiSubregionData";
-            this.tsmiSubregionData.Size = new System.Drawing.Size(100, 23);
-            this.tsmiSubregionData.Text = "Subregion Data";
-            // 
-            // tsmiGenerateSubregionData
-            // 
-            this.tsmiGenerateSubregionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmiGenerateSubregionData.Name = "tsmiGenerateSubregionData";
-            this.tsmiGenerateSubregionData.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.D)));
-            this.tsmiGenerateSubregionData.Size = new System.Drawing.Size(279, 22);
-            this.tsmiGenerateSubregionData.Text = "Generate Subregion Data";
-            this.tsmiGenerateSubregionData.Click += new System.EventHandler(this.OnGenerateSubregionData);
-            // 
             // tsmiPublishSubregionData
             // 
             this.tsmiPublishSubregionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsmiPublishSubregionData.Name = "tsmiPublishSubregionData";
-            this.tsmiPublishSubregionData.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.tsmiPublishSubregionData.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
             | System.Windows.Forms.Keys.P)));
             this.tsmiPublishSubregionData.Size = new System.Drawing.Size(279, 22);
-            this.tsmiPublishSubregionData.Text = "Publish Subregion Data";
+            this.tsmiPublishSubregionData.Text = "Generate/Publish Subregion Data";
             this.tsmiPublishSubregionData.Click += new System.EventHandler(this.OnPublish);
             // 
             // tableLayoutPanel1
@@ -258,7 +237,6 @@
         private System.Windows.Forms.MenuStrip msMain;
         private System.Windows.Forms.ToolStripMenuItem tsmiLoadDataset;
         private System.Windows.Forms.ToolStripMenuItem tsmImages;
-        private System.Windows.Forms.ToolStripMenuItem tsmiGenerateSubregionData;
         private System.Windows.Forms.ToolStripMenuItem tsmiPublishSubregionData;
         private System.Windows.Forms.ToolStripMenuItem tsmiLaunchSimulation;
         private System.Windows.Forms.ToolStripMenuItem tsmiSettings;
@@ -267,7 +245,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveImage;
         private System.Windows.Forms.ToolStripMenuItem tsmiAutoSaveImage;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSubregionData;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

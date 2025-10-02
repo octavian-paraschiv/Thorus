@@ -43,7 +43,7 @@ namespace ThorusViewer.Controls
             catch (Exception error)
             {
 #if(DEBUG)
-                MessageBox.Show(error.Message, "ResizeDescriptionArea()");
+                MessageBox.Show(ParentForm, error.Message, "ResizeDescriptionArea()");
 #endif
 
                 return false;

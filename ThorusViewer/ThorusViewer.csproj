@@ -13,12 +13,20 @@
       <EnableDefaultPageItems>false</EnableDefaultPageItems>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OPMFileUploader" Version="3.0.4" />
+    <PackageReference Include="OPMFileUploader" Version="3.0.6" />
     <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="2.2.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="9.0.9" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.10" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Forms\SelectDatabaseDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SelectDatabaseDlg.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SelectDatabaseDlg.cs</DependentUpon>
+    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +133,9 @@
     <Resource Include="WeatherStudio.ico" />
   </ItemGroup>
   <ItemGroup>
+      <EmbeddedResource Update="Forms\SelectDatabaseDlg.resx">
+        <DependentUpon>SelectDatabaseDlg.cs</DependentUpon>
+      </EmbeddedResource>
       <EmbeddedResource Update="MainForm.resx" />
       <EmbeddedResource Update="Resources.resx">
         <Generator>ResXFileCodeGenerator</Generator>

@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using ThorusCommon.Engine;
 using ThorusCommon.IO;
+using ThorusCommon.IO.SQLite;
 using ThorusCommon.MatrixExtensions;
-using ThorusCommon.SQLite;
 
 namespace ThorusCommon.Export
 {
@@ -42,7 +42,7 @@ namespace ThorusCommon.Export
                 }
 
                 // Clean up DB in case already used eg. by local web site
-                exportDb.PurgeAll<SQLite.Data>();
+                exportDb.PurgeAll<IO.SQLite.Data>();
 
                 var allFiles = Directory.GetFiles(SimulationData.DataFolder);
                 if (allFiles != null)

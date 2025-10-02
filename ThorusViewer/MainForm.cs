@@ -1,6 +1,11 @@
-﻿using System;
+﻿using FileUploader;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ThorusCommon.Engine;
@@ -69,17 +74,17 @@ namespace ThorusViewer.Forms
             try
             {
                 ExportEngine.GenerateSubregionData((current, total, desc) => _pf.DisplayProgress(this, current, total, desc));
-                if (MessageBox.Show("Succesfully generated subregion data.\r\nDo you want to publish it, too?",
+                if (MessageBox.Show(this, "Succesfully generated subregion data.\r\nDo you want to publish it, too?",
                     Constants.Product, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 {
-                    MessageBox.Show($"The data was generated and saved as:\r\n{exportDbPath}\r\nRemember this path in case you want to publish it manually to ocpa.ro website.");
+                    MessageBox.Show(this, $"The data was generated and saved as:\r\n{exportDbPath}\r\nRemember this path in case you want to publish it manually to ocpa.ro website.");
                     return;
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to generate subregion data. Details: {ex.Message}",
+                MessageBox.Show(this, $"Failed to generate subregion data. Details: {ex.Message}",
                     Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -88,44 +93,93 @@ namespace ThorusViewer.Forms
 
             if (!File.Exists(exportDbPath))
             {
-                MessageBox.Show("Threre is nothing to publish yet.");
+                MessageBox.Show(this, "Threre is nothing to publish yet.");
                 return;
             }
 
             try
             {
-                _pf.DisplayProgress(this, 0, -1, "Preparing to publish...");
-
                 string baseUri = ConfigurationManager.AppSettings["apiBaseUri"].TrimEnd('/');
                 string[] credentials = ConfigurationManager.AppSettings["apiCredentials"].Split(':');
 
-                var uploader = new OPMFileUploader.FileUploader(
-                    requestUrl: $"{baseUri}/meteo/database/preview",
+                var dbLister = new RestUploader<object>(
+                    requestUrl: $"{baseUri}/meteo/databases/all",
                     authUrl: $"{baseUri}/users/authenticate",
-                    uploadFilePath: exportDbPath,
+                    uploadData: new(),
                     loginId: credentials[0],
-                    password: credentials[1]);
+                    password: credentials[1],
+                    useCompression: false);
 
-                uploader.FileUploadProgress += (x) =>
-                    Invoke(new MethodInvoker(() => _pf.DisplayProgress(this, (int)x, 100, "Publishing subregion data: ")));
-
-                uploader.Run().ContinueWith(t =>
+                dbLister.Download(CancellationToken.None).ContinueWith(t =>
                 {
-                    _pf.DisplayProgress(this, 0, 0, "");
+                    try
+                    {
+                        _pf.DisplayProgress(this, 0, -1, "Preparing to publish...");
 
-                    if (t?.Result?.Length > 0)
-                        MessageBox.Show($"Failed to publish subregion data. {t.Result}",
+                        List<MeteoDbInfo> databases = [];
+
+                        try
+                        {
+                            databases = JsonSerializer.Deserialize<List<MeteoDbInfo>>(t.Result, options: new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true,
+                                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                            });
+                        }
+                        catch 
+                        { 
+                            databases = null;
+                        }
+
+                        if (databases?.Count > 0)
+                        {
+                            var dlg = new SelectDatabaseDlg { Databases = databases.Where(mdi => mdi.Status != MeteoDbStatus.Online).ToList() };
+                            var res = dlg.ShowDialog(this);
+                            if (res == DialogResult.OK && dlg.SelectedDatabase != null)
+                            {
+                                var uploader = new FileUploader.FileUploader(
+                                    requestUrl: $"{baseUri}/meteo/database/upload/{dlg.SelectedDatabase.Dbi}",
+                                    authUrl: $"{baseUri}/users/authenticate",
+                                    uploadFilePath: exportDbPath,
+                                    loginId: credentials[0],
+                                    password: credentials[1]);
+
+                                uploader.FileUploadProgress += (x) =>
+                                    Invoke(new MethodInvoker(() => _pf.DisplayProgress(this, (int)x, 100, "Publishing subregion data: ")));
+
+                                uploader.Upload(CancellationToken.None).ContinueWith(t =>
+                                {
+                                    _pf.DisplayProgress(this, 0, 0, "");
+
+                                    if (t?.Result?.Length > 0)
+                                        MessageBox.Show(this, $"Failed to publish subregion data. {t.Result}",
+                                            Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    else
+                                        MessageBox.Show(this, "Subregion data succesfully published.",
+                                            Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                }, TaskScheduler.FromCurrentSynchronizationContext());
+                            }
+                        }
+                        else
+                            MessageBox.Show(this, $"Failed to query database information. {t.Result ?? string.Empty}".Trim(),
+                                Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, $"Failed to publish subregion data. Details: {ex.Message}",
                             Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else
-                        MessageBox.Show("Subregion data succesfully published.",
-                            Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    finally
+                    {
+                        _pf.DisplayProgress(this, 0, 0, "");
+                    }
 
                 }, TaskScheduler.FromCurrentSynchronizationContext());
             }
             catch (Exception ex)
             {
-                _pf.DisplayProgress(this, 0, 0, "");
-                MessageBox.Show($"Failed to publish subregion data. Details: {ex.Message}",
+                MessageBox.Show(this, $"Failed to publish subregion data. Details: {ex.Message}",
                     Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -65,7 +65,7 @@ namespace ThorusViewer
         {
             if (_simProcPid > 0)
             {
-                var res = MessageBox.Show("Closing this window will also terminate the simulation in progress. Do you want to proceed?",
+                var res = MessageBox.Show(this, "Closing this window will also terminate the simulation in progress. Do you want to proceed?",
                     Constants.Product, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (res == DialogResult.Yes)

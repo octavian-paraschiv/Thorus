@@ -55,7 +55,8 @@ namespace OPMedia.UI.Controls
                     Directory.CreateDirectory(saveFolder);
 
                 string imageFile = System.IO.Path.Combine(saveFolder, jpgFile);
-                DoSave(imageFile);
+                _exporter.ExportToFile(_viewModel.Model, imageFile);
+
             }
             else
             {
@@ -65,47 +66,19 @@ namespace OPMedia.UI.Controls
                     Title = "Save image as ...",
                     CreatePrompt = true,
                     ValidateNames = true,
-                    Filter = "PNG files(*.png)|*.png|JPEG files(*.jpg)|*.jpg",
+                    Filter = "PNG files(*.png)|*.png",
                     FileName = fileName
                 };
 
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     string imageFile = dlg.FileName;
-                    DoSave(imageFile);
+                    _exporter.ExportToFile(_viewModel.Model, imageFile);
                 }
             }
         }
 
         const int XSize = 900;
-
-        void DoSave(string imageFile)
-        {
-            string ext = Path.GetExtension(imageFile).Trim('.').ToUpperInvariant();
-
-            if (ext == "PNG")
-            {
-                _exporter.ExportToFile(_viewModel.Model, imageFile);
-                return;
-            }
-
-            string pngFile = System.IO.Path.ChangeExtension(imageFile, ".tmp");
-
-            // PlotView can only save as PNG. 
-            // We need to do a conversion PNG->JPG
-            _exporter.ExportToFile(_viewModel.Model, pngFile);
-
-            if (File.Exists(pngFile))
-            {
-                using (var img = System.Drawing.Image.FromFile(pngFile))
-                {
-                    img.Save(imageFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
-
-                if (File.Exists(imageFile))
-                    File.Delete(pngFile);
-            }
-        }
 
         internal void RefitMap()
         {

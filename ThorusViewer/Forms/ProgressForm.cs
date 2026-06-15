@@ -32,9 +32,10 @@ namespace ThorusViewer.Forms
                     this.lblDesc.Text = desc;
                     pbProgress.Style = ProgressBarStyle.Marquee;
                 }
-                else if (total == 0 && this.Visible)
+                else if (total == 0)
                 {
-                    this.Hide();
+                    if (this.Visible)
+                        this.Hide();
                 }
                 else
                 {

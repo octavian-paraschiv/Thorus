@@ -17,18 +17,24 @@ namespace ThorusViewer.Palettes
             if (fields.Length < 3)
                 return OxyColors.White;
 
-            int i = 0;
             float r, g, b;
+            int i = 0;
 
-            if (float.TryParse(fields[i++], out r) == false)
-                throw new Exception("ColorFromString: specify the RGB color components in range [0..1]");
-            if (float.TryParse(fields[i++], out g) == false)
-                throw new Exception("ColorFromString: specify the RGB color components in range [0..1]");
-            if (float.TryParse(fields[i++], out b) == false)
-                throw new Exception("ColorFromString: specify the RGB color components in range [0..1]");
+            if (!float.TryParse(fields[i++], out r))
+                throw new FormatException("ColorFromString: specify the RGB color components in range [0..1]");
 
+            if (!float.TryParse(fields[i++], out g))
+                throw new FormatException("ColorFromString: specify the RGB color components in range [0..1]");
+
+            if (!float.TryParse(fields[i++], out b))
+                throw new FormatException("ColorFromString: specify the RGB color components in range [0..1]");
+
+            _ = i;
+
+#pragma warning disable S1244
             if ((r == g) && (g == b) && (r == 1))
                 return OxyColors.White;
+#pragma warning restore S1244
 
             return OxyColor.FromRgb((byte)(255 * r), (byte)(255 * g), (byte)(255 * b));
         }
@@ -83,7 +89,7 @@ namespace ThorusViewer.Palettes
             set { _lineSpacing = value; }
         }
 
-        private List<OxyColor> _colorSteps = new List<OxyColor>();
+        private readonly List<OxyColor> _colorSteps = new List<OxyColor>();
         public List<OxyColor> ColorSteps
         {
             get
@@ -117,13 +123,6 @@ namespace ThorusViewer.Palettes
         private void ReadPalette()
         {
             char ch = Type.ToUpperInvariant()[0];
-            //switch (ch)
-            //{
-            //    case 'M':
-            //    case 'L':
-            //        ch = 'T';
-            //        break;
-            //}
 
             string paletteFileName = Path.Combine(palletesFolder, string.Format("{0}.thd", ch));
             string[] lines = File.ReadAllLines(paletteFileName);
@@ -146,11 +145,11 @@ namespace ThorusViewer.Palettes
 
         static WeatherDataPalette _default = null;
 
-        public static List<string> PaletteTypes
+        public static IEnumerable<string> PaletteTypes
         {
             get
             {
-                return _palettes.Keys.ToList();
+                return _palettes.Keys.AsEnumerable();
             }
         }
 

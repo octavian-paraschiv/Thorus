@@ -28,206 +28,202 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.msMain = new System.Windows.Forms.MenuStrip();
-            this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiLoadDataset = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiLaunchSimulation = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmImages = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSaveImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAutoSaveImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPublishSubregionData = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.mapView = new OPMedia.UI.Controls.MapViewCtl();
-            this.controlPanelCtl1 = new OPMedia.UI.Controls.ControlPanelCtl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.msMain.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.SuspendLayout();
+            msMain = new System.Windows.Forms.MenuStrip();
+            tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
+            tsmiLoadDataset = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            tsmiLaunchSimulation = new System.Windows.Forms.ToolStripMenuItem();
+            tsmiPublishSubregionData = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            tsmiSettings = new System.Windows.Forms.ToolStripMenuItem();
+            tsmImages = new System.Windows.Forms.ToolStripMenuItem();
+            tsmiSaveImage = new System.Windows.Forms.ToolStripMenuItem();
+            tsmiAutoSaveImage = new System.Windows.Forms.ToolStripMenuItem();
+            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            mapView = new OPMedia.UI.Controls.MapViewCtl();
+            controlPanelCtl1 = new OPMedia.UI.Controls.ControlPanelCtl();
+            label1 = new System.Windows.Forms.Label();
+            tsmiGenerateAnimations = new System.Windows.Forms.ToolStripMenuItem();
+            msMain.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            SuspendLayout();
             // 
             // msMain
             // 
-            this.msMain.AutoSize = false;
-            this.msMain.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.msMain.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiFile,
-            this.tsmImages});
-            this.msMain.Location = new System.Drawing.Point(0, 0);
-            this.msMain.Name = "msMain";
-            this.msMain.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.msMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.msMain.Size = new System.Drawing.Size(1289, 27);
-            this.msMain.TabIndex = 1;
+            msMain.AutoSize = false;
+            msMain.BackColor = System.Drawing.SystemColors.ControlLight;
+            msMain.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            msMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { tsmiFile, tsmImages });
+            msMain.Location = new System.Drawing.Point(0, 0);
+            msMain.Name = "msMain";
+            msMain.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            msMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            msMain.Size = new System.Drawing.Size(1289, 27);
+            msMain.TabIndex = 1;
             // 
             // tsmiFile
             // 
-            this.tsmiFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiLoadDataset,
-            this.toolStripSeparator1,
-            this.tsmiLaunchSimulation,
-            this.tsmiPublishSubregionData,
-            this.toolStripSeparator2,
-            this.tsmiSettings});
-            this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(37, 23);
-            this.tsmiFile.Text = "File";
+            tsmiFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { tsmiLoadDataset, toolStripSeparator1, tsmiLaunchSimulation, tsmiPublishSubregionData, tsmiGenerateAnimations, toolStripSeparator2, tsmiSettings });
+            tsmiFile.Name = "tsmiFile";
+            tsmiFile.Size = new System.Drawing.Size(46, 23);
+            tsmiFile.Text = "File";
             // 
             // tsmiLoadDataset
             // 
-            this.tsmiLoadDataset.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmiLoadDataset.Name = "tsmiLoadDataset";
-            this.tsmiLoadDataset.ShortcutKeyDisplayString = "";
-            this.tsmiLoadDataset.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiLoadDataset.Size = new System.Drawing.Size(287, 22);
-            this.tsmiLoadDataset.Text = "Load Dataset...";
-            this.tsmiLoadDataset.Click += new System.EventHandler(this.OnLoadDataSet);
+            tsmiLoadDataset.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tsmiLoadDataset.Name = "tsmiLoadDataset";
+            tsmiLoadDataset.ShortcutKeyDisplayString = "";
+            tsmiLoadDataset.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O;
+            tsmiLoadDataset.Size = new System.Drawing.Size(403, 26);
+            tsmiLoadDataset.Text = "Load Dataset...";
+            tsmiLoadDataset.Click += OnLoadDataSet;
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(284, 6);
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(400, 6);
             // 
             // tsmiLaunchSimulation
             // 
-            this.tsmiLaunchSimulation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmiLaunchSimulation.Name = "tsmiLaunchSimulation";
-            this.tsmiLaunchSimulation.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-            | System.Windows.Forms.Keys.S)));
-            this.tsmiLaunchSimulation.Size = new System.Drawing.Size(287, 22);
-            this.tsmiLaunchSimulation.Text = "Simulation Control Panel...";
-            this.tsmiLaunchSimulation.Click += new System.EventHandler(this.OnSimulation);
-            // 
-            // tsmiSettings
-            // 
-            this.tsmiSettings.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsmiSettings.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmiSettings.Name = "tsmiSettings";
-            this.tsmiSettings.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.tsmiSettings.Size = new System.Drawing.Size(287, 22);
-            this.tsmiSettings.Text = "Settings...";
-            this.tsmiSettings.Click += new System.EventHandler(this.OnGlobalSettings);
-            // 
-            // tsmImages
-            // 
-            this.tsmImages.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiSaveImage,
-            this.tsmiAutoSaveImage});
-            this.tsmImages.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmImages.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmImages.Name = "tsmImages";
-            this.tsmImages.Size = new System.Drawing.Size(57, 23);
-            this.tsmImages.Text = "Images";
-            this.tsmImages.Click += new System.EventHandler(this.OnToggleAutoSave);
-            // 
-            // tsmiSaveImage
-            // 
-            this.tsmiSaveImage.Name = "tsmiSaveImage";
-            this.tsmiSaveImage.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-            | System.Windows.Forms.Keys.I)));
-            this.tsmiSaveImage.Size = new System.Drawing.Size(226, 22);
-            this.tsmiSaveImage.Text = "Save as image...";
-            this.tsmiSaveImage.Click += new System.EventHandler(this.OnSaveAsImage);
-            // 
-            // tsmiAutoSaveImage
-            // 
-            this.tsmiAutoSaveImage.CheckOnClick = true;
-            this.tsmiAutoSaveImage.Name = "tsmiAutoSaveImage";
-            this.tsmiAutoSaveImage.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.tsmiAutoSaveImage.Size = new System.Drawing.Size(226, 22);
-            this.tsmiAutoSaveImage.Text = "Auto-save images";
-            this.tsmiAutoSaveImage.Click += new System.EventHandler(this.OnToggleAutoSave);
+            tsmiLaunchSimulation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tsmiLaunchSimulation.Name = "tsmiLaunchSimulation";
+            tsmiLaunchSimulation.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.S;
+            tsmiLaunchSimulation.Size = new System.Drawing.Size(403, 26);
+            tsmiLaunchSimulation.Text = "Simulation Control Panel...";
+            tsmiLaunchSimulation.Click += OnSimulation;
             // 
             // tsmiPublishSubregionData
             // 
-            this.tsmiPublishSubregionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsmiPublishSubregionData.Name = "tsmiPublishSubregionData";
-            this.tsmiPublishSubregionData.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-            | System.Windows.Forms.Keys.P)));
-            this.tsmiPublishSubregionData.Size = new System.Drawing.Size(279, 22);
-            this.tsmiPublishSubregionData.Text = "Generate/Publish Subregion Data";
-            this.tsmiPublishSubregionData.Click += new System.EventHandler(this.OnPublish);
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.mapView, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.controlPanelCtl1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 27);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1289, 500);
-            this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // mapView
-            // 
-            this.mapView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mapView.BackColor = System.Drawing.Color.White;
-            this.mapView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mapView.Location = new System.Drawing.Point(0, 107);
-            this.mapView.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.mapView.MinimumSize = new System.Drawing.Size(350, 42);
-            this.mapView.Name = "mapView";
-            this.mapView.Size = new System.Drawing.Size(1289, 390);
-            this.mapView.TabIndex = 0;
-            // 
-            // controlPanelCtl1
-            // 
-            this.controlPanelCtl1.AutoSize = true;
-            this.controlPanelCtl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.controlPanelCtl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlPanelCtl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.controlPanelCtl1.Location = new System.Drawing.Point(3, 8);
-            this.controlPanelCtl1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.controlPanelCtl1.Name = "controlPanelCtl1";
-            this.controlPanelCtl1.Size = new System.Drawing.Size(1283, 85);
-            this.controlPanelCtl1.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 101);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1283, 3);
-            this.label1.TabIndex = 2;
+            tsmiPublishSubregionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tsmiPublishSubregionData.Name = "tsmiPublishSubregionData";
+            tsmiPublishSubregionData.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.P;
+            tsmiPublishSubregionData.Size = new System.Drawing.Size(403, 26);
+            tsmiPublishSubregionData.Text = "Generate/Publish Subregion Data";
+            tsmiPublishSubregionData.Click += OnPublish;
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(284, 6);
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new System.Drawing.Size(400, 6);
+            // 
+            // tsmiSettings
+            // 
+            tsmiSettings.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            tsmiSettings.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tsmiSettings.Name = "tsmiSettings";
+            tsmiSettings.ShortcutKeys = System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S;
+            tsmiSettings.Size = new System.Drawing.Size(403, 26);
+            tsmiSettings.Text = "Settings...";
+            tsmiSettings.Click += OnGlobalSettings;
+            // 
+            // tsmImages
+            // 
+            tsmImages.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { tsmiSaveImage, tsmiAutoSaveImage });
+            tsmImages.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tsmImages.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            tsmImages.Name = "tsmImages";
+            tsmImages.Size = new System.Drawing.Size(71, 23);
+            tsmImages.Text = "Images";
+            tsmImages.Click += OnToggleAutoSave;
+            // 
+            // tsmiSaveImage
+            // 
+            tsmiSaveImage.Name = "tsmiSaveImage";
+            tsmiSaveImage.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.I;
+            tsmiSaveImage.Size = new System.Drawing.Size(282, 26);
+            tsmiSaveImage.Text = "Save as image...";
+            tsmiSaveImage.Click += OnSaveAsImage;
+            // 
+            // tsmiAutoSaveImage
+            // 
+            tsmiAutoSaveImage.CheckOnClick = true;
+            tsmiAutoSaveImage.Name = "tsmiAutoSaveImage";
+            tsmiAutoSaveImage.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I;
+            tsmiAutoSaveImage.Size = new System.Drawing.Size(282, 26);
+            tsmiAutoSaveImage.Text = "Auto-save images";
+            tsmiAutoSaveImage.Click += OnToggleAutoSave;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(mapView, 0, 2);
+            tableLayoutPanel1.Controls.Add(controlPanelCtl1, 0, 0);
+            tableLayoutPanel1.Controls.Add(label1, 0, 1);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 27);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(1289, 500);
+            tableLayoutPanel1.TabIndex = 2;
+            // 
+            // mapView
+            // 
+            mapView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            mapView.BackColor = System.Drawing.Color.White;
+            mapView.Dock = System.Windows.Forms.DockStyle.Fill;
+            mapView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            mapView.Location = new System.Drawing.Point(0, 126);
+            mapView.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            mapView.MinimumSize = new System.Drawing.Size(350, 42);
+            mapView.Name = "mapView";
+            mapView.Size = new System.Drawing.Size(1289, 371);
+            mapView.TabIndex = 0;
+            // 
+            // controlPanelCtl1
+            // 
+            controlPanelCtl1.AutoSize = true;
+            controlPanelCtl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            controlPanelCtl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            controlPanelCtl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            controlPanelCtl1.Location = new System.Drawing.Point(3, 8);
+            controlPanelCtl1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            controlPanelCtl1.Name = "controlPanelCtl1";
+            controlPanelCtl1.Size = new System.Drawing.Size(1283, 104);
+            controlPanelCtl1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.BackColor = System.Drawing.SystemColors.ControlLight;
+            label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            label1.Location = new System.Drawing.Point(3, 120);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(1283, 3);
+            label1.TabIndex = 2;
+            // 
+            // tsmiGenerateAnimations
+            // 
+            tsmiGenerateAnimations.Name = "tsmiGenerateAnimations";
+            tsmiGenerateAnimations.Size = new System.Drawing.Size(403, 26);
+            tsmiGenerateAnimations.Text = "Generate Animations";
+            tsmiGenerateAnimations.Click += tsmiGenerateAnimations_Click;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1289, 527);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.msMain);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MainMenuStrip = this.msMain;
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Thorus Weather Studio";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.msMain.ResumeLayout(false);
-            this.msMain.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.White;
+            ClientSize = new System.Drawing.Size(1289, 527);
+            Controls.Add(tableLayoutPanel1);
+            Controls.Add(msMain);
+            Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            MainMenuStrip = msMain;
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            Name = "MainForm";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Thorus Weather Studio";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            msMain.ResumeLayout(false);
+            msMain.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            ResumeLayout(false);
 
         }
 
@@ -248,5 +244,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGenerateAnimations;
     }
 }

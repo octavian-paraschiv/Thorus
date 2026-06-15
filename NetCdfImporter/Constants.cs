@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Microsoft.Research.ScientificDataSet.NetCDF4
 {
@@ -37,7 +34,7 @@ namespace Microsoft.Research.ScientificDataSet.NetCDF4
             /// <summary>signed 8-byte int</summary>
             NC_INT64 = 10,
             /// <summary>string</summary>
-            NC_STRING =	12	
+            NC_STRING = 12
         }
 
         public static Type GetCLRType(NcType ncType)
@@ -61,7 +58,7 @@ namespace Microsoft.Research.ScientificDataSet.NetCDF4
                 case NcType.NC_STRING:
                     return typeof(string);
                 default:
-                    throw new ApplicationException("Unknown nc type");
+                    throw new NotSupportedException("Unknown nc type");
             }
         }
 

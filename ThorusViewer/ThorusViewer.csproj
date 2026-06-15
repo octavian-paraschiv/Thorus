@@ -13,9 +13,10 @@
       <EnableDefaultPageItems>false</EnableDefaultPageItems>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OPMFileUploader" Version="3.0.4" />
+    <!--<PackageReference Include="OPMFileUploader" Version="3.0.4" />-->
     <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="2.2.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.13" />
     <PackageReference Include="System.Resources.Extensions" Version="9.0.9" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +126,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ocpa.ro.nugets\OPMFileUploader\OPMFileUploader.csproj" />
+    <ProjectReference Include="..\..\ocpa.ro.nugets\ThorusCommon.IO\ThorusCommon.IO.csproj" />
     <ProjectReference Include="..\GribImporter\GribImporter.csproj" />
     <ProjectReference Include="..\NetCdfImporter\NetCdfImporter.csproj" />
     <ProjectReference Include="..\ThorusCommon\ThorusCommon.csproj" />

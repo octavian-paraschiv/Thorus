@@ -29,6 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="ThorusCommon.IO" Version="3.0.4" />
+    <!--<PackageReference Include="ThorusCommon.IO" Version="3.0.4" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ocpa.ro.nugets\ThorusCommon.IO\ThorusCommon.IO.csproj" />
   </ItemGroup>
 </Project>

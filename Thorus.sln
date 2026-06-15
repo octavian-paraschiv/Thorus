@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_install", "_install", "{EC
 		Installer\Thorus.iss = Installer\Thorus.iss
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMFileUploader", "..\ocpa.ro.nugets\OPMFileUploader\OPMFileUploader.csproj", "{028E2DA5-6715-E867-1894-E8F7B0A6A31B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThorusCommon.IO", "..\ocpa.ro.nugets\ThorusCommon.IO\ThorusCommon.IO.csproj", "{C87C174A-6E79-9BAE-1169-7171ADE06468}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{C50AD334-4773-4554-8C81-FCAC2168C325}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C50AD334-4773-4554-8C81-FCAC2168C325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028E2DA5-6715-E867-1894-E8F7B0A6A31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028E2DA5-6715-E867-1894-E8F7B0A6A31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028E2DA5-6715-E867-1894-E8F7B0A6A31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028E2DA5-6715-E867-1894-E8F7B0A6A31B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87C174A-6E79-9BAE-1169-7171ADE06468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87C174A-6E79-9BAE-1169-7171ADE06468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87C174A-6E79-9BAE-1169-7171ADE06468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87C174A-6E79-9BAE-1169-7171ADE06468}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

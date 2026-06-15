@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using ThorusCommon.Engine;
 using ThorusCommon.Export;
 using ThorusCommon.IO;
+using ThorusViewer.Extensions;
 using ThorusViewer.Models;
 
 namespace ThorusViewer.Forms
@@ -18,6 +19,11 @@ namespace ThorusViewer.Forms
     public partial class MainForm : Form
     {
         private readonly ProgressForm _pf = new ProgressForm();
+        private readonly JsonSerializerOptions _serializationOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
 
         public MainForm()
         {
@@ -112,15 +118,20 @@ namespace ThorusViewer.Forms
                     password: credentials[1],
                     useCompression: false);
 
-                dbLister.PerformGet(CancellationToken.None).ContinueWith(t =>
+                dbLister.Download(CancellationToken.None).ContinueWith(t =>
                 {
                     try
                     {
-                        var databases = JsonSerializer.Deserialize<List<MeteoDbInfo>>(t.Result, options: new JsonSerializerOptions
+                        List<MeteoDbInfo> databases = null;
+
+                        try
                         {
-                            PropertyNameCaseInsensitive = true,
-                            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                        });
+                            databases = JsonSerializer.Deserialize<List<MeteoDbInfo>>(t.Result, options: _serializationOptions);
+                        }
+                        catch
+                        {
+                            // Not relevant
+                        }
 
                         if (databases?.Count > 0)
                         {
@@ -128,7 +139,7 @@ namespace ThorusViewer.Forms
                             var res = dlg.ShowDialog(this);
                             if (res == DialogResult.OK && dlg.SelectedDatabase != null)
                             {
-                                var uploader = new OPMFileUploader.FileUploader(
+                                var uploader = new FileUploader.FileUploader(
                                     requestUrl: $"{baseUri}/meteo/database/upload/{dlg.SelectedDatabase.Dbi}",
                                     authUrl: $"{baseUri}/users/authenticate",
                                     uploadFilePath: exportDbPath,
@@ -138,10 +149,8 @@ namespace ThorusViewer.Forms
                                 uploader.FileUploadProgress += (x) =>
                                     Invoke(new MethodInvoker(() => _pf.DisplayProgress(this, (int)x, 100, "Publishing subregion data: ")));
 
-                                uploader.Run().ContinueWith(t =>
+                                uploader.Upload(CancellationToken.None).ContinueWith(t =>
                                 {
-                                    _pf.DisplayProgress(this, 0, 0, "");
-
                                     if (t?.Result?.Length > 0)
                                         MessageBox.Show(this, $"Failed to publish subregion data. {t.Result}",
                                             Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -149,17 +158,24 @@ namespace ThorusViewer.Forms
                                         MessageBox.Show(this, "Subregion data succesfully published.",
                                             Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                                    _pf.DisplayProgress(this, 0, 0, "");
+
                                 }, TaskScheduler.FromCurrentSynchronizationContext());
                             }
                         }
                         else
+                        {
                             MessageBox.Show(this, $"Failed to query database information. {t.Result ?? string.Empty}".Trim(),
                                 Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        _pf.DisplayProgress(this, 0, 0, "");
+                        MessageBox.Show(this, $"Failed to query database information. {ex.Message ?? string.Empty}".Trim(" :".ToCharArray()),
+                            Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+                    _pf.DisplayProgress(this, 0, 0, "");
 
                 }, TaskScheduler.FromCurrentSynchronizationContext());
             }
@@ -210,7 +226,7 @@ namespace ThorusViewer.Forms
             }
         }
 
-        private string GetBaseTitle()
+        private static string GetBaseTitle()
         {
             SimDateTime snapshot = ControlPanelModel.Instance.SelectedSnapshot;
             if (snapshot != null)
@@ -219,6 +235,29 @@ namespace ThorusViewer.Forms
 
             return string.Format("{0} [Data path: {1}], No snapshot currently loaded.",
                 Constants.Product, SimulationData.DataFolder);
+        }
+
+        private void tsmiGenerateAnimations_Click(object sender, EventArgs e)
+        {
+            string imageRoot = Path.Combine(SimulationData.WorkFolder, "image");
+
+            var foldersWithPngs = Directory
+                .EnumerateFiles(imageRoot, "*.*", SearchOption.AllDirectories)
+                .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                .Select(Path.GetDirectoryName)
+                .Where(d => d != null)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            foldersWithPngs.ForEach(f =>
+            {
+                var title = f.Replace(imageRoot, string.Empty).Replace("\\", "_").Trim('_');
+                var gifPath = Path.Combine(imageRoot, $"{title}.gif");
+                GifBuilder.CreateGifFromFolder(f, gifPath, pauseBetweenLoopsMs: 2000, compressionLevel: GifCompressionLevel.Highest);
+            });
+
+            MessageBox.Show(this, "Animations succesfully generated.",
+                Constants.Product, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

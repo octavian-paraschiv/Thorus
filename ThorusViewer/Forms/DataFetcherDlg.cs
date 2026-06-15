@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileUploader.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -93,7 +94,7 @@ namespace ThorusViewer.Forms
                     await FetchSstFile(selDate).ConfigureAwait(false);
                     await FetchGribFile().ConfigureAwait(false);
                 }
-                catch (TaskCanceledException)
+                catch (UploaderException)
                 {
                     Log("Could not download all required files, although waited for 1 hour.");
                 }
